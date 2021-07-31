@@ -1,5 +1,6 @@
 from django.test import TestCase
 from datetime import datetime, timedelta
+from .models import *
 
 
 # Create your tests here.
@@ -12,7 +13,7 @@ class ProductModelTest(TestCase):
                                                  expire_time=(datetime.now() + timedelta(days=2)))
         self.p1 = Product.objects.create(name='test_p1', company_brand='test_brand', category=self.cat1,
                                          discount=self.discount1, price=15000, inventory=120,
-                                         spesifications='international product')
+                                         specifications='international product')
 
     def test_create_product(self):
         self.p1.save()
