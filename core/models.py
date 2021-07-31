@@ -20,3 +20,8 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class TestModel(BaseModel):
+    pass
+
