@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+<div id="content-main" class="container-fluid text-center">
+    <div id="product-overview" class="row">
+        <div id="product-info" class="col-6">
+            <h3 style="color: red">{{ product_details.inventory_status }}</h3>
+            <p>{% translate 'Product Name:' %}</p>
+            <h1>{{ product_details.name }}</h1>
+            <p>{% translate 'Product Price:' %}</p>
+            <h2>{{ product_details.price }}</h2>
+            <p>{% translate 'Price After Discount:' %}</p>
+            <h2>{{ product_details.calculate_final_price }}</h2>
+        </div>
+        <div id="product-image" class="col-6">
+            {{ product_details.image }}
+        </div>
+
+    </div>
+    <table id="product-detail" class="table text-left">
+        <tr>
+            <th>
+                {% translate 'Category:' %}
+            </th>
+        </tr>
+        <tr>
+            <td>{{ product_details.category.name }}</td>
+        </tr>
+        <tr>
+            <th>
+                {% translate 'Product Name:' %}
+            </th>
+        </tr>
+        <tr>
+            <td>{{ product_details.name }}</td>
+        </tr>
+        <tr>
+            <th>
+                {% translate 'Company Brand:' %}
+            </th>
+        </tr>
+        <tr>
+            <td>{{ product_details.company_brand }}</td>
+        </tr>
+        <tr>
+            <th>
+                {% translate 'Product Specifications:' %}
+            </th>
+        </tr>
+        <tr>
+            <td>{{ product_details.specifications }}</td>
+        </tr>
+    </table>
+
+</div>
+{% endblock %}

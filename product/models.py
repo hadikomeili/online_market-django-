@@ -14,6 +14,14 @@ class Category(BaseModel):
                                null=False, blank=False)
     ref_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        if self.ref_category is not None:
+            str = f'{self.id}# {self.ref_category}-{self.name}'
+        else:
+            str = f'{self.id}# {self.name}'
+
+        return str
+
 
 class Discount(BaseModel):
     type = models.CharField(verbose_name=_('discount type'), help_text=_('specify type of discount'), null=False,
@@ -27,6 +35,9 @@ class Discount(BaseModel):
                                       help_text=_('specify start time'), null=False, blank=False)
     expire_time = models.DateTimeField(verbose_name=_('discount expire time'),
                                        help_text=_('specify expire time'), null=False, blank=False)
+
+    def __str__(self):
+        return f'{self.value} {self.type}'
 
 
 class Product(BaseModel):
@@ -42,7 +53,7 @@ class Product(BaseModel):
                                  on_delete=models.RESTRICT, null=False, blank=False)
     discount = models.ForeignKey(Discount, verbose_name=_('discount'), help_text=_('specify discount'),
                                  null=False, blank=False, on_delete=models.RESTRICT)
-    price = models.FloatField(verbose_name=_('price'), help_text=_('enter price'), null=False, blank=False)
+    price = models.IntegerField(verbose_name=_('price'), help_text=_('enter price'), null=False, blank=False)
     inventory = models.IntegerField(verbose_name=_('inventory'), help_text=_('specify product inventory'),
                                     null=False, blank=False)
     image = models.FileField(verbose_name=_('product image'), help_text=_('upload image of product'), null=True,
@@ -51,3 +62,25 @@ class Product(BaseModel):
                                       help_text=_('enter product specifications in english'), max_length=100)
     specifications_fa = models.CharField(verbose_name=_('farsi product specifications'), null=True, blank=True,
                                          help_text=_('enter product specifications in farsi'), max_length=100)
+
+    def calculate_final_price(self):
+        final_price = self.price
+        if self.discount.type == '$':
+            final_price = self.price - self.discount.value
+        elif self.discount.type == '%':
+            if self.discount.value != 0:
+                final_price = self.price - ((self.discount.value / 100) * self.price)
+            else:
+                pass
+        return final_price
+
+    def inventory_status(self):
+
+        if self.inventory > 0:
+            status = _('Available')
+        else:
+            status = _('Unavailable')
+        return status
+
+    def __str__(self):
+        return f'{self.id}# {self.name}: {self.price} - {self.inventory_status()}'
