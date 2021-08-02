@@ -1,7 +1,7 @@
 <div class="card product_card_view text-center m-4 mt-3 mb-3" style="width: 300px; border: 2px solid darkblue;
- border-radius: 10px; padding: 10px; background-color: white" >
-    <a href="/product/{{ product_card.id }}"><img src="/static/{{ product_card.image }}" alt="product image" width="100%" max-height="300px"
-                 style="border-radius: 15px"></a>
+ border-radius: 10px; padding: 10px; background-color: white; min-height: 450px" >
+    <a href="/product/{{ product_card.id }}"><img src="/static/{{ product_card.image }}" alt="product image"
+                                                  width="100%" style="border-radius: 15px; max-height:300px "></a>
     <h4>{{ product_card.name }}</h4>
     <p>Brand: {{ product_card.company_brand }}</p>
     <h5>Price After Off: {{ product_card.calculate_final_price }}</h5>

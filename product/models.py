@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+
 from django.utils.translation import gettext as _
 
 from core.models import BaseModel
@@ -29,9 +30,10 @@ class Discount(BaseModel):
     type = models.CharField(verbose_name=_('discount type'), help_text=_('specify type of discount'), null=False,
                             blank=False, choices=[('%', _('percent')), ('$', _('cash'))], max_length=15)
     value = models.IntegerField(verbose_name=_('discount value'), help_text=_('specify discount value'), null=True,
-                                blank=True, default=0)
+                                blank=True, default=0,
+                                )
     max_value = models.IntegerField(verbose_name=_('maximum value'), help_text=_('specify maximum value'),
-                                    null=True, blank=True)     #????????????????????????????????????????????????????
+                                    null=True, blank=True)
 
     start_time = models.DateField(verbose_name=_('discount start time'),
                                   help_text=_('specify start time'), null=False, blank=False)
@@ -63,7 +65,7 @@ class Product(BaseModel):
     category = models.ForeignKey(Category, verbose_name=_('category'), help_text=_('specify category'),
                                  on_delete=models.RESTRICT, null=False, blank=False)
     discount = models.ForeignKey(Discount, verbose_name=_('discount'), help_text=_('specify discount'),
-                                 null=False, blank=False, on_delete=models.RESTRICT)
+                                 null=False, blank=False, on_delete=models.SET(0))
     price = models.IntegerField(verbose_name=_('price'), help_text=_('enter price'), null=False, blank=False)
     inventory = models.IntegerField(verbose_name=_('inventory'), help_text=_('specify product inventory'),
                                     null=False, blank=False)
