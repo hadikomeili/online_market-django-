@@ -16,9 +16,9 @@ class Category(BaseModel):
 
     def __str__(self):
         if self.ref_category is not None:
-            str = f'{self.id}# {self.ref_category}-{self.name}'
+            str = f'{self.ref_category}-{self.name}'
         else:
-            str = f'{self.id}# {self.name}'
+            str = f'{self.name}'
 
         return str
 
@@ -31,13 +31,22 @@ class Discount(BaseModel):
     max_value = models.IntegerField(verbose_name=_('maximum value'), help_text=_('specify maximum value'),
                                     null=True, blank=True)     #????????????????????????????????????????????????????
 
-    start_time = models.DateTimeField(verbose_name=_('discount start time'),
-                                      help_text=_('specify start time'), null=False, blank=False)
-    expire_time = models.DateTimeField(verbose_name=_('discount expire time'),
-                                       help_text=_('specify expire time'), null=False, blank=False)
+    start_time = models.DateField(verbose_name=_('discount start time'),
+                                  help_text=_('specify start time'), null=False, blank=False)
+    expire_time = models.DateField(verbose_name=_('discount expire time'),
+                                   help_text=_('specify expire time'), null=False, blank=False)
+
+    def specify_discount_status(self):
+        if datetime.now().date() > self.expire_time:
+            status = 'Expired'
+        elif datetime.now().date() < self.start_time:
+            status = 'Waiting'
+        else:
+            status = 'Active'
+        return status
 
     def __str__(self):
-        return f'{self.value} {self.type}'
+        return f'{self.value}{self.type} => {self.specify_discount_status()} '
 
 
 class Product(BaseModel):
@@ -57,7 +66,7 @@ class Product(BaseModel):
     inventory = models.IntegerField(verbose_name=_('inventory'), help_text=_('specify product inventory'),
                                     null=False, blank=False)
     image = models.FileField(verbose_name=_('product image'), help_text=_('upload image of product'), null=True,
-                             blank=True, upload_to='media/product/images/')
+                             blank=True, upload_to='product/images/')
     specifications = models.CharField(verbose_name=_('english product specifications'), null=True, blank=True,
                                       help_text=_('enter product specifications in english'), max_length=100)
     specifications_fa = models.CharField(verbose_name=_('farsi product specifications'), null=True, blank=True,
@@ -65,13 +74,14 @@ class Product(BaseModel):
 
     def calculate_final_price(self):
         final_price = self.price
-        if self.discount.type == '$':
-            final_price = self.price - self.discount.value
-        elif self.discount.type == '%':
-            if self.discount.value != 0:
-                final_price = self.price - ((self.discount.value / 100) * self.price)
-            else:
-                pass
+        if self.discount.specify_discount_status() == 'Active':
+            if self.discount.type == '$':
+                final_price = self.price - self.discount.value
+            elif self.discount.type == '%':
+                if self.discount.value != 0:
+                    final_price = self.price - ((self.discount.value / 100) * self.price)
+                else:
+                    pass
         return final_price
 
     def inventory_status(self):

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% for product in products %}
+            {% include 'product/card.html' with product_card=product %}
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

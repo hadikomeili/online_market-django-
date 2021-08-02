@@ -1,0 +1,10 @@
+<div class="card product_card_view text-center m-1" style="width: 250px; border: 2px solid darkblue; border-radius: 10px;
+ padding: 10px; background-color: white" >
+    <a href="/product/{{ product_card.id }}"><img src="/static/{{ product_card.image }}" alt="product image" width="100%" height="250px"
+                 style="border-radius: 15px"></a>
+    <h4>{{ product_card.name }}</h4>
+    <p>Brand: {{ product_card.company_brand }}</p>
+    <h5>Price After Off: {{ product_card.calculate_final_price }}</h5>
+    <p style="color: green">{{ product_card.inventory_status }}</p>
+
+</div>

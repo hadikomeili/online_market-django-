@@ -9,8 +9,20 @@ from .models import *
 
 # Create your views here.
 
+###---Product---###
+
+class ProductIndexView(generic.TemplateView):
+    template_name = 'product/index.html'
+    extra_context = {
+        'products': Product.objects.all()
+    }
 
 class ProductDetailsView(generic.DetailView):
     template_name = 'product/detail.html'
     model = Product
     context_object_name = 'product_details'
+
+class ProductCardView(generic.DetailView):
+    template_name = 'product/card.html'
+    model = Product
+    context_object_name = 'product_card'

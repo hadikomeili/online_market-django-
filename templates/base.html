@@ -3,50 +3,138 @@
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
-<title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "" %}{% endblock %}">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'shared/css/bootstrap.min.css' %}">
+    {% block stylesheet %}
+        <link rel="stylesheet" href="{% static 'shared/css/base.css' %}">
+    {% endblock %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/JavaScript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-{% block extrastyle %}{% endblock %}
-{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "" %}{% endblock %}">{% endif %}
-{% block extrahead %}{% endblock %}
-{% block responsive %}
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static "" %}">
-    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "" %}">{% endif %}
-{% endblock %}
+    {% block css %}
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+                color: black;
+                background: #f3f2f2;
+            }
+
+            #header {
+                position: sticky;
+                top: 0;
+                z-index: 1;
+                width: 100%;
+                height: auto;
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 5px;
+
+                background-color: rgb(74, 8, 218);
+                color: white;
+            }
+
+            .topnav a, .topnav input[type=text], .topnav .search-container button {
+                float: none;
+                display: block;
+                text-align: left;
+                width: 100%;
+                margin: 0;
+                padding: 14px;
+            }
+
+            #header input[type=text] {
+                border: 1px solid #ccc;
+            }
+
+            #footer {
+                position: relative;
+                bottom: 0;
+
+                width: 100%;
+                display: flex;
+                color: #c9f2fe;
+                /*justify-content: space-between;*/
+                /*padding: 15px 20px;*/
+                /*align-items: center;*/
+                background-color: rgb(74, 8, 218);
+                min-height: 1rem;
+            }
+
+        </style>
+    {% endblock %}
+    {% block extrastyle %}{% endblock %}
+    {#{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "" %}{% endblock %}">{% endif %}#}
+    {% block extrahead %}{% endblock %}
+    {#{% block responsive %}#}
+    {#    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">#}
+    {#    <link rel="stylesheet" type="text/css" href="{% static "" %}">#}
+    {#    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "" %}">{% endif %}#}
+    {#{% endblock %}#}
     <meta charset="UTF-8">
 
 </head>
 {% load i18n %}
 <body>
-<div id="container" class="">
-<div id="header">
-    <div id="site-header" class="row">
-        <div id="products"><button>{% translate 'Products' %}</button></div>
-        <div id="branding">{% block branding %}{% translate 'MARKET' %}{% endblock %}</div>
-        <div id="user-tools"><button>{% translate 'Signup / Login' %}</button></div>
-        <div id="cart"><button>{% translate 'Cart' %}<i class="fa fa-cart"></i></button></div>
+<div id="header" class="container-fluid p-0 m-0 pt-2">
+    <div id="topnav" class="header p-1 m-auto">
+        <div id="siteheader" class="row" style="height: 45px">
+            <div id="products" style="position: absolute; left: 1.5rem">
+                <button class="btn btn-outline-light">{% translate 'Products' %}</button>
+            </div>
+            <div class="search-container">
+                <form action="">
+                    <input type="text" placeholder="{% translate 'Search ...' %}" name="search"
+                           style="position: fixed; left: 140px; padding: 6.5px; border-radius: 5px" ; size="70px">
+                    <button type="submit" class="btn btn-light" style="position: fixed; left: 730px; padding: 5px"><i
+                            class="fa fa-search"></i></button>
+                </form>
+
+            </div>
+            <div id="user-tools">
+                <button class="btn btn-outline-light"
+                        style="position: fixed; right: 330px">{% translate 'Signup / Login' %}</button>
+            </div>
+            <div id="cart">
+                <button class="btn btn-outline-light" style="position: fixed; right: 250px">{% translate 'Cart' %}<i
+                        class="fa fa-cart"></i></button>
+            </div>
+            <div id="branding" style="position: absolute; right:70px">{% block branding %}
+                <h3>{% translate 'MARKET' %}</h3>{% endblock %}</div>
+        </div>
+
     </div>
-    <div id="searchbar" class="row">
-        <input type="search">
-    </div>
-</div>
 </div>
 
 
 <div id="content">
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 </div>
-<div id="footer">
-{% block footer %}
-{% endblock %}
+<div id="footer" class="container-fluid">
+
+    {% block footer %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <p style=" padding-left: 0.5rem; padding-top: 0.7rem">Contact Us : <i class="fa fa-phone-square fa-lg"> </i> 09123456789 <i
+                            class="fa fa-envelope-square fa-lg"> </i> market@best_market.com <i
+                            class="fa fa-map-marker fa-lg"> </i> Tehran, Milad Tower, MARKET </p>
+                </div>
+
+            </div>
+        </div>
+    {% endblock %}
 </div>
 </body>
 </html>
