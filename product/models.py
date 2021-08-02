@@ -12,7 +12,9 @@ class Category(BaseModel):
                             null=False, blank=False)
     name_fa = models.CharField(verbose_name=_('farsi name'), max_length=30, help_text=_('enter name in farsi'),
                                null=False, blank=False)
-    ref_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    ref_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    image = models.FileField(verbose_name=_('category image'), help_text=_('upload image of category'), null=True,
+                             blank=True, upload_to='product/category/images/')
 
     def __str__(self):
         if self.ref_category is not None:
@@ -91,6 +93,11 @@ class Product(BaseModel):
         else:
             status = _('Unavailable')
         return status
+
+    @classmethod
+    def filter_by_category(cls, category_id):
+        res = cls.objects.filter(category=category_id)
+        return res
 
     def __str__(self):
         return f'{self.id}# {self.name}: {self.price} - {self.inventory_status()}'

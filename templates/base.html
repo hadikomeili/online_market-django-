@@ -90,13 +90,15 @@
     <div id="topnav" class="header p-1 m-auto">
         <div id="siteheader" class="row" style="height: 45px">
             <div id="products" style="position: absolute; left: 1.5rem">
-                <button class="btn btn-outline-light">{% translate 'Products' %}</button>
+                <a href="{% url 'product:product_index' %}"><button class="btn btn-outline-light">
+                    {% translate 'All Products' %}</button></a>
+
             </div>
             <div class="search-container">
                 <form action="">
                     <input type="text" placeholder="{% translate 'Search ...' %}" name="search"
-                           style="position: fixed; left: 140px; padding: 6.5px; border-radius: 5px" ; size="70px">
-                    <button type="submit" class="btn btn-light" style="position: fixed; left: 730px; padding: 5px"><i
+                           style="position: fixed; left: 160px; padding: 6.5px; border-radius: 5px" ; size="70px">
+                    <button type="submit" class="btn btn-light" style="position: fixed; left: 750px; padding: 5px"><i
                             class="fa fa-search"></i></button>
                 </form>
 
@@ -127,7 +129,8 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <p style=" padding-left: 0.5rem; padding-top: 0.7rem">Contact Us : <i class="fa fa-phone-square fa-lg"> </i> 09123456789 <i
+                    <p style=" padding-left: 0.5rem; padding-top: 0.7rem">Contact Us : <i
+                            class="fa fa-phone-square fa-lg"> </i> 09123456789 <i
                             class="fa fa-envelope-square fa-lg"> </i> market@best_market.com <i
                             class="fa fa-map-marker fa-lg"> </i> Tehran, Milad Tower, MARKET </p>
                 </div>
