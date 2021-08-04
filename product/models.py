@@ -9,6 +9,9 @@ from core.models import BaseModel
 # Create your models here.
 
 class Category(BaseModel):
+    """
+    a model for categorize products
+    """
     name = models.CharField(verbose_name=_('english name'), max_length=30, help_text=_('enter name in english'),
                             null=False, blank=False)
     name_fa = models.CharField(verbose_name=_('farsi name'), max_length=30, help_text=_('enter name in farsi'),
@@ -19,14 +22,17 @@ class Category(BaseModel):
 
     def __str__(self):
         if self.ref_category is not None:
-            str = f'{self.ref_category}-{self.name}'
+            name = f'{self.ref_category}-{self.name}'
         else:
-            str = f'{self.name}'
+            name = f'{self.name}'
 
-        return str
+        return name
 
 
 class Discount(BaseModel):
+    """
+    a model for arrange and manage discount on product model
+    """
     type = models.CharField(verbose_name=_('discount type'), help_text=_('specify type of discount'), null=False,
                             blank=False, choices=[('%', _('percent')), ('$', _('cash'))], max_length=15)
     value = models.IntegerField(verbose_name=_('discount value'), help_text=_('specify discount value'), null=True,
@@ -41,6 +47,10 @@ class Discount(BaseModel):
                                    help_text=_('specify expire time'), null=False, blank=False)
 
     def specify_discount_status(self):
+        """
+        method for specify discounts status in models
+        :return: str
+        """
         if datetime.now().date() > self.expire_time:
             status = 'Expired'
         elif datetime.now().date() < self.start_time:
@@ -54,6 +64,9 @@ class Discount(BaseModel):
 
 
 class Product(BaseModel):
+    """
+    a model for manage products
+    """
     name = models.CharField(verbose_name=_('english name'), max_length=50, help_text=_('enter name in english'),
                             null=False, blank=False)
     name_fa = models.CharField(verbose_name=_('farsi name'), max_length=50, help_text=_('enter name in farsi'),
@@ -77,6 +90,10 @@ class Product(BaseModel):
                                          help_text=_('enter product specifications in farsi'), max_length=100)
 
     def calculate_final_price(self):
+        """
+        method for calculate final price of product based on discount type and value
+        :return: union[int, float]
+        """
         final_price = self.price
         if self.discount.specify_discount_status() == 'Active':
             if self.discount.type == '$':
@@ -89,6 +106,10 @@ class Product(BaseModel):
         return final_price
 
     def inventory_status(self):
+        """
+        method for specify inventory status in models
+        :return: str
+        """
 
         if self.inventory > 0:
             status = _('Available')
@@ -98,8 +119,15 @@ class Product(BaseModel):
 
     @classmethod
     def filter_by_category(cls, category_id):
+        """
+        method for filter products based on category
+        :param category_id: int
+        :return: objects
+        """
         res = cls.objects.filter(category=category_id)
         return res
 
     def __str__(self):
         return f'{self.id}# {self.name}: {self.price} - {self.inventory_status()}'
+
+
