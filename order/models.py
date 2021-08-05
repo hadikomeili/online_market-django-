@@ -17,7 +17,7 @@ class Cart(BaseModel):
     """
     customer = models.OneToOneField(Customer, verbose_name=_('customer'),
                                     help_text=_('specify owner customer for cart'),
-                                    null=False, blank=False)
+                                    null=False, blank=False, on_delete=models.RESTRICT)
 
     # status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), null=False,
     #                           blank=False, choices=[('W', _('waiting'), ('F', _('final cart')))])

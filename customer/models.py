@@ -11,6 +11,8 @@ class Customer(User):
     """
     a model for customer in this project
     """
+    class Meta:
+        verbose_name = 'customer'
     pass
 
 
