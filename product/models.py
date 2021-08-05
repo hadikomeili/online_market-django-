@@ -56,7 +56,7 @@ class Discount(BaseModel):
 
     def specify_discount_status(self):
         """
-        method for specify discounts status in models
+        method for specify discounts status in product models
         :return: str
         """
         if datetime.now().date() > self.expire_time:

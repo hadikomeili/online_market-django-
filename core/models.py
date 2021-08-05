@@ -65,13 +65,24 @@ class MyUserManager(UserManager):
 class User(AbstractUser):
     USERNAME_FIELD = 'phone'
 
-    phone = models.CharField(verbose_name=_('phone'), max_length=11, unique=True)
-    national_code = models.CharField(max_length=10, blank=True)
-    gender = models.CharField(max_length=10, choices=[], blank=True)
-    birthday = models.DateField(null=True, blank=True)
+    phone = models.CharField(verbose_name=_('phone'), help_text=_('enter phone number'), max_length=11, unique=True,
+                             null=False, blank=False)
+    national_code = models.CharField(verbose_name=_('national code'), help_text=_('enter national code'),
+                                     max_length=10, blank=True, null=True)
+    gender = models.CharField(verbose_name=_('gender'), help_text=_('specify your gender'), max_length=10,
+                              choices=[('M', 'Male'), ('F', 'Female')], blank=True, null=True)
+    birthday = models.DateField(verbose_name=_('birthday'), help_text=_('specify birthday date'), null=True, blank=True)
 
     objects = MyUserManager()
 
 
+# ------------------TESTS---------------------#
+
+
 class TestModel(BaseModel):
     pass
+
+
+class TestUser(User):
+    pass
+
