@@ -73,4 +73,9 @@ class DiscountAdmin(admin.ModelAdmin):
 admin.site.register(Discount, DiscountAdmin)
 
 
-admin.site.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+
+    list_display = ('name', 'ref_category','level')
+
+
+admin.site.register(Category, CategoryAdmin)

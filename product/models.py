@@ -16,17 +16,25 @@ class Category(BaseModel):
                             null=False, blank=False)
     name_fa = models.CharField(verbose_name=_('farsi name'), max_length=30, help_text=_('enter name in farsi'),
                                null=False, blank=False)
-    ref_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    ref_category = models.ForeignKey('self', verbose_name=_('parent category'), help_text=_('specify parent category'),
+                                     null=True, blank=True, on_delete=models.SET_NULL)
     image = models.FileField(verbose_name=_('category image'), help_text=_('upload image of category'), null=True,
                              blank=True, upload_to='product/category/images/')
+    level = models.IntegerField(verbose_name=_('category level'), help_text=_('specify level of self relation'),
+                                null=True, blank=True, default=0, editable=False)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.ref_category is not None:
+            self.level = self.ref_category.level + 1
+        super().save(force_insert, force_update, using, update_fields)
+
 
     def __str__(self):
-        if self.ref_category is not None:
-            name = f'{self.ref_category}-{self.name}'
-        else:
+        if self.ref_category is None:
             name = f'{self.name}'
-
-        return name
+        else:
+            name = f'{self.ref_category}-{self.name}'
+        return f'{name}'
 
 
 class Discount(BaseModel):
@@ -70,11 +78,11 @@ class Product(BaseModel):
     name = models.CharField(verbose_name=_('english name'), max_length=50, help_text=_('enter name in english'),
                             null=False, blank=False)
     name_fa = models.CharField(verbose_name=_('farsi name'), max_length=50, help_text=_('enter name in farsi'),
-                               null=False, blank=False)
+                               null=True, blank=True)
     company_brand = models.CharField(verbose_name=_('english company brand'), max_length=30,
                                      help_text='enter company brand name in english', null=False, blank=False)
     company_brand_fa = models.CharField(verbose_name=_('farsi company brand'), max_length=30,
-                                        help_text='enter company brand name in farsi', null=False, blank=False)
+                                        help_text='enter company brand name in farsi', null=True, blank=True)
     category = models.ForeignKey(Category, verbose_name=_('category'), help_text=_('specify category'),
                                  on_delete=models.RESTRICT, null=False, blank=False)
     discount = models.ForeignKey(Discount, verbose_name=_('discount'), help_text=_('specify discount'),

@@ -32,7 +32,7 @@ class BaseModel(models.Model):
     deleted = models.BooleanField(default=False)
     create_timestamp = models.DateTimeField(auto_now_add=True)
     modify_timestamp = models.DateTimeField(auto_now=True)
-    delete_timestamp = models.DateTimeField(default=None, null=True, blank=True)
+    delete_timestamp = models.DateTimeField(default=None, null=True, blank=True, editable=False)
 
     objects = BaseManager()
 
