@@ -20,8 +20,11 @@ class Address(BaseModel):
     """
     a model for add customer addresses
     """
-    customer = models.ForeignKey(Customer, verbose_name=_('customer name'), help_text=_('specify customer'),
-                                 null=False, blank=False, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Customer, verbose_name=_('customer name'), help_text=_('specify customer'),
+                              null=False, blank=False, on_delete=models.CASCADE)
+    title = models.CharField(verbose_name='address title', max_length=25, default='NEW')
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     country = models.CharField(verbose_name=_('country name'), help_text=_('enter country name'), null=False,
                                blank=False, default='Iran', max_length=30)
     state = models.CharField(verbose_name=_('state name'), help_text=_('enter state name'), null=False, blank=False
@@ -31,6 +34,6 @@ class Address(BaseModel):
     village = models.CharField(verbose_name=_('village name'), help_text=_('enter village name'), null=True,
                                blank=True, max_length=50)
     rest_of_address = models.TextField(verbose_name=_('rest of address'), help_text=_('enter rest of address'),
-                                       null=False, blank=False)
+                                       null=False, blank=True)
     post_code = models.CharField(verbose_name=_('post code'), help_text=_('enter post code'), null=True,
                                  blank=True, max_length=10)

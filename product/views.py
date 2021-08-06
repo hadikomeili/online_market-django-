@@ -132,12 +132,10 @@ from rest_framework import generics
 
 
 class ProductAPIView(generics.ListCreateAPIView):
-
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
 
 class ProductDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
-
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
