@@ -28,7 +28,6 @@ class Category(BaseModel):
             self.level = self.ref_category.level + 1
         super().save(force_insert, force_update, using, update_fields)
 
-
     def __str__(self):
         if self.ref_category is None:
             name = f'{self.name}'
