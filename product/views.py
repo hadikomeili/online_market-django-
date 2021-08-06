@@ -126,3 +126,18 @@ def category_list_view_api(request):
             return JsonResponse(new_cat.data)
         else:
             return JsonResponse(new_cat.errors, status=400)
+
+
+from rest_framework import generics
+
+
+class ProductAPIView(generics.ListCreateAPIView):
+
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+
+class ProductDetailsAPIView(generics.RetrieveUpdateDestroyAPIView):
+
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
