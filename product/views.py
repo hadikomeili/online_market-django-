@@ -6,13 +6,12 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from .serializers import ProductSerializer, CategorySerializer
 from .models import *
 
 # Create your views here.
 
 ###---Product---###
-from .serializers import ProductSerializer, CategorySerializer
 
 
 class ProductIndexView(generic.TemplateView):

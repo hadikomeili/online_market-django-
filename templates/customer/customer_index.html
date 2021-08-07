@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid shadow">
+        <div class="row" >
+            {% for customer in customers %}
+                {% include 'customer/customer_card.html' with customer_card=customer %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

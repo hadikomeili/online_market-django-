@@ -4,6 +4,8 @@ from datetime import datetime
 from django.utils.translation import gettext as _
 
 from core.models import User, BaseModel
+
+
 # Create your models here.
 
 
@@ -11,9 +13,11 @@ class Customer(User):
     """
     a model for customer in this project
     """
+    image = models.FileField(verbose_name=_('customer image'), help_text=_('upload your image'), null=True,
+                             blank=True, upload_to='customer/images/')
+
     class Meta:
         verbose_name = 'customer'
-    pass
 
 
 class Address(BaseModel):
@@ -22,9 +26,10 @@ class Address(BaseModel):
     """
     owner = models.ForeignKey(Customer, verbose_name=_('customer name'), help_text=_('specify customer'),
                               null=False, blank=False, on_delete=models.CASCADE)
-    title = models.CharField(verbose_name='address title', max_length=25, default='NEW')
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
+    title = models.CharField(verbose_name=_('address title'), help_text=_('enter title for this address'),
+                             max_length=25, default='NEW')
+    latitude = models.FloatField(verbose_name=_('latitude'), help_text=_('enter latitude'), null=True, blank=True)
+    longitude = models.FloatField(verbose_name=_('longitude'), help_text=_('enter longitude'), null=True, blank=True)
     country = models.CharField(verbose_name=_('country name'), help_text=_('enter country name'), null=False,
                                blank=False, default='Iran', max_length=30)
     state = models.CharField(verbose_name=_('state name'), help_text=_('enter state name'), null=False, blank=False

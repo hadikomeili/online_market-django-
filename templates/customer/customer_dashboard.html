@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid shadow">
+        <div class="row">
+            <div class="col-6">
+                {% for cat in category %}
+                    {% include 'product/category_panel.html' with category=cat %}
+                {% endfor %}
+            </div>
+            <div class="col-6">
+                {% for product in products %}
+                    {% include 'product/card.html' with product_card=product %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    <div class="container-fluid">
+
+    </div>
+{% endblock %}

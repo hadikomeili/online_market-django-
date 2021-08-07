@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="card address_card_view text-left m-2 mt-2" style="width: 100%; border: 2px solid darkblue;
+ border-radius: 10px; padding: 10px; background-color: white; max-height: 400px">
+    <div class="row">
+        <div class="">
+            <h5>{% translate 'Title:' %} {{ address_card.title }}</h5>
+            <p>{% translate 'State:' %} {{ address_card.state }}</p>
+            <p>{% translate 'City:' %} {{ address_card.city }}</p>
+            <p>{% translate 'Village:' %} {{ address_card.village }}</p>
+            <p>{% translate 'Rest Of Address:' %} {{ address_card.rest_of_address }}</p>
+            <p>{% translate 'Post Code:' %} {{ address_card.post_code }}</p>
+        </div>
+
+    </div>
+</div>
