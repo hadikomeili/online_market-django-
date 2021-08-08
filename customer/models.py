@@ -27,7 +27,6 @@ class Customer(User):
         age = datetime.now().year - self.birthday.year
         return age
 
-
 class Address(BaseModel):
     """
     a model for add customer addresses
