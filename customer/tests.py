@@ -22,6 +22,19 @@ class CustomerModelTest(TestCase):
 
         self.assertIn(self.customer1, Customer.objects.all())
 
+    def test_deleted_customer(self):
+        self.customer1.deleted = True
+        self.customer1.save()
+
+        self.assertNotIn(self.customer1, Customer.objects.all())
+        self.assertIn(self.customer1, Customer.objects.archive())
+
+    def test_deleted_customer_filter(self):
+        self.customer3.deleted = True
+        self.customer3.save()
+
+        self.assertNotIn(self.customer3, Customer.objects.filter())
+
     # def test_create_customer_without_phone(self):
     #     self.customer2 = Customer.objects.create(email='test@t.com', password='test654321',
     #                                              birthday=datetime.now().date())
@@ -68,6 +81,12 @@ class CustomerModelTest(TestCase):
         self.assertNotEqual(self.customer1.is_staff, True)
         self.assertNotEqual(self.customer4.is_staff, True)
 
+    # def test_birthday_type(self):
+    #     self.customer1.birthday = datetime.now().time()
+    #     self.customer1.save()
+    #
+    #     self.assertRaises(self.customer1, TypeError, )
+
 
 class AddressModelTest(TestCase):
 
@@ -88,9 +107,26 @@ class AddressModelTest(TestCase):
         self.assertNotIn(self.add1, Address.objects.all())
         self.assertIn(self.add1, Address.objects.archive())
 
-    def test_delete_address_owner(self):
+    def test_deleted_address_filter(self):
+        self.add1.deleted = True
         self.add1.save()
-        self.customer1.delete()
-        self.customer1.save()
 
-        self.assertNotIsInstance(self.customer1, Customer)
+        self.assertNotIn(self.add1, Address.objects.filter())
+
+    def test_delete_address_owner(self):
+        self.customer1.deleted = True
+        self.customer1.save()
+        self.add1.save()
+
+        self.assertNotIn(self.customer1, Customer.objects.all())
+        self.assertIn(self.add1, Address.objects.all())
+
+    def test_foreign_key_customer(self):
+        self.add1.save()
+
+        self.assertIn(self.add1.owner, Customer.objects.all())
+
+
+
+
+

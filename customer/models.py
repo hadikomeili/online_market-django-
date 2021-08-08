@@ -27,12 +27,13 @@ class Customer(User):
         age = datetime.now().year - self.birthday.year
         return age
 
+
 class Address(BaseModel):
     """
     a model for add customer addresses
     """
     owner = models.ForeignKey(Customer, verbose_name=_('customer name'), help_text=_('specify customer'),
-                              null=False, blank=False, on_delete=models.CASCADE)
+                              null=False, blank=False, on_delete=models.PROTECT)
     title = models.CharField(verbose_name=_('address title'), help_text=_('enter title for this address'),
                              max_length=25, default='NEW')
     latitude = models.FloatField(verbose_name=_('latitude'), help_text=_('enter latitude'), null=True, blank=True)
