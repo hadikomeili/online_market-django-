@@ -1,26 +1,37 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid shadow">
+    <div class="container-fluid p-3">
+    <div class="row">
+        <div class="col-3">
+            {% include 'customer/customer_side_panel.html' with customer_panel=customer %}
+        </div>
+        <div class="col-9">
+
         <div class="row">
             <div class="col-6">
-                {% for cat in category %}
-                    {% include 'product/category_panel.html' with category=cat %}
-                {% endfor %}
+                <h5 class="text-center">{% translate 'User information' %}</h5>
+
+                {% include 'customer/customer_details.html' with customer_detail=customer %}
+
             </div>
             <div class="col-6">
-                {% for product in products %}
-                    {% include 'product/card.html' with product_card=product %}
+            <h5 class="text-center">{% translate 'User Addresses' %}</h5>
+                {% for address in customer_address %}
+                    {% include 'customer/address_card.html' with address_card=address %}
                 {% endfor %}
+
             </div>
 
         </div>
     </div>
     <div class="container-fluid">
 
+    </div>
+    </div>
     </div>
 {% endblock %}

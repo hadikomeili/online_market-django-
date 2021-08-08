@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+
+<div class="card address_detail_view text-left m-2 mt-2 p-3" style="width: 100%;
+ border-radius: 10px; padding: 10px; background-color: white; max-height: 400px">
+    <div class="row">
+        <div class="pl-4">
+            <p>{% translate 'Title:' %} <strong>{{ address_detail.title }}</strong></p>
+            <p>{% translate 'State:' %} <strong>{{ address_detail.state }}</strong></p>
+            <p>{% translate 'City:' %} <strong>{{ address_detail.city }}</strong></p>
+            <p>{% translate 'Village:' %} <strong>{{ address_detail.village }}</strong></p>
+            <p>{% translate 'Rest Of Address:' %} <strong>{{ address_detail.rest_of_address }}</strong></p>
+            <p>{% translate 'Post Code:' %} <strong>{{ address_detail.post_code }}</strong></p>
+            <p>{% translate 'Latitude:' %} <strong>{{ address_detail.latitude }}</strong></p>
+            <p>{% translate 'Longitude:' %} <strong>{{ address_detail.longitude }}</strong></p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

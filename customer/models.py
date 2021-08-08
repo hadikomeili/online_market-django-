@@ -19,6 +19,14 @@ class Customer(User):
     class Meta:
         verbose_name = 'customer'
 
+    def calculate_age(self):
+        """
+        methode for calculate customer age
+        :return: int
+        """
+        age = datetime.now().year - self.birthday.year
+        return age
+
 
 class Address(BaseModel):
     """
@@ -42,3 +50,8 @@ class Address(BaseModel):
                                        null=False, blank=True)
     post_code = models.CharField(verbose_name=_('post code'), help_text=_('enter post code'), null=True,
                                  blank=True, max_length=10)
+
+
+
+
+

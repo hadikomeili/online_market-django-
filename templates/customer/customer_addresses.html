@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid p-3">
+        <h5 class="text-center">{% translate 'Addresses' %} for {{ customer.first_name }} {{ customer.last_name }}</h5>
+        {% for address in cus_addresses %}
+            {% include 'customer/address_card.html' with address_card=address %}
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

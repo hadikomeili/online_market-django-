@@ -21,15 +21,6 @@ class CustomerIndexView(generic.TemplateView):
     }
 
 
-class CustomerDetailCardView(generic.DetailView):
-    """
-    View class for create card view for a customer(for customer use)
-    """
-    template_name = 'customer/customer_details.html'
-    model = Customer
-    context_object_name = 'customer_detail'
-
-
 class CustomerCardView(generic.DetailView):
     """
     View class for create card view for a customer(for superuser use)
@@ -39,15 +30,36 @@ class CustomerCardView(generic.DetailView):
     context_object_name = 'customer_card'
 
 
-class CustomerDetailView(generic.TemplateView):
+class CustomerDetailCardView(generic.DetailView):
     """
-    View class for customer dashboard panel
+    View class for create card view for a customer(for customer use)
     """
-    template_name = 'customer/customer_dashboard.html'
-    extra_context = {
-        'customers': Customer.objects.all(),
-        'category': Category.objects.all().filter(ref_category=None),
-    }
+    template_name = 'customer/customer_details.html'
+    model = Customer
+    context_object_name = 'customer_detail'
+
+
+class CustomerSidePanelView(generic.DetailView):
+    """
+    View class for customer side panel in dashboard
+    """
+    template_name = 'customer/customer_side_panel.html'
+    model = Customer
+    context_object_name = 'customer_panel'
+
+
+class CustomerDetailView(View):
+    """
+    View class for customer dashboard
+    """
+
+    def get(self, request, *args, **kwargs):
+        customer = self.request.user
+        addresses = Address.objects.filter(owner=customer)
+
+        return render(request, 'customer/customer_dashboard.html',
+                      {'customer': customer, 'customer_address': addresses})
+
 
 # -------------- Address -------------- #
 
@@ -61,19 +73,28 @@ class AddressCardView(generic.DetailView):
     context_object_name = 'address_card'
 
 
-class AddressView(generic.TemplateView):
+class AddressDetailView(generic.DetailView):
+    """
+    View class for display address details
+    """
+    template_name = 'customer/address_detail.html'
+    model = Address
+    context_object_name = 'address_detail'
+
+
+class AddressListCustomerView(View):
     """
     View class for display all addresses of one customer(based on owner)
     """
-
     def get(self, request, *args, **kwargs):
         customer = self.request.user
         addresses = Address.objects.filter(owner=customer)
 
-        return render(request, 'customer/address_of_customer.html', {'addresses': addresses})
+        return render(request, 'customer/customer_addresses.html', {'customer': customer, 'cus_addresses': addresses})
 
 
 # ------------------------ API_VIEWS -------------------------- #
+
 
 class CustomerListAPIView(generics.ListAPIView):
     serializer_class = CustomerBriefListSerializer
