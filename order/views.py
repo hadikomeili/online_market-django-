@@ -52,3 +52,14 @@ class OrderItemDetailView(generic.DetailView):
     context_object_name = 'order_item_detail'
 
 
+class CartView(View):
+    """
+    View class for Cart
+    """
+
+    def get(self, request, *args, **kwargs):
+        customer = self.request.user
+        customer_order_items = OrderItem.objects.filter(cart__customer=customer)
+
+        return render(request, 'order/cart.html',
+                      {'customer': customer, 'customer_order_items': customer_order_items})

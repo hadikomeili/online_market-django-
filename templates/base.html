@@ -108,8 +108,8 @@
                         style="position: fixed; right: 330px">{% translate 'Signup / Login' %}</button>
             </div>
             <div id="cart">
-                <button class="btn btn-outline-light" style="position: fixed; right: 250px">{% translate 'Cart' %}<i
-                        class="fa fa-cart"></i></button>
+                <a href="/order/cart/"> <button class="btn btn-outline-light" style="position: fixed; right: 250px">{% translate 'Cart' %}<i
+                        class="fa fa-cart"></i></button></a>
             </div>
             <div id="branding" style="position: absolute; right:70px">{% block branding %}
                 <h3>{% translate 'MARKET' %}</h3>{% endblock %}</div>
@@ -123,7 +123,7 @@
     {% block content %}
     {% endblock %}
 </div>
-<div id="footer" class="container-fluid">
+<div id="footer" class="container-fluid text-center">
 
     {% block footer %}
         <div class="container-fluid">

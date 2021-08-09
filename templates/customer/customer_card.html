@@ -1,6 +1,6 @@
 {% load i18n %}
-<div class="card customer_card_view text-left m-2 mt-2" style="width: 100%; border: 2px solid darkblue;
- border-radius: 10px; padding: 10px; background-color: white; max-height: 200px">
+<div class="card customer_card_view text-left m-2 mt-2 shadow" style="width: 100%;
+ border-radius: 2px; padding: 10px; background-color: #e3e9f3; max-height: 200px">
     <div class="row">
         <div class="col-4">
             <br>
@@ -13,13 +13,13 @@
             <p>{% translate 'Gender:' %} {{ customer_card.gender }}</p>
         </div>
         <div class="col-2">
-            <a href="/customer/{{ customer_card.id }}"><img src="/static/{{ customer_card.image }}" alt="customer image"
+            <a href="/customer/dashboard/"><img src="/static/{{ customer_card.image }}" alt="customer image"
                                                             height="100%" style="border-radius: 15px; max-width:200px "></a>
 
         </div>
         <div class="col-2">
             <br>
-            <a href="/customer/detail/{{ customer_card.id }}">
+            <a href="/customer/dashboard/">
                 <button class="btn btn-outline-dark">Customer Details</button>
             </a>
         </div>

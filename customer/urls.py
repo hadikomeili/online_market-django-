@@ -12,7 +12,7 @@ urlpatterns = [
     path('', CustomerIndexView.as_view(), name='all_customers'),
     path('card/<int:pk>', CustomerCardView.as_view(), name='customer_card'),
     path('dashboard/', CustomerDetailView.as_view(), name='customer_dashboard'),
-    path('detail/<int:pk>', CustomerDetailCardView.as_view(), name='customer_detail'),
+    # path('detail/<int:pk>', CustomerDetailCardView.as_view(), name='customer_detail'),
     path('address_detail/<int:pk>', AddressDetailView.as_view(), name='address_detail'),
     path('addresses/', AddressListCustomerView.as_view(), name='address_list'),
 
