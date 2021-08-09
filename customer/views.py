@@ -8,6 +8,7 @@ from .permissions import *
 from .models import *
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -51,7 +52,7 @@ class CustomerSidePanelView(generic.DetailView):
     context_object_name = 'customer_panel'
 
 
-class CustomerDetailView(View):
+class CustomerDetailView(LoginRequiredMixin, View):
     """
     View class for customer dashboard
     """
