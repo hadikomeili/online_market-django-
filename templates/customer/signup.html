@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+<title>{% block title %}Login Customer{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid m-auto p-3 text-center w-50">
+        <div class="card form-group text-left p-3">
+            <h5 class="text-center">{% translate 'Signup' %}</h5><br>
+
+            <form class="card form-group p-3" method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="btn btn-success" type="submit">
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

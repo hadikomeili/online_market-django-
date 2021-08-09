@@ -104,15 +104,17 @@
 
             </div>
             <div id="user-tools">
-                <button class="btn btn-outline-light"
-                        style="position: fixed; right: 330px">{% translate 'Signup / Login' %}</button>
+                <a href="/customer/login/"><button class="btn btn-success"
+                        style="position: fixed; right: 370px">{% translate 'Login' %}</button></a>
+                <a href="/customer/logout/"><button class="btn btn-danger"
+                        style="position: fixed; right: 290px">{% translate 'Logout' %}</button></a>
             </div>
             <div id="cart">
-                <a href="/order/cart/"> <button class="btn btn-outline-light" style="position: fixed; right: 250px">{% translate 'Cart' %}<i
+                <a href="/order/cart/"> <button class="btn btn-outline-light" style="position: fixed; right: 200px">{% translate 'Cart' %}<i
                         class="fa fa-cart"></i></button></a>
             </div>
             <div id="branding" style="position: absolute; right:70px">{% block branding %}
-                <h3>{% translate 'MARKET' %}</h3>{% endblock %}</div>
+                <a href="/product/"><h3 class="text-white">{% translate 'MARKET' %}</h3></a>{% endblock %}</div>
         </div>
 
     </div>

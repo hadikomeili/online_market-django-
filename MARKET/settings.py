@@ -137,3 +137,9 @@ MEDIA_ROOT = BASE_DIR / 'static'
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
 AUTH_USER_MODEL = 'core.User'
+
+LOGIN_URL = 'customer:login'
+
+LOGIN_REDIRECT_URL = 'customer:customer_dashboard'
+
+LOGOUT_REDIRECT_URL = 'product:product_index'
