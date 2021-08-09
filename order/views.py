@@ -1,8 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_list_or_404, reverse, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
 from .models import *
 from .forms import *
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
@@ -52,7 +54,7 @@ class OrderItemDetailView(generic.DetailView):
     context_object_name = 'order_item_detail'
 
 
-class CartView(View):
+class CartView(LoginRequiredMixin, View):
     """
     View class for Cart
     """
