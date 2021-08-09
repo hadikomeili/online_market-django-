@@ -56,13 +56,31 @@ class BaseModel(models.Model):
 
 class MyUserManager(UserManager):
 
-    def create_superuser(self, username=None, email=None, password=None, **extra_fields):
-        username = extra_fields['phone']
-        return super().create_superuser(username, email, password, **extra_fields)
+    use_in_migrations = True
 
-    def create_user(self, username=None, email=None, password=None, **extra_fields):
-        username = extra_fields['phone']
-        return super().create_user(username, email, password, **extra_fields)
+    def _create_user(self, phone, username, password, **extra_fields):
+        if not phone:
+            raise ValueError('The given phone must be set')
+        self.phone = phone
+        user = self.model(phone=phone, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, phone, password, username=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self._create_user(phone, username, password, **extra_fields)
+
+    def create_user(self, phone, username=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(phone, username, password, **extra_fields)
 
     def get_queryset(self):
         """
@@ -79,6 +97,7 @@ class MyUserManager(UserManager):
 
 class User(AbstractUser):
     USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = ['email']
 
     phone = models.CharField(verbose_name=_('phone'), help_text=_('enter phone number'), max_length=11, unique=True,
                              null=False, blank=False)
