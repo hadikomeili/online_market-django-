@@ -18,8 +18,9 @@ class Cart(BaseModel):
                                     help_text=_('specify owner customer for cart'),
                                     null=False, blank=False, on_delete=models.PROTECT)
 
-    # status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), null=False,
-    #                           blank=False, choices=[('W', _('waiting'), ('F', _('final cart')))])
+    status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), max_length=20,
+                              blank=False, null=False, choices=[('WA', _('waiting')), ('FI', _('final cart'))],
+                              default='W')
 
     def specify_cart_status(self):
         """

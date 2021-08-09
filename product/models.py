@@ -133,6 +133,6 @@ class Product(BaseModel):
         return res
 
     def __str__(self):
-        return f'{self.name}: {self.price} - {self.inventory_status()}'
+        return f'{self.name}'
 
 

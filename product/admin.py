@@ -31,7 +31,11 @@ class ProductForm(forms.ModelForm):
 
 class ProductAdmin(admin.ModelAdmin):
     form = ProductForm
-    list_display = ('name', 'price', 'discount', 'inventory')
+    list_display = ('name', 'price', 'category', 'discount', 'inventory')
+    list_filter = ('category', 'discount')
+    list_display_links = ('name',)
+    list_editable = ('price', 'inventory')
+    ordering = ('name', 'price', 'discount', 'inventory', 'category')
 
 
 admin.site.register(Product, ProductAdmin)
@@ -60,14 +64,16 @@ class DiscountForm(forms.ModelForm):
             if value < 0:
                 raise ValidationError(_('value can not be negative!'))
 
-
-
         return self.cleaned_data
 
 
 class DiscountAdmin(admin.ModelAdmin):
     form = DiscountForm
     list_display = ('value', 'type', 'max_value', 'specify_discount_status')
+    list_filter = ('type', 'max_value')
+    list_display_links = ('max_value', 'specify_discount_status')
+    list_editable = ('value', 'type')
+    ordering = ('value', 'type', 'max_value')
 
 
 admin.site.register(Discount, DiscountAdmin)
@@ -75,7 +81,18 @@ admin.site.register(Discount, DiscountAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
 
-    list_display = ('name', 'ref_category','level')
+    list_display = ('name', 'ref_category', 'level')
+    list_filter = ('level', 'ref_category')
+    list_display_links = ('name', 'level')
+    list_editable = ('ref_category',)
+    ordering = ('name', 'ref_category', 'level')
 
 
 admin.site.register(Category, CategoryAdmin)
+
+
+def logical_delete(modeladmin, request, queryset):
+    queryset.update(deleted=True)
+
+
+admin.site.add_action(logical_delete)

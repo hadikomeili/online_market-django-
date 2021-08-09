@@ -46,7 +46,7 @@ class Address(BaseModel):
     owner = models.ForeignKey(Customer, verbose_name=_('customer name'), help_text=_('specify customer'),
                               null=False, blank=False, on_delete=models.PROTECT)
     title = models.CharField(verbose_name=_('address title'), help_text=_('enter title for this address'),
-                             max_length=25, default='NEW')
+                             max_length=25, default='New')
     latitude = models.FloatField(verbose_name=_('latitude'), help_text=_('enter latitude'), null=True, blank=True)
     longitude = models.FloatField(verbose_name=_('longitude'), help_text=_('enter longitude'), null=True, blank=True)
     country = models.CharField(verbose_name=_('country name'), help_text=_('enter country name'), null=False,
