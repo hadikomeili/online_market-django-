@@ -27,6 +27,9 @@ class Cart(BaseModel):
         """
         pass
 
+    def __str__(self):
+        return f'{self.customer}'
+
 
 class OrderItem(BaseModel):
     """
@@ -99,5 +102,5 @@ class OrderItem(BaseModel):
             cart_price += item.calculate_order_item_price()
         return cart_price
 
-
-
+    def __str__(self):
+        return f'{self.product} : {self.product_number} for {self.cart}'

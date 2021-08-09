@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid m-auto p-3">
+    <div class="modal-dialog-centered m-auto">
+        <form class="form p-2" method="post" enctype="multipart/form-data"
+              style="border-radius: 10px; border: solid #062c33;">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <strong>{{ field.label_tag }}</strong>
+                    {{ field }}<br>
+                    <span style="color: dimgrey">{{ field.help_text }}</span>
+                    <span style="color: red">{{ field.errors }}</span>
+                </div>
+
+            {% endfor %}
+
+            <input class="btn btn-block btn-success" type="submit" value="Add to Cart">
+
+
+        </form>
+    </div>
+    </div>
+{% endblock %}

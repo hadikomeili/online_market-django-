@@ -1,0 +1,36 @@
+{% load i18n %}
+<div class=" container-fluid m-2">
+    <div class="card order_item_card_view text-left m-auto p-3" style="width: 75%; border: 2px solid darkblue;
+ border-radius: 10px; padding: 10px; background-color: white; max-height: 200px">
+        <div class="row">
+            <div class="col-3">
+                <br>
+                <h5>{% translate 'Product Name:' %}<br> {{ order_item_card.product.name }}</h5>
+                <h6>{% translate 'Category:' %} {{ order_item_card.product.category.name }}</h6>
+
+            </div>
+            <div class="col-3">
+                <br><br>
+                <h6>{% translate 'Order Numbers:' %} {{ order_item_card.product_number }}</h6>
+                <h6>{% translate 'Final Price:' %} {{ order_item_card.calculate_order_item_price }}</h6>
+                <p>{% translate 'Customer:' %} {{ order_item_card.cart.customer }}</p>
+
+            </div>
+            <div class="col-4">
+                <a href="/product/{{ order_item_card.product.id }}"><img
+                        src="/static/{{ order_item_card.product.image }}"
+                        alt="product image" height="170px"
+                        style="border-radius: 15px; "></a>
+
+            </div>
+            <div class="col-2">
+                <br><br><br><br>
+                <a href="/order/order_item/{{ order_item_card.id }}">
+                    <button class="btn btn-outline-dark">Details</button>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+</div>

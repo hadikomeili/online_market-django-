@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid shadow">
+        <div class="row" >
+            {% for order_item in order_items %}
+                {% include 'order/order_item_card.html' with order_item_card=order_item %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container-fluid">
+{#        <div class="row">#}
+{#            {% for product in products %}#}
+{#                {% include 'product/card.html' with product_card=product %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+    </div>
+{% endblock %}

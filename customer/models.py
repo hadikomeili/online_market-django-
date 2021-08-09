@@ -35,6 +35,9 @@ class Customer(User):
         res = cls.objects.filter(gender=gen)
         return res
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class Address(BaseModel):
     """
@@ -90,3 +93,6 @@ class Address(BaseModel):
         """
         res = cls.objects.filter(owner=owner)
         return res
+
+    def __str__(self):
+        return f'{self.title} in {self.city}#owner: {self.owner}'
