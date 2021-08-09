@@ -87,6 +87,12 @@ class CustomerModelTest(TestCase):
     #
     #     self.assertRaises(self.customer1, TypeError, )
 
+    def test_logic_delete_method(self):
+        self.customer1.logic_delete()
+
+        self.assertEqual(self.customer1.deleted, True)
+        self.assertNotEqual(self.customer1.delete_timestamp, None)
+
 
 class AddressModelTest(TestCase):
 
@@ -125,6 +131,13 @@ class AddressModelTest(TestCase):
         self.add1.save()
 
         self.assertIn(self.add1.owner, Customer.objects.all())
+
+    def test_logic_delete_method(self):
+        self.add1.logic_delete()
+
+        self.assertEqual(self.add1.deleted, True)
+        self.assertNotEqual(self.add1.delete_timestamp, None)
+
 
 
 

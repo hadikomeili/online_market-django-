@@ -27,6 +27,14 @@ class Customer(User):
         age = datetime.now().year - self.birthday.year
         return age
 
+    @classmethod
+    def filter_by_gender(cls, gen):
+        """
+        method for filter customers based on gender
+        """
+        res = cls.objects.filter(gender=gen)
+        return res
+
 
 class Address(BaseModel):
     """
@@ -51,7 +59,34 @@ class Address(BaseModel):
     post_code = models.CharField(verbose_name=_('post code'), help_text=_('enter post code'), null=True,
                                  blank=True, max_length=10)
 
+    @classmethod
+    def filter_by_country(cls, country):
+        """
+        method for filter addresses based on country
+        """
+        res = cls.objects.filter(country=country)
+        return res
 
+    @classmethod
+    def filter_by_state(cls, state):
+        """
+        method for filter addresses based on state
+        """
+        res = cls.objects.filter(state=state)
+        return res
 
+    @classmethod
+    def filter_by_city(cls, city):
+        """
+        method for filter addresses based on city
+        """
+        res = cls.objects.filter(city=city)
+        return res
 
-
+    @classmethod
+    def filter_by_owner(cls, owner):
+        """
+        method for filter addresses based on owner
+        """
+        res = cls.objects.filter(owner=owner)
+        return res

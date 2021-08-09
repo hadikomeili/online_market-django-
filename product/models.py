@@ -43,8 +43,7 @@ class Discount(BaseModel):
     type = models.CharField(verbose_name=_('discount type'), help_text=_('specify type of discount'), null=False,
                             blank=False, choices=[('%', _('percent')), ('$', _('cash'))], max_length=15)
     value = models.IntegerField(verbose_name=_('discount value'), help_text=_('specify discount value'), null=True,
-                                blank=True, default=0,
-                                )
+                                blank=True, default=0)
     max_value = models.IntegerField(verbose_name=_('maximum value'), help_text=_('specify maximum value'),
                                     null=True, blank=True)
 
@@ -56,7 +55,6 @@ class Discount(BaseModel):
     def specify_discount_status(self):
         """
         method for specify discounts status in product models
-        :return: str
         """
         if datetime.now().date() > self.expire_time:
             status = 'Expired'
@@ -77,11 +75,11 @@ class Product(BaseModel):
     name = models.CharField(verbose_name=_('english name'), max_length=50, help_text=_('enter name in english'),
                             null=False, blank=False)
     name_fa = models.CharField(verbose_name=_('farsi name'), max_length=50, help_text=_('enter name in farsi'),
-                               null=True, blank=True)
+                               null=False, blank=False)
     company_brand = models.CharField(verbose_name=_('english company brand'), max_length=30,
                                      help_text='enter company brand name in english', null=False, blank=False)
     company_brand_fa = models.CharField(verbose_name=_('farsi company brand'), max_length=30,
-                                        help_text='enter company brand name in farsi', null=True, blank=True)
+                                        help_text='enter company brand name in farsi', null=False, blank=False)
     category = models.ForeignKey(Category, verbose_name=_('category'), help_text=_('specify category'),
                                  on_delete=models.RESTRICT, null=False, blank=False)
     discount = models.ForeignKey(Discount, verbose_name=_('discount'), help_text=_('specify discount'),
