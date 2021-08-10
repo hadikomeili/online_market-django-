@@ -15,6 +15,7 @@ urlpatterns = [
     # path('detail/<int:pk>', CustomerDetailCardView.as_view(), name='customer_detail'),
     path('address_detail/<int:pk>', AddressDetailView.as_view(), name='address_detail'),
     path('addresses/', AddressListCustomerView.as_view(), name='address_list'),
+    path('add_address/', AddressCreateFormView.as_view(), name='add_address'),
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', MyLogoutView.as_view(), name='logout'),
     path('signup/', sign_up, name='signup'),

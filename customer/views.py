@@ -9,7 +9,8 @@ from .models import *
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from .forms import *
+from django.urls import reverse_lazy
 # Create your views here.
 
 # -------------- Customer -------------- #
@@ -96,6 +97,22 @@ class AddressListCustomerView(View):
         addresses = Address.objects.filter(owner=customer)
 
         return render(request, 'customer/customer_addresses.html', {'customer': customer, 'cus_addresses': addresses})
+
+
+# ------------------------ Form View --------------------------- #
+
+
+class AddressCreateFormView(generic.FormView):
+    template_name = 'customer/create_address.html'
+    form_class = AddressForm
+
+    success_url = reverse_lazy('customer:address_list')
+
+    def form_valid(self, form):
+        form.owner = self.request.user.id
+        form.save()
+        return super().form_valid(form)
+
 
 
 # ------------------------ API_VIEWS -------------------------- #

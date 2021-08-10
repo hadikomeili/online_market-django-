@@ -21,11 +21,11 @@ class CustomerForm(forms.ModelForm):
 
 class AddressForm(forms.ModelForm):
     class Meta:
-        model = Customer
+        model = Address
         exclude = ['deleted']
         owner = forms.ModelChoiceField(queryset=Address.objects.all(), label=_('customer name'),
                                        help_text=_('specify customer'),
-                                       validators=[address_owner_is_instance_customer_model])
+                                       validators=[address_owner_is_instance_customer_model], disabled=True)
         title = forms.CharField(max_length=25, label=_('address title'), help_text=_('enter title for this address'),
                                 validators=[customer_input_string_validator, address_title_is_title_validator])
         country = forms.CharField(max_length=30, label=_('country name'), help_text=_('enter country name'),
