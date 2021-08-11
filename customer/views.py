@@ -167,18 +167,18 @@ class MyLogoutView(LogoutView):
 
 def sign_up(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
+            phone = form.cleaned_data.get('phone')
             password = form.cleaned_data.get('password1')
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, phone=phone, password=password)
             login(request, user)
-            return redirect('cafe5:home')
+            return redirect('customer:customer_dashboard')
     else:
-        form = UserCreationForm()
+        form = MyUserCreationForm()
     return render(request, 'customer/signup.html', {'form': form})
 
 
-def home(request):
-    return render(request, 'home.html')
+# def home(request):
+#     return render(request, 'home.html')

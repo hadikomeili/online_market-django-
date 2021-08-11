@@ -6,12 +6,12 @@ from .forms import *
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    form = CustomerForm
-    list_display = ('first_name', 'last_name', 'phone', 'email', 'national_code', 'gender')
+    form = MyUserCreationForm
+    list_display = ('first_name', 'last_name', 'phone', 'email', 'gender')
     list_filter = ('gender',)
-    list_display_links = ('phone', 'national_code', 'first_name', 'last_name', 'email',)
+    list_display_links = ('phone', 'first_name', 'last_name', 'email',)
     list_editable = ('gender',)
-    ordering = ('first_name', 'last_name', 'phone', 'email', 'national_code', 'gender')
+    ordering = ('first_name', 'last_name', 'phone', 'email', 'gender')
 
 
 admin.site.register(Customer, CustomerAdmin)

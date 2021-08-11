@@ -9,11 +9,24 @@
         <div class="card form-group text-left p-3">
             <h5 class="text-center">{% translate 'Signup' %}</h5><br>
 
-            <form class="card form-group p-3" method="post" action="">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input class="btn btn-success" type="submit">
-            </form>
+            <form class="form p-2" method="post" enctype="multipart/form-data"
+              style="border-radius: 3px;">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <strong>{{ field.label_tag }}</strong>
+                    {{ field }}<br>
+                    <span style="color: dimgrey">{{ field.help_text }}</span>
+                    <span style="color: red">{{ field.errors }}</span>
+                </div>
+
+            {% endfor %}
+
+            <input class="btn btn-block btn-success" type="submit" value="Register">
+
+
+        </form>
 
         </div>
     </div>
