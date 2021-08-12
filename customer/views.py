@@ -114,7 +114,6 @@ class AddressCreateFormView(generic.FormView):
         return super().form_valid(form)
 
 
-
 # ------------------------ API_VIEWS -------------------------- #
 
 
