@@ -1,0 +1,8 @@
+ERROR (2021-08-12 18:40:43,712): "Error msg!" at views (process: 264748, thread: MainThread)
+CRITICAL (2021-08-12 18:40:43,712): "Critical msg!" at views (process: 264748, thread: MainThread)
+ERROR (2021-08-12 18:41:25,371): "Error msg!" at views (process: 264802, thread: MainThread)
+CRITICAL (2021-08-12 18:41:25,371): "Critical msg!" at views (process: 264802, thread: MainThread)
+ERROR (2021-08-12 18:42:21,413): "Error msg!" at views (process: 264829, thread: MainThread)
+CRITICAL (2021-08-12 18:42:21,413): "Critical msg!" at views (process: 264829, thread: MainThread)
+ERROR (2021-08-12 18:43:45,808): "Error msg!" at views (process: 264904, thread: MainThread)
+CRITICAL (2021-08-12 18:43:45,808): "Critical msg!" at views (process: 264904, thread: MainThread)

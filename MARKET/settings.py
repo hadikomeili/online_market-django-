@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from logging import LogRecord
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -145,6 +146,63 @@ LOGIN_REDIRECT_URL = 'customer:customer_dashboard'
 
 LOGOUT_REDIRECT_URL = 'product:product_index'
 
+
 # REST_FRAMEWORK = {
 #     'PAGE_SIZE': 4
 # }
+
+
+def length_limit(record: LogRecord):
+    if len(record.getMessage()) <= 20:
+        return record.getMessage()
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'format1': {
+            'format': '{levelname} ({asctime}): "{message}"',
+            'style': '{'
+        },
+        'format2': {
+            'format': '{levelname} ({asctime}): "{message}" at {module} (process: {process}, thread: {threadName})',
+            'style': '{'
+        }
+    },
+    'filters': {
+        'my-filter': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': length_limit
+        }
+    },
+    'handlers': {
+        'my-console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'format1',
+            'filters': ['my-filter']
+        },
+        'my-file': {
+            'class': 'logging.FileHandler',
+            'formatter': 'format2',
+            'level': 'ERROR',
+            'filename': BASE_DIR / 'log/my-logging.log'
+        }
+    },
+    'root': {
+        'handlers': ['my-console'],
+        'level': 'DEBUG'
+    },
+    'loggers': {
+        'project': {
+            'handlers': ['my-file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'project.developers': {
+            'handlers': ['my-file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from .serializers import ProductSerializer, CategorySerializer
 from .models import *
 
+
 # Create your views here.
 
 ###---Product---###
@@ -18,6 +19,17 @@ class ProductIndexView(generic.TemplateView):
     """
     View class for display all products
     """
+
+    ### task: logging ###
+
+    import logging
+    logger = logging.getLogger('project.developers')
+    logger.debug("Debug msg!")
+    logger.info("Info msg!")
+    logger.warning("Warning msg!")
+    logger.error("Error msg!")
+    logger.critical("Critical msg!")
+
     template_name = 'product/index.html'
     extra_context = {
         'products': Product.objects.all(),
