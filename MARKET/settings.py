@@ -143,3 +143,7 @@ LOGIN_URL = 'customer:login'
 LOGIN_REDIRECT_URL = 'customer:customer_dashboard'
 
 LOGOUT_REDIRECT_URL = 'product:product_index'
+
+# REST_FRAMEWORK = {
+#     'PAGE_SIZE': 4
+# }
