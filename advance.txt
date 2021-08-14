@@ -1,0 +1,10 @@
+important
+for search
+
+- django fixture
+- django email
+- django db routers
+- drf throtteling
+- Django test server: selemnium
+- drf authentications
+- TokenAuthentication

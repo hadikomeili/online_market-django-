@@ -8,5 +8,4 @@ class IsSuperuserPermission(permissions.BasePermission):
 
 class IsOwnerPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        print(obj.owner, request.user)
-        return request.user == obj.owner
+        return request.user.username == obj.owner.username

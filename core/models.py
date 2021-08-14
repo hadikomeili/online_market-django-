@@ -82,11 +82,6 @@ class User(AbstractUser):
 
     phone = models.CharField(verbose_name=_('phone'), help_text=_('enter phone number'), max_length=11, unique=True,
                              null=False, blank=False)
-    national_code = models.CharField(verbose_name=_('national code'), help_text=_('enter national code'),
-                                     max_length=10, blank=True, null=True)
-    gender = models.CharField(verbose_name=_('gender'), help_text=_('specify your gender'), max_length=10,
-                              choices=[('M', 'Male'), ('F', 'Female')], blank=True, null=True)
-    birthday = models.DateField(verbose_name=_('birthday'), help_text=_('specify birthday date'), null=True, blank=True)
 
     deleted = models.BooleanField(default=False)
     create_timestamp = models.DateTimeField(auto_now_add=True)

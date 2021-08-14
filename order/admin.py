@@ -21,7 +21,7 @@ admin.site.register(OrderItem, OrderItemAdmin)
 
 class CartAdmin(admin.ModelAdmin):
     form = CartForm
-    list_display = ('customer', 'status')
+    list_display = ('customer', 'status', 'final_price')
     list_filter = ('customer', 'status')
     list_display_links = ('customer',)
     list_editable = ('status',)

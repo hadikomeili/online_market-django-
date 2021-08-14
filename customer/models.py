@@ -13,6 +13,11 @@ class Customer(User):
     """
     a model for customer in this project
     """
+    national_code = models.CharField(verbose_name=_('national code'), help_text=_('enter national code'),
+                                     max_length=10, blank=True, null=True)
+    gender = models.CharField(verbose_name=_('gender'), help_text=_('specify your gender'), max_length=10,
+                              choices=[('M', 'Male'), ('F', 'Female')], blank=True, null=True)
+    birthday = models.DateField(verbose_name=_('birthday'), help_text=_('specify birthday date'), null=True, blank=True)
     image = models.FileField(verbose_name=_('customer image'), help_text=_('upload your image'), null=True,
                              blank=True, upload_to='customer/images/')
 
@@ -35,6 +40,9 @@ class Customer(User):
         res = cls.objects.filter(gender=gen)
         return res
 
+    def customer_name(self):
+        return self.__str__()
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -43,8 +51,8 @@ class Address(BaseModel):
     """
     a model for add customer addresses
     """
-    owner = models.ForeignKey(Customer, verbose_name=_('customer name'), help_text=_('specify customer'),
-                              null=True, blank=True, on_delete=models.PROTECT)
+    owner = models.ForeignKey(Customer, verbose_name=_('address owner'), help_text=_('specify owner'),
+                              null=True, blank=True, on_delete=models.CASCADE)
     title = models.CharField(verbose_name=_('address title'), help_text=_('enter title for this address'),
                              max_length=25, default='New')
     latitude = models.FloatField(verbose_name=_('latitude'), help_text=_('enter latitude'), null=True, blank=True)

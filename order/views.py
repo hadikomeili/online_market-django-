@@ -2,6 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_list_or_404, reverse, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
+from rest_framework import generics
+from .serializers import *
+
 from .models import *
 from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -65,3 +68,16 @@ class CartView(LoginRequiredMixin, View):
 
         return render(request, 'order/cart.html',
                       {'customer': customer, 'customer_order_items': customer_order_items})
+
+
+# --------------- API Views ------------------ #
+
+
+class OrderItemListAPIView(generics.ListAPIView):
+    serializer_class = OrderItemSerializer
+    queryset = OrderItem.objects.all()
+
+
+class CartAPIView(generics.ListAPIView):
+    serializer_class = CartSerializer
+    queryset = Cart.objects.all()

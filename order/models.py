@@ -21,12 +21,29 @@ class Cart(BaseModel):
     status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), max_length=20,
                               blank=False, null=False, choices=[('WA', _('waiting')), ('FI', _('final cart'))],
                               default='W')
+    final_price = models.FloatField(verbose_name=_('final price'), help_text=_('final cart price'),
+                                    null=True, blank=True)
 
     def specify_cart_status(self):
         """
         method for specify cart status in order models
         """
         pass
+
+    def cart_price(self):
+        """
+        method for calculate cart price
+        """
+        items = OrderItem.objects.filter(cart__customer=self.customer)
+        price = 0
+        for item in items:
+            price += item.product.calculate_final_price() * item.product_number
+        return price
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        p = self.cart_price()
+        self.final_price = p
+        super().save(force_insert, force_update, using, update_fields)
 
     def __str__(self):
         return f'{self.customer}'
@@ -42,7 +59,8 @@ class OrderItem(BaseModel):
     product_number = models.IntegerField(verbose_name=_('numbers'), help_text=_('specify number of selected product'),
                                          null=False, blank=False, default=1)
     cart = models.ForeignKey(Cart, verbose_name=_('cart'), help_text=_('specify cart'), null=True, blank=True,
-                             on_delete=models.PROTECT)
+                             on_delete=models.PROTECT, related_name='cart_orderitems',
+                             related_query_name='customer_car_orderitems')
 
     def specify_order_item_status(self):
         """

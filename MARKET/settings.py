@@ -147,9 +147,10 @@ LOGIN_REDIRECT_URL = 'customer:customer_dashboard'
 LOGOUT_REDIRECT_URL = 'product:product_index'
 
 
-# REST_FRAMEWORK = {
-#     'PAGE_SIZE': 4
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'core.pagination.APIViewPagination',
+    'PAGE_SIZE': 5
+}
 
 
 def length_limit(record: LogRecord):

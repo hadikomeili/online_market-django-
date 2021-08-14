@@ -1,7 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.views import generic, View
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.response import Response
+
 from .serializers import *
 from .permissions import *
 
@@ -118,6 +124,9 @@ class AddressCreateFormView(generic.FormView):
 
 
 class CustomerListAPIView(generics.ListAPIView):
+    """
+    API view for superuser to see list of customers
+    """
     serializer_class = CustomerBriefListSerializer
     queryset = Customer.objects.all()
     permission_classes = [
@@ -125,19 +134,39 @@ class CustomerListAPIView(generics.ListAPIView):
     ]
 
 
+class CustomerDetailsAdminAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API view for superuser to edit and delete customer
+    """
+    serializer_class = CustomerDetailAdminSerializer
+    queryset = Customer.objects.all()
+    permission_classes = [
+        IsSuperuserPermission
+    ]
+
+
 class CustomerDetailAPIView(generics.RetrieveUpdateAPIView):
+    """
+    API view for customer to see and update his info
+    """
     serializer_class = CustomerSerializer
+    queryset = Customer.objects.all()
 
     permission_classes = [
         permissions.IsAuthenticated
     ]
 
-    def get_queryset(self):
-        return self.request.user
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, username=self.request.user)
+        return obj
 
 
-class AddressListAPIView(generics.ListAPIView):
-    serializer_class = AddressBriefListSerializer
+class AddressListAPIView(generics.ListCreateAPIView):
+    """
+    for customer use
+    """
+    serializer_class = AddressDetailSerializer
     permission_classes = [
         permissions.IsAuthenticated
     ]
@@ -145,13 +174,39 @@ class AddressListAPIView(generics.ListAPIView):
     def get_queryset(self):
         return Address.objects.filter(owner=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        new_address = AddressDetailSerializer(data=request.data)
+
+        if new_address.is_valid():
+            new_address.validated_data['owner'] = Customer.objects.get(phone=request.user.phone)
+            print(type(new_address.validated_data))
+            new_address.save()
+
+            return Response(new_address.data)
+
 
 class AddressDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = AddressSerializer
+    """
+    for customer use
+    """
+    serializer_class = AddressDetailSerializer
     queryset = Address.objects.all()
     permission_classes = [
         permissions.IsAuthenticated, IsOwnerPermission
     ]
+
+
+class AddressesIndexAPIView(generics.ListAPIView):
+    """
+    for superuser use
+    """
+    serializer_class = AddressBriefListSerializer
+    queryset = Address.objects.all()
+    permission_classes = [
+        IsSuperuserPermission, permissions.IsAuthenticated
+    ]
+    
+
 
 # -------------------- login/logout/signup ---------------------- #
 

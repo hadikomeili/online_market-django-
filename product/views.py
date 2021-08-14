@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProductSerializer, CategorySerializer
 from .models import *
+from rest_framework import generics
 
 
 # Create your views here.
@@ -121,6 +122,7 @@ def product_list_view_api(request):
 
 
 @csrf_exempt
+@api_view(['GET', 'POST'])
 def category_list_view_api(request):
     """
     a function view for category list as api
@@ -128,18 +130,15 @@ def category_list_view_api(request):
     if request.method == 'GET':
         categories = Category.objects.all()
         s = CategorySerializer(categories, many=True)
-        return JsonResponse({'categories': s.data})
+        return Response({'categories': s.data})
     elif request.method == 'POST':
         new_cat = CategorySerializer(data=request.POST)
 
         if new_cat.is_valid():
 
-            return JsonResponse(new_cat.data)
+            return Response(new_cat.data)
         else:
-            return JsonResponse(new_cat.errors, status=400)
-
-
-from rest_framework import generics
+            return Response(new_cat.errors, status=400)
 
 
 class ProductAPIView(generics.ListCreateAPIView):
