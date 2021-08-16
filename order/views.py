@@ -62,7 +62,7 @@ class OrderItemDetailView(generic.DetailView):
     context_object_name = 'order_item_detail'
 
 
-class CartView(View):
+class CartView(LoginRequiredMixin, View):
     """
     View class for Cart
     """
@@ -94,6 +94,11 @@ class CartView(View):
 
             return redirect('product:product_index')
 
+
+class CartArchiveView(generic.DetailView):
+    template_name = 'order/cart_card.html'
+    model = Cart
+    context_object_name = 'cart_card'
 
 # --------------- API Views ------------------ #
 

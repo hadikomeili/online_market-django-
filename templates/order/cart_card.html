@@ -1,0 +1,19 @@
+{% load i18n %}
+<div class=" container-fluid m-2">
+    <div class="card order_item_card_view text-left m-auto p-3" style="width: 75%;
+ border-radius: 10px; padding: 10px; background-color: white; max-height: 300px">
+        <div class="row">
+
+            <div class="col-12 m-auto w-75">
+                <br><br>
+                <h6>{% translate 'Cart Status:' %} {{ cart_card.order_status }}</h6>
+                <h6>{% translate 'Cart Price:' %} {{ cart_card.final_price }}</h6>
+                <h6>{% translate 'Address:' %} {{ cart_card.order_address }}</h6>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
