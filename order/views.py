@@ -177,17 +177,20 @@ class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
     API view for customer to see his/her cart
     """
     serializer_class = CartForCustomerSerializer
-    queryset = Cart.objects.filter(status='WA')
+    # queryset = Cart.objects.filter(status='WA', order_address__owner=)
 
-    # permission_classes = [
-    #     permissions.IsAuthenticated
-    # ]
+    # def filter_queryset(self, queryset):
+    #     x = Cart.objects.filter(order_address__owner=self.request.user)
+    #     return x
 
     def get_object(self):
-        queryset = self.get_queryset()
+        queryset = Cart.objects.filter(status='WA')
+        queryset2 = Address.objects.all()
+
         if self.request.user.is_authenticated:
             obj = get_object_or_404(queryset, customer=self.request.user)
             obj.save()
+            obj2 = get_list_or_404(queryset2, owner=self.request.user)
             return obj
         else:
             obj = get_object_or_404(queryset, customer=None)

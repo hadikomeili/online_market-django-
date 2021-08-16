@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from customer.models import Customer
+from customer.models import Customer, Address
 from product.models import Product
 from .models import OrderItem, Cart
 
@@ -49,6 +49,7 @@ class CartForCustomerSerializer(serializers.ModelSerializer):
     for customer
     """
     customer = serializers.PrimaryKeyRelatedField(read_only=True, source='customer.__str__')
+    order_address = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Cart

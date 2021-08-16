@@ -30,6 +30,10 @@ class Cart(BaseModel):
                                       help_text=_('specify address for send order'),
                                       null=True, blank=True, on_delete=models.PROTECT)
 
+    def address_by_customer(self):
+        addresses = Address.objects.filter(owner=self.customer)
+        return addresses
+
     def change_order_status_to_in_process(self):
         """
         method for change order status to IP
