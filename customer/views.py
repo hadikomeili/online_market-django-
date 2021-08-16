@@ -17,6 +17,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from django.urls import reverse_lazy
+
+
 # Create your views here.
 
 # -------------- Customer -------------- #
@@ -179,7 +181,7 @@ class AddressListAPIView(generics.ListCreateAPIView):
 
         if new_address.is_valid():
             new_address.validated_data['owner'] = Customer.objects.get(phone=request.user.phone)
-            print(type(new_address.validated_data))
+            # print(type(new_address.validated_data))
             new_address.save()
 
             return Response(new_address.data)
@@ -192,7 +194,7 @@ class AddressDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AddressDetailSerializer
     queryset = Address.objects.all()
     permission_classes = [
-        permissions.IsAuthenticated, IsOwnerPermission
+        permissions.IsAuthenticated, IsOwnerAddressPermission
     ]
 
 
@@ -205,13 +207,13 @@ class AddressesIndexAPIView(generics.ListAPIView):
     permission_classes = [
         IsSuperuserPermission, permissions.IsAuthenticated
     ]
-    
 
 
 # -------------------- login/logout/signup ---------------------- #
 
 
 class MyLoginView(LoginView):
+
     pass
 
 
@@ -232,7 +234,6 @@ def sign_up(request):
     else:
         form = MyUserCreationForm()
     return render(request, 'customer/signup.html', {'form': form})
-
 
 # def home(request):
 #     return render(request, 'home.html')

@@ -9,7 +9,10 @@ urlpatterns = [
     path('order_item/<int:pk>', OrderItemDetailView.as_view(), name='order_item_detail'),
     path('add_order_item/', OrderItemFormView.as_view(), name='add_order_item_form'),
     path('cart/', CartView.as_view(), name='customer_cart'),
-    path('api/order_items-list/', OrderItemListAPIView.as_view()),
-    path('api/cart-list/', CartAPIView.as_view()),
-
+    path('api/orderitems-list/', OrderItemListAPIView.as_view(), name='orderitems_api_for_admin'),
+    path('api/cart-list/', CartAPIView.as_view(), name='cart_list_api_for_admin'),
+    path('api/cart/', CartCustomerAPIView.as_view(), name='customer_cart_api'),
+    path('api/cart/orderitems/', CartOrderItemsAPIView.as_view(), name='customer_cart_orderitems_api'),
+    path('api/cart/orderitems/<int:pk>', OrderItemDetailAPIView.as_view(), name='customer_cart_orderitems_details_api'),
+    path('api/add_orderitem/', CartOrderItemCreateAPIView.as_view(), name='customer_cart_orderitems_create_api'),
 ]

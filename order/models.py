@@ -19,16 +19,25 @@ class Cart(BaseModel):
                                     null=False, blank=False, on_delete=models.PROTECT)
 
     status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), max_length=20,
-                              blank=False, null=False, choices=[('WA', _('waiting')), ('FI', _('final cart'))],
+                              blank=False, null=False, choices=[('WA', _('waiting')), ('FI', _('final cart')),
+                                                                ('PD', _('paid'))],
                               default='W')
     final_price = models.FloatField(verbose_name=_('final price'), help_text=_('final cart price'),
                                     null=True, blank=True)
 
-    def specify_cart_status(self):
+    def finalize_cart(self):
         """
-        method for specify cart status in order models
+        method for change cart status to FI
         """
-        pass
+        self.status = 'FI'
+        return self.status
+
+    def paid_cart(self):
+        """
+        method for change cart status to PD
+        """
+        self.status = 'PD'
+        return self.status
 
     def cart_price(self):
         """
@@ -60,7 +69,7 @@ class OrderItem(BaseModel):
                                          null=False, blank=False, default=1)
     cart = models.ForeignKey(Cart, verbose_name=_('cart'), help_text=_('specify cart'), null=True, blank=True,
                              on_delete=models.PROTECT, related_name='cart_orderitems',
-                             related_query_name='customer_car_orderitems')
+                             related_query_name='customer_cart_orderitems')
 
     def specify_order_item_status(self):
         """

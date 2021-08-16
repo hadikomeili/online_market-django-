@@ -3,11 +3,15 @@ from django.shortcuts import render, get_list_or_404, reverse, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
 from rest_framework import generics
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+
 from .serializers import *
 
 from .models import *
 from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin
+from customer.permissions import *
 
 
 # Create your views here.
@@ -74,10 +78,124 @@ class CartView(LoginRequiredMixin, View):
 
 
 class OrderItemListAPIView(generics.ListAPIView):
+    """
+    API view for superuser to see all order items
+    """
     serializer_class = OrderItemSerializer
     queryset = OrderItem.objects.all()
+    permission_classes = [
+        IsSuperuserPermission
+    ]
 
 
 class CartAPIView(generics.ListAPIView):
+    """
+    API view for superuser to see all carts
+    """
     serializer_class = CartSerializer
     queryset = Cart.objects.all()
+    permission_classes = [
+        IsSuperuserPermission
+    ]
+
+
+class CartOrderItemsAPIView(generics.ListCreateAPIView):
+    """
+    API view for customer to see all order items in his/her cart
+    """
+    serializer_class = OrderItemForCustomerSerializer
+    queryset = OrderItem.objects.all()
+    # permission_classes = [
+    #     permissions.IsAuthenticated
+    # ]
+
+    def get_queryset(self):
+        order_items = OrderItem.objects.filter(cart__customer=self.request.user)
+        return order_items
+
+    def create(self, request, *args, **kwargs):
+        new_order_item = OrderItemForCustomerSerializer(data=request.data)
+
+        if new_order_item.is_valid():
+            if Cart.objects.get(customer=request.user):
+                new_order_item.validated_data['cart'] = Cart.objects.get(customer=request.user)
+                new_order_item.save()
+            else:
+                Cart.objects.create(customer=request.user)
+                new_order_item.validated_data['cart'] = Cart.objects.get(customer=request.user)
+                new_order_item.save()
+
+            return Response(new_order_item.data)
+
+
+class CartOrderItemCreateAPIView(generics.CreateAPIView):
+    """
+    API view for customer to see all order items in his/her cart
+    """
+    serializer_class = OrderItemForCustomerSerializer
+    queryset = OrderItem.objects.all()
+    # permission_classes = [
+    #     permissions.IsAuthenticated
+    # ]
+
+    # def get_queryset(self):
+    #     order_items = OrderItem.objects.filter(cart__customer=self.request.user)
+    #     return order_items
+
+    def create(self, request, *args, **kwargs):
+        new_order_item = OrderItemForCustomerSerializer(data=request.data)
+
+        if new_order_item.is_valid():
+            if request.user.is_authenticated:
+                customer = Customer.objects.get(username=request.user.username)
+                cart = Cart.objects.filter(customer=customer)
+                print(cart)
+
+                if not cart or cart[0].status == 'PD':
+                    new_cart = Cart.objects.create(customer=customer)
+                    new_cart.save()
+                    new_order_item.validated_data['cart'] = new_cart
+                    new_order_item.save()
+                elif cart and cart[0].status == 'WA':
+                    new_order_item.validated_data['cart'] = cart
+                    new_order_item.save()
+
+                elif request.user.is_anonymous:
+                    pass
+
+                print(cart)
+            return Response(new_order_item.data)
+
+
+class CartCustomerAPIView(generics.RetrieveAPIView):
+    """
+    API view for customer to see his/her cart
+    """
+    serializer_class = CartForCustomerSerializer
+    queryset = Cart.objects.all()
+    # permission_classes = [
+    #     permissions.IsAuthenticated
+    # ]
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, customer=self.request.user)
+        obj.save()
+        return obj
+
+
+class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API view for customer to edit order items in cart
+    """
+    serializer_class = OrderItemForCustomerSerializer
+    queryset = OrderItem.objects.all()
+    permission_classes = [
+        IsOwnerCartPermission
+    ]
+
+    # def get_queryset(self):
+    #     order_items = OrderItem.objects.filter(cart__customer=self.request.user)
+    #     return order_items
+
+
