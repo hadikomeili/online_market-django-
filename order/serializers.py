@@ -49,10 +49,11 @@ class CartForCustomerSerializer(serializers.ModelSerializer):
     for customer
     """
     customer = serializers.PrimaryKeyRelatedField(read_only=True, source='customer.__str__')
-    order_address = serializers.PrimaryKeyRelatedField(read_only=True)
+    order_address = serializers.PrimaryKeyRelatedField(queryset=Address.objects.all())
 
     class Meta:
         model = Cart
         fields = ['id', 'customer', 'order_status', 'final_price', 'order_address']
         read_only_fields = ['id', 'customer', 'order_status', 'final_price']
+
 

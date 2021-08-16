@@ -139,19 +139,43 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
         new_order_item = OrderItemForCustomerSerializer(data=request.data)
 
         if new_order_item.is_valid():
-            customer = Customer.objects.get(id=request.user.id)
-            cart = Cart.objects.get(customer=customer)
-            print(cart)
+            qs = Cart.objects.filter(status='WA')
+            if request.user.is_authenticated:
+                customer = Customer.objects.get(username=request.user.username)
+                cart = get_object_or_404(qs, customer=customer)
 
-            if cart.status == 'WA':
+                if not cart or cart.status == 'PD':
+                    new_cart = Cart.objects.create(customer=customer)
+                    new_cart.save()
+                    new_order_item.validated_data['cart'] = new_cart
+                    new_order_item.save()
+                    return Response(new_order_item.data)
 
-                new_order_item.validated_data['cart'] = cart
-                new_order_item.save()
+                elif cart and cart.status == 'WA':
+                    new_order_item.validated_data['cart'] = cart
+                    new_order_item.save()
+                    return Response(new_order_item.data)
 
             else:
-                new_cart = Cart.objects.create(customer=customer)
-                new_order_item.validated_data['cart'] = new_cart
                 new_order_item.save()
+                return Response(new_order_item.data)
+    # def create(self, request, *args, **kwargs):
+    #     new_order_item = OrderItemForCustomerSerializer(data=request.data)
+    #
+    #     if new_order_item.is_valid():
+    #         customer = Customer.objects.get(id=request.user.id)
+    #         cart = Cart.objects.get(customer=customer)
+    #         print(cart)
+    #
+    #         if cart.status == 'WA':
+    #
+    #             new_order_item.validated_data['cart'] = cart
+    #             new_order_item.save()
+    #
+    #         else:
+    #             new_cart = Cart.objects.create(customer=customer)
+    #             new_order_item.validated_data['cart'] = new_cart
+    #             new_order_item.save()
 
 
 class CartOrderItemCreateAPIView(generics.CreateAPIView):
@@ -159,25 +183,26 @@ class CartOrderItemCreateAPIView(generics.CreateAPIView):
     API view for customer to see all order items in his/her cart
     """
     serializer_class = OrderItemForCustomerSerializer
-    queryset = OrderItem.objects.all()
+    queryset = OrderItem.objects.filter(cart__status='WA')
 
     def create(self, request, *args, **kwargs):
         new_order_item = OrderItemForCustomerSerializer(data=request.data)
 
         if new_order_item.is_valid():
+            qs = Cart.objects.filter(status='WA')
             if request.user.is_authenticated:
                 customer = Customer.objects.get(username=request.user.username)
-                cart = Cart.objects.filter(customer=customer)
+                cart = get_object_or_404(qs, customer=customer)
 
-                if not cart or cart[0].status == 'PD':
+                if not cart or cart.status == 'PD':
                     new_cart = Cart.objects.create(customer=customer)
                     new_cart.save()
                     new_order_item.validated_data['cart'] = new_cart
                     new_order_item.save()
                     return Response(new_order_item.data)
 
-                elif cart and cart[0].status == 'WA':
-                    new_order_item.validated_data['cart'] = cart[0]
+                elif cart and cart.status == 'WA':
+                    new_order_item.validated_data['cart'] = cart
                     new_order_item.save()
                     return Response(new_order_item.data)
 
@@ -191,14 +216,17 @@ class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
     API view for customer to see his/her cart
     """
     serializer_class = CartForCustomerSerializer
+    queryset = Cart.objects.filter(status='WA')
 
     def get_object(self):
-        queryset = Cart.objects.filter(status='WA')
+        queryset = self.queryset
 
         if self.request.user.is_authenticated:
             customer = Customer.objects.get(username=self.request.user.username)
+            print(customer)
             obj = get_object_or_404(queryset, customer=customer)
             obj.save()
+            print(obj)
             return obj
         else:
             obj = get_object_or_404(queryset, customer=None)
