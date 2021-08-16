@@ -5,10 +5,47 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-<div class="container-fluid">
-<div class="row">
+    <body>
+    <div class="container-fluid m-auto p-3">
 
-</div>
 
-</div>
+
+        <div class="row">
+            <div><button class="btn btn-outline-success"
+                    onclick="ShowOrderItems()">{% translate 'show order items' %}</button><br></div><br>
+            <div class="col p-2 text-left w-75" id="orderitems">
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col p-2 text-left w-75" id="cart">
+
+            </div>
+
+        </div>
+    </div>
+    </body>
+    <script>
+
+        function ShowOrderItems() {
+            $('#orderitems').html('')
+            $.getJSON("http://127.0.0.1:8000/order/api/cart/orderitems/", function (data) {
+                console.log(data)
+                $.each(data, function (key, val) {
+
+                    let el = "<li id='" + key + "'>" + val + "</li>"
+
+                    $('#orderitems').append(el)
+
+                })
+            })
+        }
+
+        function myFunction() {
+  document.getElementById("orderitems").innerHTML = "Hello World";
+}
+
+
+    </script>
 {% endblock %}

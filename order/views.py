@@ -68,7 +68,7 @@ class CartView(View):
     """
 
     def get(self, request, *args, **kwargs):
-        customer = self.request.user
+        customer = Customer.objects.get(id=self.request.user.id)
         customer_carts = Cart.objects.filter(customer=customer)
         customer_cart = customer_carts.filter(status='WA')
         if not customer_cart:
@@ -222,7 +222,7 @@ class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
         queryset = self.queryset
 
         if self.request.user.is_authenticated:
-            customer = Customer.objects.get(username=self.request.user.username)
+            customer = Customer.objects.get(id=self.request.user.id)
             print(customer)
             obj = get_object_or_404(queryset, customer=customer)
             obj.save()
@@ -243,4 +243,10 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         IsOwnerCartPermission
     ]
+
+
+# -------------------- Single Page Cart --------------------- #
+
+def single_page_cart_view(request):
+    return render(request, 'order/single_page_cart.html')
 

@@ -15,4 +15,6 @@ urlpatterns = [
     path('api/cart/orderitems/', CartOrderItemsAPIView.as_view(), name='customer_cart_orderitems_api'),
     path('api/cart/orderitems/<int:pk>', OrderItemDetailAPIView.as_view(), name='customer_cart_orderitems_details_api'),
     path('api/cart/add_orderitem/', CartOrderItemCreateAPIView.as_view(), name='customer_cart_orderitems_create_api'),
+    path('sp_cart/', single_page_cart_view, name='single_page_cart'),
+
 ]
