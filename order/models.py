@@ -24,8 +24,8 @@ class Cart(BaseModel):
     final_price = models.FloatField(verbose_name=_('final price'), help_text=_('final cart price'),
                                     null=True, blank=True)
     order_status = models.CharField(verbose_name=_('customer order status'), help_text=_('display status of order'),
-                                    blank=False, null=False, choices=[('NW', _('new')), ('IP', _('in process')),
-                                                                      ('SN', _('send'))], default='NW', max_length=20)
+                                    blank=False, null=False, choices=[('NW', _('new')), ('SN', _('send'))],
+                                    default='NW', max_length=20)
     order_address = models.ForeignKey(Address, verbose_name=_('customer address'),
                                       help_text=_('specify address for send order'),
                                       null=True, blank=True, on_delete=models.PROTECT)

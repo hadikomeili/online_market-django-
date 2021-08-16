@@ -8,16 +8,37 @@
     <div class="container-fluid">
         <div class="row w-75 m-auto">
 
-                {% include 'customer/customer_card.html' with customer_card=customer %}
+            {#            {% include 'customer/customer_card.html' with customer_card=customer %}#}
 
         </div>
     </div>
     <div class="container-fluid shadow">
-        <div class="row">
-            {% for order_item in customer_order_items %}
-                {% include 'order/order_item_card.html' with order_item_card=order_item %}
-            {% endfor %}
+        <div class="row m-auto w-75 p-5 h-75">
+            <form class="form-group order_item_card_view text-left m-auto p-3" style="width: 75%; border-radius: 10px;
+             padding: 10px; background-color: white" method="post">
+                {% csrf_token %}
+                <p>{% translate 'Customer Name:' %}<strong> {{ customer.first_name }} {{ customer.last_name }}</strong>
+                </p>
+                {% for cus in customer_cart %}
+                    <p>{% translate 'Cart Price:' %}<strong> {{ cus.final_price }}</strong></p>
+                    <p>{% translate 'Status:' %}<strong> {{ cus.order_status }}</strong></p>
+                {% endfor %}
+                <p>{% translate 'Address:' %}</p>
+                <div class="input-group mb-3">
+                    <select class="custom-select" id="inputGroupSelect02" name="address">
+                        {#                        <option>{% translate 'Choose...' %}</option>#}
+                        {% for address in addresses %}
+                            <option value='{{ address.id }}'>{{ address.title }} : {{ address.city }}</option>
+                        {% endfor %}
+                    </select>
+
+                </div>
+                <button type="submit" class="btn btn-success float-right">Final Confirm</button>
+
+            </form>
+
         </div>
+    </div>
     </div>
 
 {% endblock %}

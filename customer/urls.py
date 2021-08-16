@@ -5,10 +5,10 @@ from .views import *
 app_name = 'customer'
 
 urlpatterns = [
-    path('api/customer-list/', CustomerListAPIView.as_view(), name='customers_api'),
+    path('api/customer-list/', CustomerListAPIView.as_view(), name='customers_api_for_admin'),
     path('api/customer/details/<int:pk>', CustomerDetailsAdminAPIView.as_view(), name='customer_detail_api_for_admin'),
     path('api/customer-detail/', CustomerDetailAPIView.as_view(), name='customer_detail_api'),
-    path('api/addresses/', AddressesIndexAPIView.as_view(), name='addresses_index_api'),
+    path('api/addresses/', AddressesIndexAPIView.as_view(), name='addresses_index_api_for_admin'),
     path('api/customer-addresses-list/', AddressListAPIView.as_view(), name='customer_addresses_list_api'),
     path('api/customer_address/<int:pk>', AddressDetailAPIView.as_view(), name='customer_address_detail_api'),
     path('', CustomerIndexView.as_view(), name='all_customers'),

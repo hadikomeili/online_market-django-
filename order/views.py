@@ -26,6 +26,7 @@ class OrderItemFormView(generic.FormView):
     success_url = reverse_lazy('order:add_order_item_form')
 
     def form_valid(self, form):
+        form.cleaned_data['product'] = ...
         form.save()
         return super().form_valid(form)
 
@@ -61,17 +62,37 @@ class OrderItemDetailView(generic.DetailView):
     context_object_name = 'order_item_detail'
 
 
-class CartView(LoginRequiredMixin, View):
+class CartView(View):
     """
     View class for Cart
     """
 
     def get(self, request, *args, **kwargs):
         customer = self.request.user
-        customer_order_items = OrderItem.objects.filter(cart__customer=customer)
+        customer_carts = Cart.objects.filter(customer=customer)
+        customer_cart = customer_carts.filter(status='WA')
+        if not customer_cart:
+            customer_cart = Cart.objects.create(customer=Customer.objects.get(id=customer.id))
+            customer_cart.save()
+
+        addresses = Address.objects.filter(owner=customer)
 
         return render(request, 'order/cart.html',
-                      {'customer': customer, 'customer_order_items': customer_order_items})
+                      {'customer': customer, 'customer_cart': customer_cart, 'addresses': addresses})
+
+    def post(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            address_id = request.POST['address']
+            customer = self.request.user
+            customer_carts = Cart.objects.filter(customer=customer)
+            customer_cart = customer_carts.filter(status='WA')
+            for cus in customer_cart:
+                cus.order_address = Address.objects.get(id=address_id)
+                cus.status = 'PD'
+                cus.order_status = 'SN'
+                cus.save()
+
+            return redirect('product:product_index')
 
 
 # --------------- API Views ------------------ #
@@ -105,6 +126,7 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
     """
     serializer_class = OrderItemForCustomerSerializer
     queryset = OrderItem.objects.all()
+
     # permission_classes = [
     #     permissions.IsAuthenticated
     # ]
@@ -122,12 +144,16 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
         new_order_item = OrderItemForCustomerSerializer(data=request.data)
 
         if new_order_item.is_valid():
-            if Cart.objects.get(customer=request.user):
-                new_order_item.validated_data['cart'] = Cart.objects.get(customer=request.user)
+            carts = Cart.objects.get(customer=Customer.objects.get(id=request.user.id))
+            cart = carts.objects.filter(status='WA')
+
+            if cart:
+                new_order_item.validated_data['cart'] = Cart.objects.get(customer=cart)
                 new_order_item.save()
+
             else:
-                Cart.objects.create(customer=request.user)
-                new_order_item.validated_data['cart'] = Cart.objects.get(customer=request.user)
+                Cart.objects.create(customer=cart)
+                new_order_item.validated_data['cart'] = Cart.objects.get(customer=cart)
                 new_order_item.save()
 
             return Response(new_order_item.data)
@@ -139,6 +165,7 @@ class CartOrderItemCreateAPIView(generics.CreateAPIView):
     """
     serializer_class = OrderItemForCustomerSerializer
     queryset = OrderItem.objects.all()
+
     # permission_classes = [
     #     permissions.IsAuthenticated
     # ]
@@ -177,6 +204,7 @@ class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
     API view for customer to see his/her cart
     """
     serializer_class = CartForCustomerSerializer
+
     # queryset = Cart.objects.filter(status='WA', order_address__owner=)
 
     # def filter_queryset(self, queryset):
@@ -211,5 +239,3 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     # def get_queryset(self):
     #     order_items = OrderItem.objects.filter(cart__customer=self.request.user)
     #     return order_items
-
-
