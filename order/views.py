@@ -110,8 +110,13 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
     # ]
 
     def get_queryset(self):
-        order_items = OrderItem.objects.filter(cart__customer=self.request.user)
-        return order_items
+        if self.request.user.is_authenticated:
+            order_items = OrderItem.objects.filter(cart__customer=self.request.user)
+            res = order_items.filter(cart__status='WA')
+            return res
+        else:
+            order_items = OrderItem.objects.filter(cart__customer=None)
+            return order_items
 
     def create(self, request, *args, **kwargs):
         new_order_item = OrderItemForCustomerSerializer(data=request.data)
@@ -149,39 +154,45 @@ class CartOrderItemCreateAPIView(generics.CreateAPIView):
             if request.user.is_authenticated:
                 customer = Customer.objects.get(username=request.user.username)
                 cart = Cart.objects.filter(customer=customer)
-                print(cart)
 
                 if not cart or cart[0].status == 'PD':
                     new_cart = Cart.objects.create(customer=customer)
                     new_cart.save()
                     new_order_item.validated_data['cart'] = new_cart
                     new_order_item.save()
+                    return Response(new_order_item.data)
+
                 elif cart and cart[0].status == 'WA':
-                    new_order_item.validated_data['cart'] = cart
+                    new_order_item.validated_data['cart'] = cart[0]
                     new_order_item.save()
+                    return Response(new_order_item.data)
 
-                elif request.user.is_anonymous:
-                    pass
-
-                print(cart)
-            return Response(new_order_item.data)
+            else:
+                new_order_item.save()
+                return Response(new_order_item.data)
 
 
-class CartCustomerAPIView(generics.RetrieveAPIView):
+class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
     """
     API view for customer to see his/her cart
     """
     serializer_class = CartForCustomerSerializer
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.filter(status='WA')
+
     # permission_classes = [
     #     permissions.IsAuthenticated
     # ]
 
     def get_object(self):
         queryset = self.get_queryset()
-        obj = get_object_or_404(queryset, customer=self.request.user)
-        obj.save()
-        return obj
+        if self.request.user.is_authenticated:
+            obj = get_object_or_404(queryset, customer=self.request.user)
+            obj.save()
+            return obj
+        else:
+            obj = get_object_or_404(queryset, customer=None)
+            obj.save()
+            return obj
 
 
 class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):

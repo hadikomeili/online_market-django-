@@ -3,7 +3,7 @@ from datetime import datetime
 from django.utils.translation import gettext as _
 
 from core.models import BaseModel
-from customer.models import Customer
+from customer.models import Customer, Address
 from product.models import Product
 
 
@@ -14,23 +14,35 @@ class Cart(BaseModel):
     """
     a model for customer Cart consist of order items
     """
-    customer = models.OneToOneField(Customer, verbose_name=_('customer'),
-                                    help_text=_('specify owner customer for cart'),
-                                    null=False, blank=False, on_delete=models.PROTECT)
+    customer = models.ForeignKey(Customer, verbose_name=_('customer'),
+                                 help_text=_('specify owner customer for cart'),
+                                 null=True, blank=True, on_delete=models.PROTECT)
 
     status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), max_length=20,
-                              blank=False, null=False, choices=[('WA', _('waiting')), ('FI', _('final cart')),
-                                                                ('PD', _('paid'))],
-                              default='W')
+                              blank=False, null=False, choices=[('WA', _('waiting')), ('PD', _('paid'))],
+                              default='WA')
     final_price = models.FloatField(verbose_name=_('final price'), help_text=_('final cart price'),
                                     null=True, blank=True)
+    order_status = models.CharField(verbose_name=_('customer order status'), help_text=_('display status of order'),
+                                    blank=False, null=False, choices=[('NW', _('new')), ('IP', _('in process')),
+                                                                      ('SN', _('send'))], default='NW', max_length=20)
+    order_address = models.ForeignKey(Address, verbose_name=_('customer address'),
+                                      help_text=_('specify address for send order'),
+                                      null=True, blank=True, on_delete=models.PROTECT)
 
-    def finalize_cart(self):
+    def change_order_status_to_in_process(self):
         """
-        method for change cart status to FI
+        method for change order status to IP
         """
-        self.status = 'FI'
-        return self.status
+        self.order_status = 'IP'
+        return self.order_status
+
+    def change_order_status_to_send(self):
+        """
+        method for change order status to SN
+        """
+        self.order_status = 'SN'
+        return self.order_status
 
     def paid_cart(self):
         """
@@ -44,10 +56,15 @@ class Cart(BaseModel):
         method for calculate cart price
         """
         items = OrderItem.objects.filter(cart__customer=self.customer)
+        all_items = items.filter(cart__status='WA')
         price = 0
-        for item in items:
+        for item in all_items:
             price += item.product.calculate_final_price() * item.product_number
         return price
+
+    @classmethod
+    def cart_history(cls):
+        return cls.objects.archive()
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         p = self.cart_price()
