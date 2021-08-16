@@ -125,11 +125,6 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
     API view for customer to see all order items in his/her cart
     """
     serializer_class = OrderItemForCustomerSerializer
-    queryset = OrderItem.objects.all()
-
-    # permission_classes = [
-    #     permissions.IsAuthenticated
-    # ]
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -144,19 +139,19 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
         new_order_item = OrderItemForCustomerSerializer(data=request.data)
 
         if new_order_item.is_valid():
-            carts = Cart.objects.get(customer=Customer.objects.get(id=request.user.id))
-            cart = carts.objects.filter(status='WA')
+            customer = Customer.objects.get(id=request.user.id)
+            cart = Cart.objects.get(customer=customer)
+            print(cart)
 
-            if cart:
-                new_order_item.validated_data['cart'] = Cart.objects.get(customer=cart)
+            if cart.status == 'WA':
+
+                new_order_item.validated_data['cart'] = cart
                 new_order_item.save()
 
             else:
-                Cart.objects.create(customer=cart)
-                new_order_item.validated_data['cart'] = Cart.objects.get(customer=cart)
+                new_cart = Cart.objects.create(customer=customer)
+                new_order_item.validated_data['cart'] = new_cart
                 new_order_item.save()
-
-            return Response(new_order_item.data)
 
 
 class CartOrderItemCreateAPIView(generics.CreateAPIView):
@@ -165,14 +160,6 @@ class CartOrderItemCreateAPIView(generics.CreateAPIView):
     """
     serializer_class = OrderItemForCustomerSerializer
     queryset = OrderItem.objects.all()
-
-    # permission_classes = [
-    #     permissions.IsAuthenticated
-    # ]
-
-    # def get_queryset(self):
-    #     order_items = OrderItem.objects.filter(cart__customer=self.request.user)
-    #     return order_items
 
     def create(self, request, *args, **kwargs):
         new_order_item = OrderItemForCustomerSerializer(data=request.data)
@@ -205,20 +192,13 @@ class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
     """
     serializer_class = CartForCustomerSerializer
 
-    # queryset = Cart.objects.filter(status='WA', order_address__owner=)
-
-    # def filter_queryset(self, queryset):
-    #     x = Cart.objects.filter(order_address__owner=self.request.user)
-    #     return x
-
     def get_object(self):
         queryset = Cart.objects.filter(status='WA')
-        queryset2 = Address.objects.all()
 
         if self.request.user.is_authenticated:
-            obj = get_object_or_404(queryset, customer=self.request.user)
+            customer = Customer.objects.get(username=self.request.user.username)
+            obj = get_object_or_404(queryset, customer=customer)
             obj.save()
-            obj2 = get_list_or_404(queryset2, owner=self.request.user)
             return obj
         else:
             obj = get_object_or_404(queryset, customer=None)
@@ -236,6 +216,3 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         IsOwnerCartPermission
     ]
 
-    # def get_queryset(self):
-    #     order_items = OrderItem.objects.filter(cart__customer=self.request.user)
-    #     return order_items
