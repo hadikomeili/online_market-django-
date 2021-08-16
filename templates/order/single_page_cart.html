@@ -11,7 +11,7 @@
 
 
         <div class="row">
-            <div><button class="btn btn-outline-success"
+            <div class="col-12"><button class="btn btn-outline-success"
                     onclick="ShowOrderItems()">{% translate 'show order items' %}</button><br></div><br>
             <div class="col p-2 text-left w-75" id="orderitems">
 
@@ -19,7 +19,9 @@
 
         </div>
         <div class="row">
-            <div class="col p-2 text-left w-75" id="cart">
+            <div class="col-12"><button class="btn btn-outline-success"
+                    onclick="AddOrderItems()">{% translate 'Add order item' %}</button><br></div><br>
+            <div class="col p-2 text-left w-75" id="add_order">
 
             </div>
 
@@ -34,7 +36,11 @@
                 console.log(data)
                 $.each(data, function (key, val) {
 
-                    let el = "<li id='" + key + "'>" + val + "</li>"
+                    let el = "<li id='" + key + "'>" + val + "</li>"+
+                        "<li id='" + key + "'>" + val + "</li>"+
+                        "<li id='" + key + "'>" + val + "</li>"+
+                        "<li id='" + key + "'>" + val + "</li>"+
+                        "<li id='" + key + "'>" + val + "</li>"
 
                     $('#orderitems').append(el)
 
@@ -42,9 +48,23 @@
             })
         }
 
-        function myFunction() {
-  document.getElementById("orderitems").innerHTML = "Hello World";
-}
+        function AddOrderItem() {
+            $('#add_order').html('')
+            $.getJSON("http://127.0.0.1:8000/order/api/cart/add_orderitem/", function (data) {
+                console.log(data)
+                $.each(data, function (key, val) {
+
+                    let el = "<li id='" + key + "'>" + val + "</li>"+
+                        "<li id='" + key + "'>" + val + "</li>"+
+                        "<li id='" + key + "'>" + val + "</li>"+
+
+
+                    $('#add_order').append(el)
+
+                })
+            })
+        }
+
 
 
     </script>
