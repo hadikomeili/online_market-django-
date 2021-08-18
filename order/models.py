@@ -84,12 +84,12 @@ class OrderItem(BaseModel):
     a model for each product that add to cart
     """
     product = models.ForeignKey(Product, verbose_name=_('selected product'),
-                                help_text=_('select product for add to your Cart'), on_delete=models.PROTECT,
+                                help_text=_('select product for add to your Cart'), on_delete=models.CASCADE,
                                 null=False, blank=False)
     product_number = models.IntegerField(verbose_name=_('numbers'), help_text=_('specify number of selected product'),
                                          null=False, blank=False, default=1)
     cart = models.ForeignKey(Cart, verbose_name=_('cart'), help_text=_('specify cart'), null=True, blank=True,
-                             on_delete=models.PROTECT, related_name='cart_orderitems',
+                             on_delete=models.CASCADE, related_name='cart_orderitems',
                              related_query_name='customer_cart_orderitems')
 
     def specify_order_item_status(self):

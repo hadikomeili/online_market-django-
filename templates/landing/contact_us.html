@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div id="content-main" class="container-fluid text-center p-3">
+        <div class="card p-5 m-auto w-50 pt-3 pb-3 text-left">
+            <h3 class="text-center">{% translate 'Cuntact Us' %}</h3>
+            <form id="my-form">
+                <div class="form-group">
+                    <label for="subject">{% translate 'subject:' %}</label>
+                    <input type="text" class="form-control required" id="subject" placeholder="Enter subject">
+                </div>
+                <div class="form-group">
+                    <label for="customer_name">{% translate 'customer name:' %}</label>
+                    <input id="customer_name" class="form-control required" type="text" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">{% translate 'email:' %}</label>
+                    <input type="text" id="email" class="form-control required" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">{% translate 'phone:' %}</label>
+                    <input type="text" id="phone_number" class="form-control required" placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="message_text">{% translate 'message:' %}</label>
+                    <textarea id="message_text" class="form-control required" placeholder="Enter your message ..."></textarea>
+                </div>
+                <button type="button" id="submit"
+                        class="btn btn-success float-right">{% translate 'send message' %}</button>
+            </form>
+        </div>
+        <script>
+            var formData = new FormData();
+
+            $(document).on('click', '#submit', function (e) {
+                formData.append('subject', $('#subject').val())
+                formData.append('customer_name', $('#customer_name').val())
+                formData.append('email', $('#email').val())
+                formData.append('phone_number', $('#phone_number').val())
+                formData.append('message_text', $('#message_text').val())
+                formData.append('action', 'create-message')
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "landing:contact_us" %}',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    enctype: 'multipart/form-data',
+                    success: function () {
+                        $('#my-form.input').val('')
+                        alert("The message has been sent!")
+                    },
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ":" + xhr.responseText)
+                    }
+                })
+            })
+        </script>
+    </div>
+
+{% endblock %}
