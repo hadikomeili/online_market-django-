@@ -10,7 +10,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
     """
     product = serializers.HyperlinkedRelatedField(queryset=Product.objects.all(),
                                                   view_name='product:product_details_api')
-    cart = serializers.PrimaryKeyRelatedField(queryset=Cart.objects.all(), source='cart.customer.__str__')
+    cart = serializers.PrimaryKeyRelatedField(queryset=Cart.objects.all())
 
     class Meta:
         model = OrderItem

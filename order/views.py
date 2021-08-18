@@ -95,10 +95,23 @@ class CartView(LoginRequiredMixin, View):
             return redirect('product:product_index')
 
 
-class CartArchiveView(generic.DetailView):
+class CartArchiveCardView(generic.DetailView):
     template_name = 'order/cart_card.html'
     model = Cart
     context_object_name = 'cart_card'
+
+
+class CartArchiveIndexView(View):
+    """
+    View class for display all carts of customer
+    """
+    def get(self, request, *args, **kwargs):
+        carts = Cart.objects.filter(customer=Customer.objects.get(id=self.request.user.id))
+
+        return render(request, 'customer/customer_dashboard.html', {'carts': carts})
+
+
+
 
 # --------------- API Views ------------------ #
 

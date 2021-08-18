@@ -8,6 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.response import Response
 
+from order.models import Cart
 from .serializers import *
 from .permissions import *
 
@@ -69,9 +70,10 @@ class CustomerDetailView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         customer = self.request.user
         addresses = Address.objects.filter(owner=customer)
+        carts = Cart.objects.filter(customer=Customer.objects.get(id=self.request.user.id))
 
         return render(request, 'customer/customer_dashboard.html',
-                      {'customer': customer, 'customer_address': addresses})
+                      {'customer': customer, 'customer_address': addresses, 'carts': carts})
 
 
 # -------------- Address -------------- #

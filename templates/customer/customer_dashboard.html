@@ -14,15 +14,28 @@
 
                 <div class="row">
                     <div class="col-6">
-                        <h5 class="text-center">{% translate 'User information' %}</h5>
-                        <a><button class="btn btn-outline-dark float-right">{% translate 'Edit Info' %}</button></a><br><br>
-                        {% include 'customer/customer_details.html' with customer_detail=customer %}
+                        <div class="row">
+                            <h5 class="text-center">{% translate 'User information' %}</h5><br>
+                            <a>
+                                <button class="btn btn-outline-dark float-right">{% translate 'Edit Info' %}</button>
+                            </a><br><br><br>
+                            <div class="row">
+                            {% include 'customer/customer_details.html' with customer_detail=customer %}
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            {% for cart in carts %}
+                                {% include 'order/cart_card.html' with cart_card=cart %}
+                            {% endfor %}
+                        </div>
                     </div>
                     <div class="col-6">
                         <h5 class="text-center">{% translate 'User Addresses' %}</h5>
-                        <a href="/customer/add_address/"><button class="btn btn-outline-dark float-right">{% translate 'Add Address' %}
-                        </button></a><br><br>
+                        <a href="/customer/add_address/">
+                            <button class="btn btn-outline-dark float-right">{% translate 'Add Address' %}
+                            </button>
+                        </a><br><br>
                         {% for address in customer_address %}
                             {% include 'customer/address_card.html' with address_card=address %}
                         {% endfor %}
