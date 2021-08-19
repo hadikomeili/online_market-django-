@@ -5,29 +5,54 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <body>
-    <div class="container-fluid m-auto p-3">
+    <div class="container">
+    <table class="table table-bordered" id="showdata">
+        <thead>
+            <tr>
+                <th scope="col">{% translate 'Product Name' %}</th>
+                <th scope="col">{% translate 'Product Price' %}</th>
+                <th scope="col">{% translate 'Numbers' %}</th>
+                <th scope="col">{% translate 'Discount' %}</th>
+                <th scope="col">{% translate 'Final Price' %}</th>
 
+            </tr>
+        </thead>
+        <tbody>
+        {% for orderitem in orderitems %}
+        <tr>
+            <td>{{ orderitem.product }}</td>
+            <td>{{ orderitem.product.price }}</td>
+            <td>{{ orderitem.product_number }}</td>
+            <td>{{ orderitem.product.discount }}</td>
+            <td>{{ orderitem.calculate_order_item_price }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
+{#    <div class="container-fluid m-auto p-3">#}
+{##}
+{##}
+{##}
+{#        <div class="row">#}
+{#            <div class="col-12"><button class="btn btn-outline-success"#}
+{#                    onclick="ShowOrderItems()">{% translate 'show order items' %}</button><br></div><br>#}
+{#            <div class="col p-2 text-left w-75" id="orderitems">#}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#        <div class="row">#}
+{#            <div class="col-12"><button class="btn btn-outline-success"#}
+{#                    onclick="AddOrderItems()">{% translate 'Add order item' %}</button><br></div><br>#}
+{#            <div class="col p-2 text-left w-75" id="add_order">#}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#    </div>#}
 
-        <div class="row">
-            <div class="col-12"><button class="btn btn-outline-success"
-                    onclick="ShowOrderItems()">{% translate 'show order items' %}</button><br></div><br>
-            <div class="col p-2 text-left w-75" id="orderitems">
-
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-12"><button class="btn btn-outline-success"
-                    onclick="AddOrderItems()">{% translate 'Add order item' %}</button><br></div><br>
-            <div class="col p-2 text-left w-75" id="add_order">
-
-            </div>
-
-        </div>
-    </div>
-    </body>
     <script>
 
         function ShowOrderItems() {

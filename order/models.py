@@ -34,13 +34,6 @@ class Cart(BaseModel):
         addresses = Address.objects.filter(owner=self.customer)
         return addresses
 
-    def change_order_status_to_in_process(self):
-        """
-        method for change order status to IP
-        """
-        self.order_status = 'IP'
-        return self.order_status
-
     def change_order_status_to_send(self):
         """
         method for change order status to SN
@@ -85,7 +78,7 @@ class OrderItem(BaseModel):
     """
     product = models.ForeignKey(Product, verbose_name=_('selected product'),
                                 help_text=_('select product for add to your Cart'), on_delete=models.CASCADE,
-                                null=False, blank=False)
+                                null=True, blank=True)
     product_number = models.IntegerField(verbose_name=_('numbers'), help_text=_('specify number of selected product'),
                                          null=False, blank=False, default=1)
     cart = models.ForeignKey(Cart, verbose_name=_('cart'), help_text=_('specify cart'), null=True, blank=True,

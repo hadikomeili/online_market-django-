@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_list_or_404, reverse, redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
 from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
+from django.utils.translation import gettext as _
 
 from .serializers import *
 
@@ -26,9 +28,17 @@ class OrderItemFormView(generic.FormView):
     success_url = reverse_lazy('order:add_order_item_form')
 
     def form_valid(self, form):
-        form.cleaned_data['product'] = ...
+
         form.save()
         return super().form_valid(form)
+
+    def post(self, request, *arg, **kwargs):
+        resp = JsonResponse({"msg": "product added to your cart!"})
+        product = request.POST.get("product")
+        product_number = request.POST.get("product_number")
+        cart = request.COOKIES.get("cart", "")
+        resp.set_cookie("cart", cart + product + ":" + product_number + ",")
+        return resp
 
 
 # ------------------- Views ----------------------- #
@@ -68,29 +78,81 @@ class CartView(LoginRequiredMixin, View):
     """
 
     def get(self, request, *args, **kwargs):
-        customer = Customer.objects.get(id=self.request.user.id)
+        try:
+            customer = Customer.objects.get(id=self.request.user.id)
+        except Customer.DoesNotExist:
+            return redirect(reverse('customer:login'))
+        addresses = Address.objects.filter(owner=customer)
+        if addresses.count() == 0:
+            return redirect(reverse('customer:add_address'))
+        new_orderitems = set(request.COOKIES.get("cart", "").split(","))
+        print(new_orderitems)
         customer_carts = Cart.objects.filter(customer=customer)
         customer_cart = customer_carts.filter(status='WA')
-        if not customer_cart:
-            customer_cart = Cart.objects.create(customer=Customer.objects.get(id=customer.id))
-            customer_cart.save()
+        if customer_cart.count() == 1:
+            cart = customer_cart[0]
+            # print(cart, 1)
+            # cart.save()
+        else:
+            cart = Cart.objects.create(customer=customer)
+            cart.save()
+            # print(cart, 2)
+        if not new_orderitems == {''}:
+            for orderitem in new_orderitems:
+                # print('orderitem:', orderitem)
+                items_in_cart = OrderItem.objects.filter(cart=cart)
+                if items_in_cart:
+                    if not orderitem == '':
+                        product_id, p_number = orderitem.split(":")
+                        # print(product_id, p_number)
+                        for item in items_in_cart:
+                            # print('items:',item)
+                            if int(product_id) == item.product.id:
+                                num = item.product_number
+                                num += int(p_number)
+                                item.product_number = num
+                                item.save()
+                                # print('item:', item)
+                                cart.save()
+                                # print(cart, 3)
+                                # msg = _('product updated in ')
+                            else:
+                                o_item = OrderItem.objects.create(product=Product.objects.get(id=product_id),
+                                                                  product_number=int(p_number), cart=cart)
+                                o_item.save()
+                                # print('o_item:', o_item)
+                                cart.save()
+                                # print(cart, 4)
+                    else:
+                        continue
+                else:
+                    if not orderitem == '':
+                        product_id, p_number = orderitem.split(":")
+                        o_item = OrderItem.objects.create(product=Product.objects.get(id=product_id),
+                                                          product_number=int(p_number), cart=cart)
+                        o_item.save()
+                        # print('o_item:', o_item)
+                        cart.save()
+                        # print(cart, 4)
 
-        addresses = Address.objects.filter(owner=customer)
+        cart.save()
+        response = render(request, 'order/cart.html',
+                          {'customer': customer, 'customer_cart': cart, 'addresses': addresses})
 
-        return render(request, 'order/cart.html',
-                      {'customer': customer, 'customer_cart': customer_cart, 'addresses': addresses})
+        response.set_cookie("cart", '')
+        return response
 
     def post(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             address_id = request.POST['address']
-            customer = self.request.user
+            customer = Customer.objects.get(id=self.request.user.id)
             customer_carts = Cart.objects.filter(customer=customer)
             customer_cart = customer_carts.filter(status='WA')
-            for cus in customer_cart:
-                cus.order_address = Address.objects.get(id=address_id)
-                cus.status = 'PD'
-                cus.order_status = 'SN'
-                cus.save()
+            cart = customer_cart[0]
+            cart.order_address = Address.objects.get(id=address_id)
+            cart.status = 'PD'
+            cart.order_status = 'SN'
+            cart.save()
 
             return redirect('product:product_index')
 
@@ -105,12 +167,11 @@ class CartArchiveIndexView(View):
     """
     View class for display all carts of customer
     """
+
     def get(self, request, *args, **kwargs):
         carts = Cart.objects.filter(customer=Customer.objects.get(id=self.request.user.id))
 
         return render(request, 'customer/customer_dashboard.html', {'carts': carts})
-
-
 
 
 # --------------- API Views ------------------ #
@@ -266,5 +327,9 @@ class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 # -------------------- Single Page Cart --------------------- #
 
 def single_page_cart_view(request):
-    return render(request, 'order/single_page_cart.html')
+    form = OrderItemForm
+    customer = Customer.objects.get(id=request.user.id)
+    orderitems = OrderItem.objects.filter(cart__status='WA').get(cart=Cart.objects.get(customer=customer))
+    # o_items = orderitems.filter(cart__status="WA")
 
+    return render(request, 'order/single_page_cart.html', {'form': form, 'orderitems': orderitems})

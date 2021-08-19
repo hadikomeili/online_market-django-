@@ -53,7 +53,7 @@ class AddressDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        exclude = ['id', 'deleted', 'create_timestamp', 'modify_timestamp', 'delete_timestamp']
+        exclude = ['deleted', 'create_timestamp', 'modify_timestamp', 'delete_timestamp']
         read_only_fields = ['owner']
 
 

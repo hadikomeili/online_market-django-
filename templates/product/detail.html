@@ -8,14 +8,36 @@
     <div id="content-main" class="container-fluid text-center">
         <div id="product-overview" class="row p-3">
             <div id="product-info" class="col-6">
-                <h3 style="color: green">{{ product_details.inventory_status }}</h3>
-                <p>{% translate 'Product Name:' %}</p>
-                <h2>{{ product_details.name }}</h2>
-                <p>{% translate 'Price:' %}</p>
-                <h3>{{ product_details.price }}</h3>
-                <p>{% translate 'Price After Discount:' %}</p>
-                <h2>{{ product_details.calculate_final_price }}</h2>
-                <a href="/order/add_order_item/"><button class="btn btn-primary">Add to Cart</button></a>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {#                    <p id="product" style="display: none">{{ product_details.id }}</p>#}
+                    <h3 style="color: green">{{ product_details.inventory_status }}</h3>
+                    <p>{% translate 'Product Name:' %}</p>
+                    <h2>{{ product_details.name }}</h2>
+                    <p>{% translate 'Price:' %}</p>
+                    <h3>{{ product_details.price }}</h3>
+                    <p>{% translate 'Price After Discount:' %}</p>
+                    <h2 class="text-success">{{ product_details.calculate_final_price }}</h2>
+                    <div>
+                        <input type="text" value="{{ product_details.id }}" name="product" class="form-control"
+                               style="width: 100px;display: none">
+                    </div>
+                    <div class="row w-50 text-center m-auto">
+                        <hr>
+                        <div class="p-1">
+                        <input type="number" value="1" min="1" max="{{ product_details.inventory }}"
+                               name="product_number" class="num form-control" style="width: 100px"><br>
+                            </div><br>
+                        <div class="p-1">
+                        <a href="/order/cart/">
+                            <button type="submit" class="btn btn-primary">{% translate 'Add to Cart' %}
+                            </button>
+                        </a>
+                            </div>
+                    </div>
+
+
+                </form>
             </div>
             <div id="product-image" class="col-6">
 

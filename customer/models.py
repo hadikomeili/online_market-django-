@@ -43,6 +43,9 @@ class Customer(User):
     def customer_name(self):
         return self.__str__()
 
+    def addresses(self):
+        return Address.objects.filter(owner__username=self.username)
+
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 

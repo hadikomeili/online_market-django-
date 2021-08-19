@@ -65,7 +65,7 @@ class Discount(BaseModel):
         return status
 
     def __str__(self):
-        return f'{self.value}{self.type}'
+        return f'{self.value}{self.type} : {self.specify_discount_status()}'
 
 
 class Product(BaseModel):

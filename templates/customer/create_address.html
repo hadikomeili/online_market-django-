@@ -10,6 +10,7 @@
         <form class="form p-2" method="post" enctype="multipart/form-data"
               style="border-radius: 10px; border: solid #062c33;">
             {% csrf_token %}
+            <input name="owner" value="{{ user.id }}" style="display: none">
 
             {% for field in form %}
                 <div class="form-group">

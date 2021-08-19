@@ -19,10 +19,10 @@
                 {% csrf_token %}
                 <p>{% translate 'Customer Name:' %}<strong> {{ customer.first_name }} {{ customer.last_name }}</strong>
                 </p>
-                {% for cus in customer_cart %}
-                    <p>{% translate 'Cart Price:' %}<strong> {{ cus.final_price }}</strong></p>
-                    <p>{% translate 'Status:' %}<strong> {{ cus.order_status }}</strong></p>
-                {% endfor %}
+{#                {% for cus in customer_cart %}#}
+                    <p>{% translate 'Cart Price:' %}<strong> {{ customer_cart.final_price }}</strong></p>
+                    <p>{% translate 'Status:' %}<strong> {{ customer_cart.order_status }}</strong></p>
+{#                {% endfor %}#}
                 <p>{% translate 'Address:' %}</p>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="inputGroupSelect02" name="address">

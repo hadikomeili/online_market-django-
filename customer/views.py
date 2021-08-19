@@ -119,8 +119,10 @@ class AddressCreateFormView(generic.FormView):
     success_url = reverse_lazy('customer:address_list')
 
     def form_valid(self, form):
-        form.owner = self.request.user.id
-        form.save()
+
+        new_address = form.save()
+        new_address.owner = Customer.objects.get(id=self.request.POST['owner'])
+        new_address.save()
         return super().form_valid(form)
 
 
@@ -215,7 +217,6 @@ class AddressesIndexAPIView(generics.ListAPIView):
 
 
 class MyLoginView(LoginView):
-
     pass
 
 

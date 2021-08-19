@@ -54,6 +54,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.MyMiddleware'
 ]
+SESSION_EXPIRE_SECONDS = 36000
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 ROOT_URLCONF = 'MARKET.urls'
 
@@ -207,3 +209,5 @@ LOGGING = {
         },
     }
 }
+
+CART_SESSION_ID = 'cart'

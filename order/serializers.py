@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from customer.models import Customer, Address
 from product.models import Product
+from product.serializers import ProductSerializer
 from .models import OrderItem, Cart
 
 
@@ -22,13 +23,13 @@ class OrderItemForCustomerSerializer(serializers.ModelSerializer):
     """
     for customer
     """
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
-    # cart = serializers.PrimaryKeyRelatedField(queryset=Cart.objects.all(), source='cart.customer.__str__')
+    product = ProductSerializer(read_only=True)
+    cart = serializers.PrimaryKeyRelatedField(read_only=True, source='cart.customer.__str__')
 
     class Meta:
         model = OrderItem
         fields = ['id', 'cart', 'product', 'product_number', 'calculate_order_item_price']
-        read_only_fields = ['id', 'calculate_order_item_price', 'cart']
+        read_only_fields = ['id', 'calculate_order_item_price', 'cart', 'product']
 
 
 class CartSerializer(serializers.ModelSerializer):

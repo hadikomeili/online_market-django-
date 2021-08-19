@@ -14,7 +14,7 @@ class OrderItemForm(forms.ModelForm):
                                      label=_('product'), help_text=_('select intended product'))
     product_number = forms.IntegerField(validators=[product_number_int_validator, product_number_positive_validator],
                                         label=_('number'), help_text=_('specify number of product'))
-    cart = forms.ModelChoiceField(queryset=Cart.objects.all(), validators=[cart_is_instance_cart_model], label=_('cart')
+    cart = forms.ModelChoiceField(queryset=Cart.objects.filter(status='WA'), validators=[cart_is_instance_cart_model], label=_('cart')
                                   , help_text=_('choose cart'))
 
 

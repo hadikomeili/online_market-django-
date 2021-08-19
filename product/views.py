@@ -22,15 +22,15 @@ class ProductIndexView(generic.TemplateView):
     View class for display all products
     """
 
-    ### task: logging ###
-
-    import logging
-    logger = logging.getLogger('project.developers')
-    logger.debug("Debug msg!")
-    logger.info("Info msg!")
-    logger.warning("Warning msg!")
-    logger.error("Error msg!")
-    logger.critical("Critical msg!")
+    # ### task: logging ###
+    #
+    # import logging
+    # logger = logging.getLogger('project.developers')
+    # logger.debug("Debug msg!")
+    # logger.info("Info msg!")
+    # logger.warning("Warning msg!")
+    # logger.error("Error msg!")
+    # logger.critical("Critical msg!")
 
     template_name = 'product/index.html'
     extra_context = {
@@ -46,6 +46,14 @@ class ProductDetailsView(generic.DetailView):
     template_name = 'product/detail.html'
     model = Product
     context_object_name = 'product_details'
+
+    def post(self, request, *arg, **kwargs):
+        resp = JsonResponse({"msg": "product added to your cart!"})
+        product = request.POST.get("product")
+        product_number = request.POST.get("product_number")
+        cart = request.COOKIES.get("cart", "")
+        resp.set_cookie("cart", cart + product + ":" + product_number + ",")
+        return redirect(reverse('order:customer_cart'))
 
 
 class ProductCardView(generic.DetailView):
