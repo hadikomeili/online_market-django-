@@ -1,10 +1,6 @@
-{% extends "base.html" %}
 {% load i18n %}
-{% load static %}
 
-{% block extrastyle %}{% endblock %}
-{% block extrahead %}{% endblock %}
-{% block content %}
+<div class="container-fluid m-auto p-2" style="background-color: #c2cbd1">
     <div class="container-fluid p-3">
         <h5 class="text-center">{% translate 'Addresses' %} for {{ customer.first_name }} {{ customer.last_name }}</h5>
         {% for address in cus_addresses %}
@@ -12,5 +8,5 @@
         {% endfor %}
 
     </div>
+</div>
 
-{% endblock %}

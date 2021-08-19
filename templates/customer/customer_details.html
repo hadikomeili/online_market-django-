@@ -1,45 +1,52 @@
 {% load i18n %}
-<div class="card">
+<div class="container-fluid">
+<form enctype="multipart/form-data" class="form-control bg-secondary" method="post">
     <table id="customer-detail" class="table text-left w-75 m-auto">
-        <tr>
-            <th>
-                {% translate 'Name:' %}
-            </th>
-            <th>
-                {% translate 'Email:' %}
-            </th>
-        </tr>
-        <tr>
-            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.first_name }} {{ customer_detail.last_name }}</td>
-            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.email }}</td>
-        </tr>
-        <tr>
-            <th>
-                {% translate 'Phone:' %}
-            </th>
-            <th>
-                {% translate 'National Code:' %}
-            </th>
-        </tr>
-        <tr>
-            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.phone }}</td>
-            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.national_code }}</td>
-        </tr>
-        <tr>
-            <th>
-                {% translate 'Gender:' %}
-            </th>
-            <th>
-                {% translate 'Birthday:' %}
-            </th>
+        {% for field in form %}
+            <div class="form-group">
+                <tr>
+                    <th>
+                        {{ field.label_tag }}
+                    </th>
+                </tr>
+                <tr>
+                    <td style="padding-left: 30px; color: #231e1e; background: white">{{ field }}</td>
+                    <td><span style="color: whitesmoke">{{ field.help_text }}</span></td>
+                </tr>
+                <span style="color: red">{{ field.errors }}</span>
 
-        </tr>
-        <tr>
-            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.gender }}</td>
-            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.birthday }}</td>
-        </tr>
+            </div>
+        {% endfor %}
+
 
     </table>
-
-
+</form>
 </div>
+
+
+
+{#        <tr>#}
+{#            <th>#}
+{#                {% translate 'Phone:' %}#}
+{#            </th>#}
+{#            <th>#}
+{#                {% translate 'National Code:' %}#}
+{#            </th>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.phone }}</td>#}
+{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.national_code }}</td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <th>#}
+{#                {% translate 'Gender:' %}#}
+{#            </th>#}
+{#            <th>#}
+{#                {% translate 'Birthday:' %}#}
+{#            </th>#}
+{##}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.gender }}</td>#}
+{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.birthday }}</td>#}
+{#        </tr>#}

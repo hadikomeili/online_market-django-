@@ -1,0 +1,39 @@
+{% load i18n %}
+
+<div class="container-fluid m-auto p-2" style="background-color: #c2cbd1">
+    <div class="row text-center p-2">
+        <div class="col-6">
+            <a href="/customer/dashboard/">
+                <button class="btn m-1 btn-block btn-secondary">
+                {% translate 'User Information' %}
+                </button>
+            </a>
+            <a>
+                <button class="btn m-1 btn-block btn-secondary">
+                    {% translate 'Orders History' %}
+                </button>
+            </a>
+
+        </div>
+        <div class="col-6">
+
+            <a>
+                <button class="btn m-1 btn-block btn-secondary" onclick="showAddressList()">
+                    {% translate 'Addresses List' %}
+                </button>
+            </a>
+            <a>
+                <button class="btn m-1 btn-block btn-secondary">
+                    {% translate 'Orders Status' %}
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+    <script>
+    function showAddressList(){
+        $('#info').html('')
+    }
+    </script>
+</div>

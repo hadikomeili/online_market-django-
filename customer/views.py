@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.views.decorators.csrf import csrf_exempt
@@ -25,7 +27,7 @@ from django.urls import reverse_lazy
 # -------------- Customer -------------- #
 
 
-class CustomerIndexView(generic.TemplateView):
+class CustomerIndexView(LoginRequiredMixin, generic.TemplateView):
     """
     View class for display all customers(for superuser use)
     """
@@ -33,6 +35,12 @@ class CustomerIndexView(generic.TemplateView):
     extra_context = {
         'customers': Customer.objects.all(),
     }
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponse('You have not access to this page!!!')
 
 
 class CustomerCardView(generic.DetailView):
@@ -43,37 +51,69 @@ class CustomerCardView(generic.DetailView):
     model = Customer
     context_object_name = 'customer_card'
 
-
-class CustomerDetailCardView(generic.DetailView):
-    """
-    View class for create card view for a customer(for customer use)
-    """
-    template_name = 'customer/customer_details.html'
-    model = Customer
-    context_object_name = 'customer_detail'
+    def get(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponse('You have not access to this page!!!')
 
 
-class CustomerSidePanelView(generic.DetailView):
+# class CustomerDetailCardView(generic.FormView):
+#     """
+#     View class for create card view for a customer(for customer use)
+#     """
+#     template_name = 'customer/customer_details.html'
+#     form_class = CustomerForm
+#     # context_object_name = 'customer_detail'
+#
+#     def get(self, request, *args, **kwargs):
+#         customer = Customer.objects.get(id=request.user.id)
+#         form = CustomerForm(instance=customer)
+#         return render(request, 'customer/customer_details.html',
+#                       {'form': form})
+#
+#     def form_valid(self, form):
+#         form.save()
+#         return super.form_valid(form)
+
+
+class CustomerTopPanelView(generic.DetailView):
     """
     View class for customer side panel in dashboard
     """
-    template_name = 'customer/customer_side_panel.html'
+    template_name = 'customer/customer_panel.html'
     model = Customer
     context_object_name = 'customer_panel'
 
 
-class CustomerDetailView(LoginRequiredMixin, View):
+class CustomerDetailView(LoginRequiredMixin, generic.FormView):
     """
     View class for customer dashboard
     """
+    template_name = 'customer/customer_details.html'
+    form_class = CustomerForm
 
     def get(self, request, *args, **kwargs):
-        customer = self.request.user
+        customer = Customer.objects.get(id=request.user.id)
         addresses = Address.objects.filter(owner=customer)
-        carts = Cart.objects.filter(customer=Customer.objects.get(id=self.request.user.id))
+        carts = Cart.objects.filter(customer=customer)
+        form = CustomerForm(instance=customer)
 
         return render(request, 'customer/customer_dashboard.html',
-                      {'customer': customer, 'customer_address': addresses, 'carts': carts})
+                      {'customer': customer, 'customer_address': addresses, 'carts': carts, 'form': form})
+
+    def form_valid(self, form):
+        customer = Customer.objects.get(id=self.request.user.id)
+        customer.first_name = form.cleaned_data['first_name']
+        customer.last_name = form.cleaned_data['last_name']
+        customer.national_code = form.cleaned_data['national_code']
+        customer.email = form.cleaned_data['email']
+        x = customer.save(update_fields=['first_name', 'last_name', 'national_code', 'email'])
+        if x:
+            return redirect(reverse_lazy('customer:customer_dashboard'), status=400)
+        else:
+            return render(self.request, 'customer/customer_dashboard.html',
+                          {'customer': customer, 'form': form})
 
 
 # -------------- Address -------------- #
