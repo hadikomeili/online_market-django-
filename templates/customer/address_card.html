@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
-    <div class="row">
+    <div class="row form-group">
         <table class="table table-responsive-md w-75 m-auto">
 
             <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
@@ -21,7 +21,7 @@
             <tr style="background-color: white; text-align: center">
                 <td style="color: #353232; ">{{ address_card.title }}</td>
                 <td style="color: #353232; ">{{ address_card.state }}</td>
-                <td style="color: #353232; ">{{ customer.phone }}</td>
+                <td style="color: #353232; ">{{ address_card.city }}</td>
                 <td style="color: #353232; ">
                     <a href="/customer/address_detail/{{ address_card.id }}">
                         <button class="btn btn-outline-dark btn-sm">

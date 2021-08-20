@@ -41,9 +41,10 @@ class AddressForm(forms.ModelForm):
                             validators=[customer_input_string_validator])
     city = forms.CharField(max_length=50, label=_('city name'), help_text=_('enter/change city name'),
                            validators=[customer_input_string_validator])
-    village = forms.CharField(max_length=50, label=_('village name'), help_text=_('enter/change village name'), required=False,
-                              validators=[customer_input_string_validator])
-    post_code = forms.CharField(max_length=10, min_length=10, label=_('post code'), help_text=_('enter/change post code'),
+    village = forms.CharField(max_length=50, label=_('village name'), help_text=_('enter/change village name'),
+                              validators=[customer_input_string_validator], required=False)
+    post_code = forms.CharField(max_length=10, min_length=10, label=_('post code'),
+                                help_text=_('enter/change post code'),
                                 validators=[customer_input_string_validator, address_post_code_validator,
                                             address_post_code_length_validator], required=False)
 
