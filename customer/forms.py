@@ -33,19 +33,19 @@ class AddressForm(forms.ModelForm):
         model = Address
         exclude = ['deleted', 'owner']
 
-    title = forms.CharField(max_length=25, label=_('address title'), help_text=_('enter title for this address'),
+    title = forms.CharField(max_length=25, label=_('address title'), help_text=_('enter/change title for this address'),
                             validators=[customer_input_string_validator, address_title_is_title_validator])
-    country = forms.CharField(max_length=30, label=_('country name'), help_text=_('enter country name'),
+    country = forms.CharField(max_length=30, label=_('country name'), help_text=_('enter/change country name'),
                               validators=[customer_input_string_validator])
-    state = forms.CharField(max_length=50, label=_('state name'), help_text=_('enter state name'),
+    state = forms.CharField(max_length=50, label=_('state name'), help_text=_('enter/change state name'),
                             validators=[customer_input_string_validator])
-    city = forms.CharField(max_length=50, label=_('city name'), help_text=_('enter city name'),
+    city = forms.CharField(max_length=50, label=_('city name'), help_text=_('enter/change city name'),
                            validators=[customer_input_string_validator])
-    village = forms.CharField(max_length=50, label=_('village name'), help_text=_('enter village name'), required=False,
+    village = forms.CharField(max_length=50, label=_('village name'), help_text=_('enter/change village name'), required=False,
                               validators=[customer_input_string_validator])
-    post_code = forms.CharField(max_length=10, label=_('post code'), help_text=_('enter post code'),
+    post_code = forms.CharField(max_length=10, min_length=10, label=_('post code'), help_text=_('enter/change post code'),
                                 validators=[customer_input_string_validator, address_post_code_validator,
-                                            address_post_code_length_validator])
+                                            address_post_code_length_validator], required=False)
 
 
 class MyUserCreationForm(forms.ModelForm):

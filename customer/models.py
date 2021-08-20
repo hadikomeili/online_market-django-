@@ -58,8 +58,8 @@ class Address(BaseModel):
                               null=True, blank=True, on_delete=models.CASCADE)
     title = models.CharField(verbose_name=_('address title'), help_text=_('enter title for this address'),
                              max_length=25, default='New')
-    latitude = models.FloatField(verbose_name=_('latitude'), help_text=_('enter latitude'), null=True, blank=True)
-    longitude = models.FloatField(verbose_name=_('longitude'), help_text=_('enter longitude'), null=True, blank=True)
+    latitude = models.FloatField(verbose_name=_('latitude'), help_text=_('enter/change latitude'), null=True, blank=True)
+    longitude = models.FloatField(verbose_name=_('longitude'), help_text=_('enter/change longitude'), null=True, blank=True)
     country = models.CharField(verbose_name=_('country name'), help_text=_('enter country name'), null=False,
                                blank=False, default='Iran', max_length=30)
     state = models.CharField(verbose_name=_('state name'), help_text=_('enter state name'), null=False, blank=False
@@ -68,7 +68,7 @@ class Address(BaseModel):
                             max_length=50)
     village = models.CharField(verbose_name=_('village name'), help_text=_('enter village name'), null=True,
                                blank=True, max_length=50)
-    rest_of_address = models.TextField(verbose_name=_('rest of address'), help_text=_('enter rest of address'),
+    rest_of_address = models.TextField(verbose_name=_('rest of address'), help_text=_('enter/change rest of address'),
                                        null=False, blank=True)
     post_code = models.CharField(verbose_name=_('post code'), help_text=_('enter post code'), null=True,
                                  blank=True, max_length=10)

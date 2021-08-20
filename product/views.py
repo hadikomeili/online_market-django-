@@ -6,6 +6,7 @@ from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirec
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
 from .serializers import ProductSerializer, CategorySerializer, DiscountSerializer
 from .models import *
 from rest_framework import generics
@@ -51,7 +52,6 @@ class ProductDetailsView(generic.DetailView):
         resp = HttpResponseRedirect(self.request.path_info)
         product = request.POST.get("product")
         product_number = request.POST.get("product_number")
-
         cart = request.COOKIES.get("cart", "")
         resp.set_cookie("cart", cart + product + ":" + product_number + ",")
         return resp

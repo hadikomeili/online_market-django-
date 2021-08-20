@@ -10,7 +10,7 @@
             <div id="product-info" class="col-6">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {#                    <p id="product" style="display: none">{{ product_details.id }}</p>#}
+
                     <h3 style="color: darkred">{{ product_details.inventory_status }}</h3>
                     <p>{% translate 'Product Name:' %}</p>
                     <h2>{{ product_details.name }}</h2>

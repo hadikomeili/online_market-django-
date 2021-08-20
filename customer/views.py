@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.views.decorators.csrf import csrf_exempt
@@ -103,17 +103,19 @@ class CustomerDetailView(LoginRequiredMixin, generic.FormView):
                       {'customer': customer, 'customer_address': addresses, 'carts': carts, 'form': form})
 
     def form_valid(self, form):
-        customer = Customer.objects.get(id=self.request.user.id)
-        customer.first_name = form.cleaned_data['first_name']
-        customer.last_name = form.cleaned_data['last_name']
-        customer.national_code = form.cleaned_data['national_code']
-        customer.email = form.cleaned_data['email']
-        x = customer.save(update_fields=['first_name', 'last_name', 'national_code', 'email'])
-        if x:
+        if form.is_valid():
+            customer = Customer.objects.get(id=self.request.user.id)
+            customer.first_name = form.cleaned_data['first_name']
+            customer.last_name = form.cleaned_data['last_name']
+            customer.national_code = form.cleaned_data['national_code']
+            customer.email = form.cleaned_data['email']
+            customer.save(update_fields=['first_name', 'last_name', 'national_code', 'email'])
+
             return redirect(reverse_lazy('customer:customer_dashboard'), status=400)
+
         else:
             return render(self.request, 'customer/customer_dashboard.html',
-                          {'customer': customer, 'form': form})
+                          {'form': form}, form.errors)
 
 
 # -------------- Address -------------- #
@@ -128,13 +130,49 @@ class AddressCardView(generic.DetailView):
     context_object_name = 'address_card'
 
 
-class AddressDetailView(generic.DetailView):
+class AddressDetailView(LoginRequiredMixin, generic.FormView):
     """
     View class for display address details
     """
     template_name = 'customer/address_detail.html'
-    model = Address
-    context_object_name = 'address_detail'
+    form_class = AddressForm
+    # context_object_name = 'address_detail'
+
+    def get(self, request, *args, **kwargs):
+        customer = Customer.objects.get(id=self.request.user.id)
+        address_id = kwargs['pk']
+        print(address_id)
+        address = Address.objects.get(id=address_id)
+        print(address)
+        form = AddressForm(instance=address)
+
+        return render(request, 'customer/address_detail.html',
+                      {'customer': customer, 'form': form, 'address_id': address_id})
+
+    def form_valid(self, form):
+
+        address_id = self.request.POST.get('address')
+
+        if form.is_valid():
+            form.save()
+            address = Address.objects.get(id=address_id)
+            address.title = form.cleaned_data['title']
+            address.latitude = form.cleaned_data['latitude']
+            address.longitude = form.cleaned_data['longitude']
+            address.country = form.cleaned_data['country']
+            address.city = form.cleaned_data['city']
+            address.state = form.cleaned_data['state']
+            address.village = form.cleaned_data['village']
+            address.rest_of_address = form.cleaned_data['rest_of_address']
+            address.post_code = form.cleaned_data['post_code']
+            address.save(update_fields=['title', 'latitude', 'longitude', 'country', 'city', 'state',
+                                        'village', 'rest_of_address', 'post_code'])
+
+            return render(self.request, 'customer/address_detail.html', {'form': form, 'address_id': address_id})
+
+        else:
+            return render(self.request, 'customer/customer_addresses.html',
+                          {'form': form, 'address_id': address_id}, form.errors)
 
 
 class AddressListCustomerView(View):
