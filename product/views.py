@@ -2,7 +2,7 @@ from django.shortcuts import render, get_list_or_404, reverse, redirect
 from django.core.files.storage import default_storage
 from django.urls import reverse_lazy
 from django.views import View, generic
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -48,12 +48,13 @@ class ProductDetailsView(generic.DetailView):
     context_object_name = 'product_details'
 
     def post(self, request, *arg, **kwargs):
-        resp = JsonResponse({"msg": "product added to your cart!"})
+        resp = HttpResponseRedirect(self.request.path_info)
         product = request.POST.get("product")
         product_number = request.POST.get("product_number")
+
         cart = request.COOKIES.get("cart", "")
         resp.set_cookie("cart", cart + product + ":" + product_number + ",")
-        return redirect(reverse('order:customer_cart'))
+        return resp
 
 
 class ProductCardView(generic.DetailView):

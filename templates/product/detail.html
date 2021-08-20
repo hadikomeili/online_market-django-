@@ -11,7 +11,7 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {#                    <p id="product" style="display: none">{{ product_details.id }}</p>#}
-                    <h3 style="color: green">{{ product_details.inventory_status }}</h3>
+                    <h3 style="color: darkred">{{ product_details.inventory_status }}</h3>
                     <p>{% translate 'Product Name:' %}</p>
                     <h2>{{ product_details.name }}</h2>
                     <p>{% translate 'Price:' %}</p>
@@ -19,17 +19,17 @@
                     <p>{% translate 'Price After Discount:' %}</p>
                     <h2 class="text-success">{{ product_details.calculate_final_price }}</h2>
                     <div>
-                        <input type="text" value="{{ product_details.id }}" name="product" class="form-control"
-                               style="width: 100px;display: none">
+                        <input id="product" type="text" value="{{ product_details.id }}" name="product" class="form-control"
+                               style="display: none">
                     </div>
                     <div class="row w-50 text-center m-auto">
                         <hr>
                         <div class="p-1">
-                        <input type="number" value="1" min="1" max="{{ product_details.inventory }}"
+                        <input type="number" placeholder="1" value="0" min="0" max="{{ product_details.inventory }}"
                                name="product_number" class="num form-control" style="width: 100px"><br>
                             </div><br>
                         <div class="p-1">
-                        <a href="/order/cart/">
+                        <a>
                             <button type="submit" class="btn btn-primary">{% translate 'Add to Cart' %}
                             </button>
                         </a>

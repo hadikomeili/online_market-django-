@@ -1,11 +1,12 @@
 {% load i18n %}
-<div class="card product_card_view text-center m-4 mt-3 mb-3" style="width: 300px; border: 2px solid darkblue;
- border-radius: 10px; padding: 10px; background-color: white; min-height: 450px" >
+<div class="card product_card_view text-center m-4 mt-3 mb-0 bg-white shadow" style="width: 300px;
+ padding: 5px; min-height: 400px" >
     <a href="/product/{{ product_card.id }}"><img src="/static/{{ product_card.image }}" alt="product image"
-                                                  width="100%" style="border-radius: 15px; max-height:300px "></a>
-    <h4>{{ product_card.name }}</h4>
-    <p>{% translate 'Brand:' %} {{ product_card.company_brand }}</p>
-    <h5>{% translate 'Price After Off:' %} {{ product_card.calculate_final_price }}</h5>
-    <p style="color: green">{{ product_card.inventory_status }}</p>
+                                                  width="100%" style="border-radius: 5px; height:300px "></a>
+    <h5>{{ product_card.name }}</h5>
+{#    <p>{% translate 'Brand:' %} {{ product_card.company_brand }}</p>#}
+    <h6 class="text-secondary">{% translate 'Price:' %}</h6>
+    <h5 class="text-center text-danger">{{ product_card.price }}</h5>
+{#    <p style="color: green">{{ product_card.inventory_status }}</p>#}
 
 </div>

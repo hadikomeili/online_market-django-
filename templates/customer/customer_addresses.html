@@ -1,12 +1,40 @@
+{% extends "base.html" %}
 {% load i18n %}
+{% load static %}
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid pt-3" style="min-height: 75vh">
+        <div class="row m-auto w-50">
+            <div class="col-12 text-center">
+                {% include 'customer/customer_panel.html' with customer_panel=customer %}
+            </div>
+        </div>
 
-<div class="container-fluid m-auto p-2" style="background-color: #c2cbd1">
-    <div class="container-fluid p-3">
-        <h5 class="text-center">{% translate 'Addresses' %} for {{ customer.first_name }} {{ customer.last_name }}</h5>
-        {% for address in cus_addresses %}
-            {% include 'customer/address_card.html' with address_card=address %}
-        {% endfor %}
+        <div class="row w-75 m-auto p-3 ">
+            <div class="container-fluid p-3">
+                <h5 class="text-center">
+                    {{ customer.first_name }} {{ customer.last_name }}
+                {% translate 'Address List' %}</h5>
 
+                {% for address in cus_addresses %}
+                    {% include 'customer/address_card.html' with address_card=address %}
+                {% endfor %}
+
+            </div>
+        </div>
+        <div id="addresses" class="container-fluid">
+
+        </div>
     </div>
-</div>
+    <script>
+        function showAddressList() {
+
+            $('#info').html('')
+            {#$('#addresses').append('{% include 'customer/customer_addresses.html' with customer=customer %}')#}
+
+        }
+    </script>
+{% endblock %}
 

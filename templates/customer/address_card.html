@@ -1,18 +1,38 @@
 {% load i18n %}
-<div class="card address_card_view text-left m-2 mt-2" style="width: 100%;
- border-radius: 10px; padding: 10px; background-color: white; max-height: 250px">
-    <div class="row">
-        <div class="col-6 pl-3">
-            <p>{% translate 'Title:' %} <strong>{{ address_card.title }}</strong></p>
-            <p>{% translate 'State:' %} <strong>{{ address_card.state }}</strong></p>
-            <p>{% translate 'City:' %} <strong>{{ address_card.city }}</strong></p>
+<div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
-        </div>
-        <div class="col-6">
-            <a href="/customer/address_detail/{{ address_card.id }}"><button class="btn btn-outline-dark">{% translate 'Show Details' %}</button></a>
-            <br><br>
-            <a href="#"><button class="btn btn-outline-dark">{% translate 'Update/Delete Address' %}</button></a>
-        </div>
+    <div class="row">
+        <table class="table table-responsive-md w-75 m-auto">
+
+            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                <th>
+                    {% translate 'Title:' %}
+                </th>
+                <th>
+                    {% translate 'State:' %}
+                </th>
+                <th>
+                    {% translate 'City:' %}
+                </th>
+                <th>
+                    {% translate 'Details:' %}
+                </th>
+            </tr>
+            <tr style="background-color: white; text-align: center">
+                <td style="color: #353232; ">{{ address_card.title }}</td>
+                <td style="color: #353232; ">{{ address_card.state }}</td>
+                <td style="color: #353232; ">{{ customer.phone }}</td>
+                <td style="color: #353232; ">
+                    <a href="/customer/address_detail/{{ address_card.id }}">
+                        <button class="btn btn-outline-dark btn-sm">
+                            {% translate 'Show' %}
+                        </button>
+                    </a>
+                </td>
+            </tr>
+
+        </table>
+
 
     </div>
 </div>

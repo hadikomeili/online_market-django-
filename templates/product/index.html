@@ -5,14 +5,14 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid shadow">
+    <div class="container-fluid m-auto bg-light">
         <div class="row" >
             {% for cat in category %}
                 {% include 'product/category_panel.html' with category=cat %}
             {% endfor %}
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid m-auto text-center">
         <div class="row">
             {% for product in products %}
                 {% include 'product/card.html' with product_card=product %}

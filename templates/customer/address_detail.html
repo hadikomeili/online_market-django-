@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
+    <div class="container-fluid pt-3" style="min-height: 75vh">
+        <div class="row m-auto w-50">
+            <div class="col-12 text-center">
+                {% include 'customer/customer_panel.html' with customer_panel=customer %}
+            </div>
+        </div>
 
 <div class="card address_detail_view text-left m-2 mt-2 p-3" style="width: 100%;
  border-radius: 10px; padding: 10px; background-color: white; max-height: 400px">

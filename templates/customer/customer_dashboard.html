@@ -11,6 +11,7 @@
                 {% include 'customer/customer_panel.html' with customer_panel=customer %}
             </div>
         </div>
+{#        <button onclick="showAddressList()">show</button>#}
         <div id="info" class="row w-75 m-auto p-3 ">
 
             <div class="col-12 text-center">
@@ -20,10 +21,10 @@
                     <div class="container-fluid w-75 pt-0">
                         <form enctype="multipart/form-data" class="form-group" method="post">
                             {% csrf_token %}
-                            <table id="customer-detail" class="table text-left">
+                            <table id="customer-detail" class="table text-left table-responsive-md">
                                 <div class="form-group">
 
-                                    <tr style="background-color: #c2cbd1" class="pb-2">
+                                    <tr style="background-color: #c2cbd1" class="thead-light">
                                         <th>
                                             {% translate 'Phone:' %}
                                         </th>
@@ -37,7 +38,7 @@
                                 </div>
                                 <div class="form-group">
                                     {% for field in form %}
-                                        <tr style="background-color: #c2cbd1">
+                                        <tr style="background-color: #c2cbd1" class="thead-light">
                                             <th>
                                                 {{ field.label_tag }}
                                             </th>
@@ -66,7 +67,7 @@
 
                             </table>
                             <input type="submit" name="update" value="Update Info"
-                                   class="btn btn-outline-success btn-block">
+                                   class="btn btn-outline-dark btn-block">
                         </form>
                     </div>
 
@@ -77,9 +78,11 @@
         </div>
     </div>
     <script>
-    function showAddressList(){
+        function showAddressList() {
 
-        $('#info').html({% include "customer/customer_addresses.html" with customer=customer %})
-    }
+            $('#info').html('')
+            {#$('#addresses').append('{% include 'customer/customer_addresses.html' with customer=customer %}')#}
+
+        }
     </script>
 {% endblock %}
