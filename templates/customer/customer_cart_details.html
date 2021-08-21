@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid pt-3" style="min-height: 85vh">
+        <div class="row m-auto w-50">
+            <div class="col-12 text-center">
+                {% include 'customer/customer_panel.html' with customer_panel=customer %}
+            </div>
+        </div>
+        <div class="container-fluid p-3 w-50 m-auto text-center">
+            <h5 style="text-align: center">{% translate 'Order Info' %}</h5>
+            <div class="row form-group text-center">
+
+        <table class="table table-responsive-md m-auto">
+
+            <tr style="background-color: #c2cbd1; text-align: center" class="thead-dark">
+                <th>
+                    {% translate 'Number:' %}
+                </th>
+                <th>
+                    {% translate 'Date:' %}
+                </th>
+                <th>
+                    {% translate 'Status:' %}
+                </th>
+                <th>
+                    {% translate 'Price:' %}
+                </th>
+                <th>
+                    {% translate 'Address:' %}
+                </th>
+
+            </tr>
+            <tr style="background-color: white; text-align: center">
+                <td style="color: #353232; ">{{ cart.id }}</td>
+                <td style="color: #353232; ">{{ cart.order_date }}</td>
+                <td style="color: #353232; ">{{ cart.order_status }}</td>
+                <td style="color: #353232; ">{{ cart.final_price }}</td>
+                <td style="color: #353232; ">{{ cart.order_address }}</td>
+
+            </tr>
+
+        </table>
+
+
+    </div>
+        </div>
+        <div class="container-fluid p-3 w-75 m-auto text-center">
+        <h6>{% translate 'Items in Order' %}</h6>
+            <div class="row">
+                {% for order_item in cart_order_items %}
+                    {% include 'order/order_item_card.html' with order_item_card=order_item %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

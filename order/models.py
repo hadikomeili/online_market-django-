@@ -21,14 +21,18 @@ class Cart(BaseModel):
     status = models.CharField(verbose_name=_('cart status'), help_text=_('display cart status'), max_length=20,
                               blank=False, null=False, choices=[('WA', _('waiting')), ('PD', _('paid'))],
                               default='WA')
-    final_price = models.FloatField(verbose_name=_('final price'), help_text=_('final cart price'),
+    final_price = models.IntegerField(verbose_name=_('final price'), help_text=_('final cart price'),
                                     null=True, blank=True)
     order_status = models.CharField(verbose_name=_('customer order status'), help_text=_('display status of order'),
-                                    blank=False, null=False, choices=[('NW', _('new')), ('SN', _('send'))],
+                                    blank=False, null=False,
+                                    choices=[('NW', _('new')), ('SN', _('send')), ('CA', _('cancel'))],
                                     default='NW', max_length=20)
     order_address = models.ForeignKey(Address, verbose_name=_('customer address'),
                                       help_text=_('specify address for send order'),
                                       null=True, blank=True, on_delete=models.PROTECT)
+
+    def order_date(self):
+        return self.create_timestamp.date()
 
     def address_by_customer(self):
         addresses = Address.objects.filter(owner=self.customer)
@@ -39,6 +43,13 @@ class Cart(BaseModel):
         method for change order status to SN
         """
         self.order_status = 'SN'
+        return self.order_status
+
+    def change_order_status_to_cancel(self):
+        """
+        method for change order status to SN
+        """
+        self.order_status = 'CA'
         return self.order_status
 
     def paid_cart(self):
@@ -57,7 +68,7 @@ class Cart(BaseModel):
         price = 0
         for item in all_items:
             price += item.product.calculate_final_price() * item.product_number
-        return price
+        return int(price)
 
     @classmethod
     def cart_history(cls):
@@ -115,7 +126,7 @@ class OrderItem(BaseModel):
         checking = self.check_inventory()
         if checking:
             order_item_price = self.product_number * self.product.calculate_final_price()
-            return order_item_price
+            return int(order_item_price)
         else:
             return checking
 
@@ -123,10 +134,12 @@ class OrderItem(BaseModel):
         """method for decrease number of products in order item from inventory after order finalization"""
         if self.check_inventory():
             self.product.inventory -= self.product_number
+            self.product.save()
 
     def increase_to_inventory(self):
         """method for increase to inventory if order canceled"""
         self.product.inventory += self.product_number
+        self.product.save()
 
     @classmethod
     def filter_by_cart(cls, cart):

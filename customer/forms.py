@@ -52,7 +52,7 @@ class AddressForm(forms.ModelForm):
 class MyUserCreationForm(forms.ModelForm):
     phone = forms.CharField(max_length=11, validators=[customer_phone_validator, customer_phone_length_validator,
                                                        customer_phone_start_validator, customer_input_string_validator],
-                            label=_('phone'), help_text=_('enter  phone number'))
+                            label=_('Phone'), help_text=_('enter  phone number'), min_length=11)
     password1 = forms.CharField(
         label=_("Password"),
         strip=False,

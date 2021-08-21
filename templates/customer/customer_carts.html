@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid pt-3" style="min-height: 85vh">
+        <div class="row m-auto w-50">
+            <div class="col-12 text-center">
+                {% include 'customer/customer_panel.html' with customer_panel=customer %}
+            </div>
+        </div>
+
+        <div class="container-fluid p-3 w-50 m-auto">
+            <div class="row">
+                <h6 class="col-12 text-center">
+
+                    {% translate 'Orders List' %}</h6>
+                <div class="container-fluid form-group text-center">
+                    {% if msg %}
+                        <div class="alert alert-success">
+                            {{ msg|escape }}
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                {% for cart in carts %}
+                    {% include 'order/cart_card.html' with cart_card=cart %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    <div id="addresses" class="container-fluid">
+
+    </div>
+    </div>
+    <script>
+
+    </script>
+{% endblock %}
+

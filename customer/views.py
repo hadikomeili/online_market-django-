@@ -12,7 +12,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.response import Response
 
-from order.models import Cart
+from order.models import Cart, OrderItem
 from .serializers import *
 from .permissions import *
 
@@ -121,6 +121,35 @@ class CustomerDetailView(LoginRequiredMixin, generic.FormView):
         else:
             return render(self.request, 'customer/customer_dashboard.html',
                           {'form': form, 'customer': customer})
+
+
+class CustomerCartArchiveIndexView(View):
+    """
+    View class for display all carts of customer
+    """
+
+    def get(self, request, *args, **kwargs):
+        customer = Customer.objects.get(id=self.request.user.id)
+        carts = Cart.objects.archive().filter(customer=customer)
+
+        return render(request, 'customer/customer_carts.html',
+                      {'carts': carts, 'customer': customer})
+
+
+class CustomerCartArchiveDetailsView(generic.DetailView):
+    """
+    View class for display cart details for customer
+    """
+    template_name = 'customer/customer_cart_details.html'
+    model = Cart
+    # context_object_name = 'cart'
+
+    def get(self, request, *args, **kwargs):
+        cart_id = kwargs['pk']
+        cart = Cart.objects.archive().get(id=cart_id)
+        cart_order_items = OrderItem.objects.filter(cart=cart)
+        return render(request, 'customer/customer_cart_details.html',
+                      {'cart': cart, 'cart_order_items': cart_order_items})
 
 
 # -------------- Address -------------- #

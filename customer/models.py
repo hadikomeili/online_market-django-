@@ -106,4 +106,4 @@ class Address(BaseModel):
         return res
 
     def __str__(self):
-        return f'{self.title} in {self.city}#owner: {self.owner}'
+        return f'{self.city}'

@@ -1,19 +1,46 @@
 {% load i18n %}
-<div class=" container-fluid m-2">
-    <div class="card order_item_card_view text-left m-auto p-3" style="width: 75%;
- border-radius: 10px; padding: 10px; background-color: white; max-height: 300px">
-        <div class="row">
+<div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
-            <div class="col-12 m-auto w-75">
-                <br><br>
-                <h6>{% translate 'Cart Status:' %} {{ cart_card.order_status }}</h6>
-                <h6>{% translate 'Cart Price:' %} {{ cart_card.final_price }}</h6>
-                <h6>{% translate 'Address:' %} {{ cart_card.order_address }}</h6>
+    <div class="row form-group">
+        <table class="table table-responsive-md m-auto">
 
-            </div>
+            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                <th>
+                    {% translate 'Number:' %}
+                </th>
+                <th>
+                    {% translate 'Date:' %}
+                </th>
+                <th>
+                    {% translate 'Status:' %}
+                </th>
+                <th>
+                    {% translate 'Price:' %}
+                </th>
+                <th>
+                    {% translate 'Address:' %}
+                </th>
+                <th>
+                    {% translate 'Details:' %}
+                </th>
+            </tr>
+            <tr style="background-color: white; text-align: center">
+                <td style="color: #353232; ">{{ cart_card.id }}</td>
+                <td style="color: #353232; ">{{ cart_card.order_date }}</td>
+                <td style="color: #353232; ">{{ cart_card.order_status }}</td>
+                <td style="color: #353232; ">{{ cart_card.final_price }}</td>
+                <td style="color: #353232; ">{{ cart_card.order_address }}</td>
+                <td style="color: #353232; ">
+                    <a href="/customer/dashboard/orders/{{ cart_card.id }}">
+                        <button class="btn btn-outline-dark btn-sm">
+                            {% translate 'Show' %}
+                        </button>
+                    </a>
+                </td>
+            </tr>
+
+        </table>
 
 
-
-        </div>
     </div>
 </div>

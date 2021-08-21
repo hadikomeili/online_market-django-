@@ -65,7 +65,7 @@ class Discount(BaseModel):
         return status
 
     def __str__(self):
-        return f'{self.value}{self.type} : {self.specify_discount_status()}'
+        return f'{self.value}{self.type} ({self.specify_discount_status()})'
 
 
 class Product(BaseModel):
@@ -108,7 +108,7 @@ class Product(BaseModel):
                     final_price = self.price - ((self.discount.value / 100) * self.price)
                 else:
                     pass
-        return final_price
+        return int(final_price)
 
     def inventory_status(self):
         """
