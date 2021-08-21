@@ -14,15 +14,22 @@
     </div>
     <div class="container-fluid shadow">
         <div class="row m-auto w-75 p-5 h-75">
+            <div class="container-fluid form-group text-center">
+                {% if msg %}
+                    <div class="alert alert-success">
+                        {{ msg|escape }}
+                    </div>
+                {% endif %}
+            </div>
             <form class="form-group order_item_card_view text-left m-auto p-3" style="width: 75%; border-radius: 10px;
              padding: 10px; background-color: white" method="post">
                 {% csrf_token %}
                 <p>{% translate 'Customer Name:' %}<strong> {{ customer.first_name }} {{ customer.last_name }}</strong>
                 </p>
-{#                {% for cus in customer_cart %}#}
-                    <p>{% translate 'Cart Price:' %}<strong> {{ customer_cart.final_price }}</strong></p>
-                    <p>{% translate 'Status:' %}<strong> {{ customer_cart.order_status }}</strong></p>
-{#                {% endfor %}#}
+                {#                {% for cus in customer_cart %}#}
+                <p>{% translate 'Cart Price:' %}<strong> {{ customer_cart.final_price }}</strong></p>
+                <p>{% translate 'Status:' %}<strong> {{ customer_cart.order_status }}</strong></p>
+                {#                {% endfor %}#}
                 <p>{% translate 'Address:' %}</p>
                 <div class="input-group mb-3">
                     <select class="custom-select" id="inputGroupSelect02" name="address">
@@ -33,8 +40,21 @@
                     </select>
 
                 </div>
-                <button type="submit" class="btn btn-success float-right">Final Confirm</button>
+                <div class="row">
 
+                    <div class="col-6">
+                        <input type="submit" name="cancel" id="cancel"
+                               value="{% translate 'Cancel Order' %}" class="btn btn-danger btn-block">
+
+
+                    </div>
+                    <div class="col-6">
+                        <input type="submit" name="confirm" id="confirm"
+                               value="{% translate 'Confirm and Pay' %}" class="btn btn-success btn-block">
+
+
+                    </div>
+                </div>
             </form>
 
         </div>

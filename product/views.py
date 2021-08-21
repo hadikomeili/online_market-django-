@@ -52,9 +52,13 @@ class ProductDetailsView(generic.DetailView):
         resp = HttpResponseRedirect(self.request.path_info)
         product = request.POST.get("product")
         product_number = request.POST.get("product_number")
-        cart = request.COOKIES.get("cart", "")
-        resp.set_cookie("cart", cart + product + ":" + product_number + ",")
-        return resp
+        if int(product_number) > 0:
+            resp = redirect(reverse('order:customer_cart'))
+            cart = request.COOKIES.get("cart", "")
+            resp.set_cookie("cart", cart + product + ":" + product_number + ",")
+            return resp
+        else:
+            return resp
 
 
 class ProductCardView(generic.DetailView):

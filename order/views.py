@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_list_or_404, reverse, redirect
@@ -84,45 +86,48 @@ class CartView(LoginRequiredMixin, View):
             return redirect(reverse('customer:login'))
         addresses = Address.objects.filter(owner=customer)
         if addresses.count() == 0:
-            return redirect(reverse('customer:add_address'))
+            return redirect(reverse('customer:add_address'),
+                            {'msg': _('please add an address for sending your orders!')})
         new_orderitems = set(request.COOKIES.get("cart", "").split(","))
-        print(new_orderitems)
+        # print(new_orderitems)
         customer_carts = Cart.objects.filter(customer=customer)
         customer_cart = customer_carts.filter(status='WA')
         if customer_cart.count() == 1:
             cart = customer_cart[0]
-            # print(cart, 1)
-            # cart.save()
+
         else:
             cart = Cart.objects.create(customer=customer)
             cart.save()
-            # print(cart, 2)
+
         if not new_orderitems == {''}:
             for orderitem in new_orderitems:
-                # print('orderitem:', orderitem)
+
                 items_in_cart = OrderItem.objects.filter(cart=cart)
                 if items_in_cart:
                     if not orderitem == '':
                         product_id, p_number = orderitem.split(":")
-                        # print(product_id, p_number)
+
                         for item in items_in_cart:
-                            # print('items:',item)
+
                             if int(product_id) == item.product.id:
                                 num = item.product_number
                                 num += int(p_number)
                                 item.product_number = num
+                                product = item.product
+                                product.inventory -= int(p_number)
+                                product.save()
                                 item.save()
-                                # print('item:', item)
                                 cart.save()
-                                # print(cart, 3)
                                 # msg = _('product updated in ')
                             else:
                                 o_item = OrderItem.objects.create(product=Product.objects.get(id=product_id),
                                                                   product_number=int(p_number), cart=cart)
                                 o_item.save()
-                                # print('o_item:', o_item)
+                                product = o_item.product
+                                product.inventory -= int(p_number)
+                                product.save()
                                 cart.save()
-                                # print(cart, 4)
+
                     else:
                         continue
                 else:
@@ -131,9 +136,10 @@ class CartView(LoginRequiredMixin, View):
                         o_item = OrderItem.objects.create(product=Product.objects.get(id=product_id),
                                                           product_number=int(p_number), cart=cart)
                         o_item.save()
-                        # print('o_item:', o_item)
+                        product = o_item.product
+                        product.inventory -= int(p_number)
+                        product.save()
                         cart.save()
-                        # print(cart, 4)
 
         cart.save()
         response = render(request, 'order/cart.html',
@@ -143,18 +149,53 @@ class CartView(LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            address_id = request.POST['address']
-            customer = Customer.objects.get(id=self.request.user.id)
-            customer_carts = Cart.objects.filter(customer=customer)
-            customer_cart = customer_carts.filter(status='WA')
-            cart = customer_cart[0]
-            cart.order_address = Address.objects.get(id=address_id)
-            cart.status = 'PD'
-            cart.order_status = 'SN'
-            cart.save()
+        # pprint(request.POST)
 
-            return redirect('product:product_index')
+        address_id = request.POST['address']
+        customer = Customer.objects.get(id=self.request.user.id)
+        customer_carts = Cart.objects.filter(customer=customer)
+        customer_cart = customer_carts.filter(status='WA')
+        cart = customer_cart[0]
+        # orderitems = OrderItem.objects.get(cart=cart)
+        cart.order_address = Address.objects.get(id=address_id)
+        cart.save()
+        # addresses = cart.order_address
+        if 'confirm' in request.POST:
+            confirm = request.POST['confirm']
+            if confirm == 'Confirm and Pay':
+                if not cart.final_price == 0:
+                    cart.status = 'PD'
+                    cart.order_status = 'SN'
+                    cart.save()
+                    msg = _('Thanks for your trust. Your order successfully registered.'
+                            ' Our staff will call you for sending your order.')
+                    return HttpResponse(msg)
+                else:
+                    msg = _('Your cart is empty!!!')
+                    return HttpResponse(msg)
+
+        elif 'cancel' in request.POST:
+            cancel = request.POST['cancel']
+            if cancel == 'Cancel Order':
+                if not cart.final_price == 0:
+                    orderitems = OrderItem.objects.filter(cart=cart)
+                    # print(orderitems)
+                    for orderitem in orderitems:
+                        product = orderitem.product
+                        product.inventory += orderitem.product_number
+                        product.save()
+                        orderitem.deleted = True
+                        orderitem.save()
+                    cart.status = 'CA'
+                    cart.order_status = 'CA'
+                    cart.deleted = True
+                    cart.save()
+                    msg = _('This order canceled successfully!')
+                    return HttpResponse(msg)
+                else:
+                    msg = _('Your cart is empty!!!')
+                    return HttpResponse(msg)
+
 
 
 class CartArchiveCardView(generic.DetailView):
