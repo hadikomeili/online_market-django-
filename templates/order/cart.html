@@ -5,60 +5,146 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid">
-        <div class="row w-75 m-auto">
+    <div class="container-fluid p-3 w-75 m-auto text-center  h-75">
 
-            {#            {% include 'customer/customer_card.html' with customer_card=customer %}#}
 
-        </div>
-    </div>
-    <div class="container-fluid shadow">
-        <div class="row m-auto w-75 p-5 h-75">
-            <div class="container-fluid form-group text-center">
-                {% if msg %}
-                    <div class="alert alert-success">
-                        {{ msg|escape }}
+        <div class="row ">
+            <div class="container-fluid m-auto">
+                <div class="container-fluid form-group text-center">
+                    {% if msg %}
+                        <div class="alert alert-success">
+                            {{ msg|escape }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="container-fluid form-group text-center">
+                    {% for orderitem in orderitems %}
+                        {% include 'order/orderitem_card_for_cart.html' with order_item_detail=orderitem %}
+                    {% endfor %}
+                </div>
+                <form class="form-group order_item_card_view text-left m-auto p-2"
+                      style="background-color: white" method="post">
+                    {% csrf_token %}
+                    <h5 style="text-align: center">{% translate 'Order Info' %}</h5>
+                    <table class="table table-responsive-md m-auto shadow ">
+
+                        <tr style="background-color: #c2cbd1; text-align: center" class="thead-dark">
+
+                            <th>
+                                {% translate 'Date:' %}
+                            </th>
+                            <th>
+                                {% translate 'Status:' %}
+                            </th>
+                            <th>
+                                {% translate 'Price:' %}
+                            </th>
+                            <th>
+                                {% translate 'Address:' %}
+                            </th>
+
+
+                        </tr>
+                        <tr style="background-color: white; text-align: center" class="bg-light">
+
+                            <td style="color: #353232; ">{{ customer_cart.order_date }}</td>
+                            <td style="color: #353232; ">{{ customer_cart.order_status }}</td>
+                            <td style="color: #353232; ">{{ customer_cart.final_price }}</td>
+                            <td style="color: #353232; padding-top: 3px">
+                                <div class="input-group">
+                                    <select class="custom-select" id="inputGroupSelect02" name="address">
+                                        {% for address in addresses %}
+                                            <option value='{{ address.id }}'>{{ address.title }}
+                                                : {{ address.city }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+
+                    <div class="row p-2">
+
+                        <div class="col-6">
+                            <input type="submit" name="cancel" id="cancel"
+                                   value="{% translate 'Cancel Order' %}" class="btn btn-danger btn-block">
+
+
+                        </div>
+                        <div class="col-6">
+                            <input type="submit" name="confirm" id="confirm"
+                                   value="{% translate 'Confirm and Pay' %}" class="btn btn-success btn-block">
+
+
+                        </div>
                     </div>
-                {% endif %}
+
+                </form>
+
             </div>
-            <form class="form-group order_item_card_view text-left m-auto p-3" style="width: 75%; border-radius: 10px;
-             padding: 10px; background-color: white" method="post">
-                {% csrf_token %}
-                <p>{% translate 'Customer Name:' %}<strong> {{ customer.first_name }} {{ customer.last_name }}</strong>
-                </p>
-                {#                {% for cus in customer_cart %}#}
-                <p>{% translate 'Cart Price:' %}<strong> {{ customer_cart.final_price }}</strong></p>
-                <p>{% translate 'Status:' %}<strong> {{ customer_cart.order_status }}</strong></p>
-                {#                {% endfor %}#}
-                <p>{% translate 'Address:' %}</p>
-                <div class="input-group mb-3">
-                    <select class="custom-select" id="inputGroupSelect02" name="address">
-                        {#                        <option>{% translate 'Choose...' %}</option>#}
-                        {% for address in addresses %}
-                            <option value='{{ address.id }}'>{{ address.title }} : {{ address.city }}</option>
-                        {% endfor %}
-                    </select>
-
-                </div>
-                <div class="row">
-
-                    <div class="col-6">
-                        <input type="submit" name="cancel" id="cancel"
-                               value="{% translate 'Cancel Order' %}" class="btn btn-danger btn-block">
-
-
-                    </div>
-                    <div class="col-6">
-                        <input type="submit" name="confirm" id="confirm"
-                               value="{% translate 'Confirm and Pay' %}" class="btn btn-success btn-block">
-
-
-                    </div>
-                </div>
-            </form>
-
         </div>
     </div>
-    </div>
+
+
+
+    {#    <div class="container-fluid">#}
+    {##}
+    {#        <div class="row w-75 m-auto">#}
+    {##}
+    {##}
+    {#        </div>#}
+    {#    </div>#}
+    {#    <div class="container-fluid shadow">#}
+    {#        <div class="row m-auto w-75 p-5 h-75">#}
+    {#            <div class="container-fluid form-group text-center">#}
+    {#                {% if msg %}#}
+    {#                    <div class="alert alert-success">#}
+    {#                        {{ msg|escape }}#}
+    {#                    </div>#}
+    {#                {% endif %}#}
+    {#            </div>#}
+    {#            <form class="form-group order_item_card_view text-left m-auto p-3" style="width: 75%; border-radius: 10px;#}
+    {#             padding: 10px; background-color: white" method="post">#}
+    {#                {% csrf_token %}#}
+    {#                <p>{% translate 'Customer Name:' %}<strong> {{ customer.first_name }} {{ customer.last_name }}</strong>#}
+    {#                </p>#}
+    {##}
+    {#                <p>{% translate 'Cart Price:' %}<strong> {{ customer_cart.final_price }}</strong></p>#}
+    {#                <p>{% translate 'Status:' %}<strong> {{ customer_cart.order_status }}</strong></p>#}
+    {##}
+    {#                <p>{% translate 'Address:' %}</p>#}
+    {#                <div class="input-group mb-3">#}
+    {#                    <select class="custom-select" id="inputGroupSelect02" name="address">#}
+    {##}
+    {#                        {% for address in addresses %}#}
+    {#                            <option value='{{ address.id }}'>{{ address.title }} : {{ address.city }}</option>#}
+    {#                        {% endfor %}#}
+    {#                    </select>#}
+    {##}
+    {#                </div>#}
+    {#                <div class="row">#}
+    {##}
+    {#                    <div class="col-6">#}
+    {#                        <input type="submit" name="cancel" id="cancel"#}
+    {#                               value="{% translate 'Cancel Order' %}" class="btn btn-danger btn-block">#}
+    {##}
+    {##}
+    {#                    </div>#}
+    {#                    <div class="col-6">#}
+    {#                        <input type="submit" name="confirm" id="confirm"#}
+    {#                               value="{% translate 'Confirm and Pay' %}" class="btn btn-success btn-block">#}
+    {##}
+    {##}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </form>#}
+    {##}
+    {#        </div>#}
+    {#    </div>#}
+    {#    </div>#}
 
 {% endblock %}

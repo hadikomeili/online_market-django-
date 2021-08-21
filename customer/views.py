@@ -145,11 +145,12 @@ class CustomerCartArchiveDetailsView(generic.DetailView):
     # context_object_name = 'cart'
 
     def get(self, request, *args, **kwargs):
+        customer = Customer.objects.get(id=self.request.user.id)
         cart_id = kwargs['pk']
         cart = Cart.objects.archive().get(id=cart_id)
         cart_order_items = OrderItem.objects.filter(cart=cart)
         return render(request, 'customer/customer_cart_details.html',
-                      {'cart': cart, 'cart_order_items': cart_order_items})
+                      {'cart': cart, 'cart_order_items': cart_order_items, 'customer': customer})
 
 
 # -------------- Address -------------- #
@@ -209,10 +210,10 @@ class AddressDetailView(LoginRequiredMixin, generic.FormView):
                                             'village', 'rest_of_address', 'post_code'])
                 msg = _('address successfully updated!')
                 return render(self.request, 'customer/address_detail.html',
-                              {'form': form, 'address_id': address_id, 'msg': msg})
+                              {'form': form, 'address_id': address_id, 'msg': msg, 'customer': customer})
             else:
                 return render(self.request, 'customer/customer_addresses.html',
-                              {'form': form, 'address_id': address_id}, form.errors)
+                              {'form': form, 'address_id': address_id, 'customer': customer})
         elif delete == 'Delete':
             address = Address.objects.get(id=address_id)
             address.deleted = True
@@ -244,14 +245,22 @@ class AddressCreateFormView(generic.FormView):
     template_name = 'customer/create_address.html'
     form_class = AddressForm
 
-    success_url = reverse_lazy('customer:customer_address_list')
+
+    def get(self, request, *args, **kwargs):
+        form = AddressForm()
+        customer = Customer.objects.get(id=self.request.user.id)
+        return render(request, 'customer/create_address.html',
+                      {'form': form, 'customer': customer})
 
     def form_valid(self, form):
         customer = Customer.objects.get(id=self.request.user.id)
         new_address = form.save()
         new_address.owner = customer
         new_address.save()
-        return super().form_valid(form)
+        form = AddressForm()
+        msg = _('new address successfully added to your list address!')
+        return render(self.request, 'customer/create_address.html',
+                      {'form': form, 'customer': customer, 'msg': msg})
 
 
 # ------------------------ API_VIEWS -------------------------- #

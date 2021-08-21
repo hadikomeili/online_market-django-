@@ -3,9 +3,11 @@
 <div class="container-fluid m-auto p-2" style="background-color: #c2cbd1">
     <div class="row text-center p-2">
         <div class="col-6">
+            <h6>{% translate 'Name:' %}
+            {{ customer.customer_name }}</h6>
             <a href="/customer/dashboard/">
                 <button class="btn m-1 btn-block btn-secondary">
-                {% translate 'User Information' %}
+                {% translate 'Customer Information' %}
                 </button>
             </a>
             <a href="/customer/dashboard/orders/">
@@ -16,7 +18,8 @@
 
         </div>
         <div class="col-6">
-
+            <h6>{% translate 'Phone:' %}
+            {{ customer.phone }}</h6>
             <a href="/customer/dashboard/addresses/">
                 <button class="btn m-1 btn-block btn-secondary">
                     {% translate 'Addresses List' %}

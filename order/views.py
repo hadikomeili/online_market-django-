@@ -69,7 +69,7 @@ class OrderItemDetailView(generic.DetailView):
     """
     View class for display details of an order item
     """
-    template_name = 'order/order_item_detail.html'
+    template_name = 'order/orderitem_card_for_cart.html'
     model = OrderItem
     context_object_name = 'order_item_detail'
 
@@ -142,15 +142,16 @@ class CartView(LoginRequiredMixin, View):
                         cart.save()
 
         cart.save()
+        cart_orderitems = OrderItem.objects.filter(cart=cart)
         response = render(request, 'order/cart.html',
-                          {'customer': customer, 'customer_cart': cart, 'addresses': addresses})
+                          {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
+                           'orderitems': cart_orderitems})
 
         response.set_cookie("cart", '')
         return response
 
     def post(self, request, *args, **kwargs):
         # pprint(request.POST)
-
         address_id = request.POST['address']
         customer = Customer.objects.get(id=self.request.user.id)
         customer_carts = Cart.objects.filter(customer=customer)

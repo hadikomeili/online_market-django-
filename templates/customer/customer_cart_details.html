@@ -15,42 +15,42 @@
             <h5 style="text-align: center">{% translate 'Order Info' %}</h5>
             <div class="row form-group text-center">
 
-        <table class="table table-responsive-md m-auto">
+                <table class="table table-responsive-md m-auto">
 
-            <tr style="background-color: #c2cbd1; text-align: center" class="thead-dark">
-                <th>
-                    {% translate 'Number:' %}
-                </th>
-                <th>
-                    {% translate 'Date:' %}
-                </th>
-                <th>
-                    {% translate 'Status:' %}
-                </th>
-                <th>
-                    {% translate 'Price:' %}
-                </th>
-                <th>
-                    {% translate 'Address:' %}
-                </th>
+                    <tr style="background-color: #c2cbd1; text-align: center" class="thead-dark">
+                        <th>
+                            {% translate 'Number:' %}
+                        </th>
+                        <th>
+                            {% translate 'Date:' %}
+                        </th>
+                        <th>
+                            {% translate 'Status:' %}
+                        </th>
+                        <th>
+                            {% translate 'Price:' %}
+                        </th>
+                        <th>
+                            {% translate 'Address:' %}
+                        </th>
 
-            </tr>
-            <tr style="background-color: white; text-align: center">
-                <td style="color: #353232; ">{{ cart.id }}</td>
-                <td style="color: #353232; ">{{ cart.order_date }}</td>
-                <td style="color: #353232; ">{{ cart.order_status }}</td>
-                <td style="color: #353232; ">{{ cart.final_price }}</td>
-                <td style="color: #353232; ">{{ cart.order_address }}</td>
+                    </tr>
+                    <tr style="background-color: white; text-align: center">
+                        <td style="color: #353232; ">{{ cart.id }}</td>
+                        <td style="color: #353232; ">{{ cart.order_date }}</td>
+                        <td style="color: #353232; ">{{ cart.order_status }}</td>
+                        <td style="color: #353232; ">{{ cart.final_price }}</td>
+                        <td style="color: #353232; ">{{ cart.order_address }}</td>
 
-            </tr>
+                    </tr>
 
-        </table>
+                </table>
 
 
-    </div>
+            </div>
         </div>
         <div class="container-fluid p-3 w-75 m-auto text-center">
-        <h6>{% translate 'Items in Order' %}</h6>
+            <h6>{% translate 'Items in Order' %}</h6>
             <div class="row">
                 {% for order_item in cart_order_items %}
                     {% include 'order/order_item_card.html' with order_item_card=order_item %}

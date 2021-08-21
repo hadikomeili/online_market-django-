@@ -14,6 +14,7 @@ class Cart(BaseModel):
     """
     a model for customer Cart consist of order items
     """
+
     customer = models.ForeignKey(Customer, verbose_name=_('customer'),
                                  help_text=_('specify owner customer for cart'),
                                  null=True, blank=True, on_delete=models.PROTECT)

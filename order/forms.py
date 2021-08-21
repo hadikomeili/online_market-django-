@@ -8,14 +8,14 @@ from django.utils.translation import gettext as _
 class OrderItemForm(forms.ModelForm):
     class Meta:
         model = OrderItem
-        exclude = ['deleted']
+        exclude = ['deleted', 'cart']
 
     product = forms.ModelChoiceField(queryset=Product.objects.all(), validators=[product_is_instance_product_model],
-                                     label=_('product'), help_text=_('select intended product'))
+                                     label=_('product'), help_text=_('select intended product'), disabled=True)
     product_number = forms.IntegerField(validators=[product_number_int_validator, product_number_positive_validator],
                                         label=_('number'), help_text=_('specify number of product'))
-    cart = forms.ModelChoiceField(queryset=Cart.objects.filter(status='WA'), validators=[cart_is_instance_cart_model], label=_('cart')
-                                  , help_text=_('choose cart'))
+    # cart = forms.ModelChoiceField(queryset=Cart.objects.filter(status='WA'), validators=[cart_is_instance_cart_model],
+    #                               label=_('cart'), help_text=_('choose cart'))
 
 
 class CartForm(forms.ModelForm):
