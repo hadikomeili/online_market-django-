@@ -2,7 +2,7 @@
 <div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
     <div class="row form-group">
-        <table class="table table-responsive-md w-75 m-auto">
+        <table class="table table-responsive-md m-auto">
 
             <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
                 <th>
@@ -23,7 +23,7 @@
                 <td style="color: #353232; ">{{ address_card.state }}</td>
                 <td style="color: #353232; ">{{ address_card.city }}</td>
                 <td style="color: #353232; ">
-                    <a href="/customer/address_detail/{{ address_card.id }}">
+                    <a href="/customer/dashboard/addresses/{{ address_card.id }}">
                         <button class="btn btn-outline-dark btn-sm">
                             {% translate 'Show' %}
                         </button>

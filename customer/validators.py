@@ -57,7 +57,7 @@ def address_post_code_length_validator(p_code: str):
 
 def address_title_is_title_validator(name: str):
     if not name.istitle():
-        raise ValidationError(_('title must be Title!'))
+        raise ValidationError(_('Title inputs must be Title!'))
 
 
 def address_owner_is_instance_customer_model(owner: Customer):

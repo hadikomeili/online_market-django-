@@ -5,7 +5,7 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid pt-3" style="min-height: 75vh">
+    <div class="container-fluid pt-3" style="min-height: 85vh">
         <div class="row m-auto w-50">
             <div class="col-12 text-center">
                 {% include 'customer/customer_panel.html' with customer_panel=customer %}
@@ -21,12 +21,15 @@
                         <form enctype="multipart/form-data" class="form-group" method="post">
                             {% csrf_token %}
                             <table id="customer-detail" class="table text-left table-responsive-md">
-                                <div>
-                                    <input id="address" type="text" value="{{ address_id }}" name="address"
-                                           class="form-control"
-                                           style="display: none">
-                                </div>
 
+                                <input id="address" type="number" value="{{ address_id }}" name="address"
+                                       class="form-control"
+                                       style="display: none">
+                                {% if msg %}
+                                    <div class="alert alert-success">
+                                        {{ msg|escape }}
+                                    </div>
+                                {% endif %}
                                 <div class="form-group">
                                     {% for field in form %}
                                         <tr style="background-color: #c2cbd1" class="thead-light">
@@ -57,8 +60,18 @@
 
 
                             </table>
-                            <input type="submit" name="update" value="Update Address"
-                                   class="btn btn-outline-dark btn-block">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="submit" name="delete" value="Delete"
+                                           class="btn btn-danger btn-block float-left">
+                                </div>
+                                <div class="col-6">
+                                    <input type="submit" name="update" value="Update"
+                                           class="btn btn-outline-dark btn-block float-right">
+                                </div>
+
+                            </div>
+
                         </form>
                     </div>
 
@@ -69,21 +82,5 @@
         </div>
     </div>
 
-    {#<div class="card address_detail_view text-left m-2 mt-2 p-3" style="width: 100%;#}
-    {# border-radius: 10px; padding: 10px; background-color: white; max-height: 400px">#}
-    {#    <div class="row">#}
-    {#        <div class="pl-4">#}
-    {#            <p>{% translate 'Title:' %} <strong>{{ address_detail.title }}</strong></p>#}
-    {#            <p>{% translate 'State:' %} <strong>{{ address_detail.state }}</strong></p>#}
-    {#            <p>{% translate 'City:' %} <strong>{{ address_detail.city }}</strong></p>#}
-    {#            <p>{% translate 'Village:' %} <strong>{{ address_detail.village }}</strong></p>#}
-    {#            <p>{% translate 'Rest Of Address:' %} <strong>{{ address_detail.rest_of_address }}</strong></p>#}
-    {#            <p>{% translate 'Post Code:' %} <strong>{{ address_detail.post_code }}</strong></p>#}
-    {#            <p>{% translate 'Latitude:' %} <strong>{{ address_detail.latitude }}</strong></p>#}
-    {#            <p>{% translate 'Longitude:' %} <strong>{{ address_detail.longitude }}</strong></p>#}
-    {##}
-    {#        </div>#}
-    {##}
-    {#    </div>#}
-    {#</div>#}
+
 {% endblock %}

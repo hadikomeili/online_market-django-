@@ -1,3 +1,5 @@
+from pprint import pprint
+from django.utils.translation import gettext as _
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -95,27 +97,30 @@ class CustomerDetailView(LoginRequiredMixin, generic.FormView):
 
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(id=request.user.id)
-        addresses = Address.objects.filter(owner=customer)
-        carts = Cart.objects.filter(customer=customer)
+        # addresses = Address.objects.filter(owner=customer)
+        # carts = Cart.objects.filter(customer=customer)
         form = CustomerForm(instance=customer)
+        msg = _('wellcome to customer dashboard')
 
         return render(request, 'customer/customer_dashboard.html',
-                      {'customer': customer, 'customer_address': addresses, 'carts': carts, 'form': form})
+                      {'customer': customer, 'form': form, 'msg': msg})
 
     def form_valid(self, form):
+        customer = Customer.objects.get(id=self.request.user.id)
         if form.is_valid():
-            customer = Customer.objects.get(id=self.request.user.id)
             customer.first_name = form.cleaned_data['first_name']
             customer.last_name = form.cleaned_data['last_name']
             customer.national_code = form.cleaned_data['national_code']
             customer.email = form.cleaned_data['email']
             customer.save(update_fields=['first_name', 'last_name', 'national_code', 'email'])
+            msg = _('information successfully updated!')
 
-            return redirect(reverse_lazy('customer:customer_dashboard'), status=400)
+            return render(self.request, 'customer/customer_dashboard.html',
+                          {'customer': customer, 'form': form, 'msg': msg})
 
         else:
             return render(self.request, 'customer/customer_dashboard.html',
-                          {'form': form}, form.errors)
+                          {'form': form, 'customer': customer})
 
 
 # -------------- Address -------------- #
@@ -150,29 +155,45 @@ class AddressDetailView(LoginRequiredMixin, generic.FormView):
                       {'customer': customer, 'form': form, 'address_id': address_id})
 
     def form_valid(self, form):
-
+        customer = Customer.objects.get(id=self.request.user.id)
         address_id = self.request.POST.get('address')
+        print(address_id)
+        update = self.request.POST.get('update')
+        delete = self.request.POST.get('delete')
+        pprint(self.request.POST)
+        if update == 'Update':
 
-        if form.is_valid():
-            form.save()
+            if form.is_valid():
+                form.save()
+                address = Address.objects.get(id=address_id)
+                print(address)
+                address.title = form.cleaned_data['title']
+                address.latitude = form.cleaned_data['latitude']
+                address.longitude = form.cleaned_data['longitude']
+                address.country = form.cleaned_data['country']
+                address.city = form.cleaned_data['city']
+                address.state = form.cleaned_data['state']
+                address.village = form.cleaned_data['village']
+                address.rest_of_address = form.cleaned_data['rest_of_address']
+                address.post_code = form.cleaned_data['post_code']
+                address.save(update_fields=['title', 'latitude', 'longitude', 'country', 'city', 'state',
+                                            'village', 'rest_of_address', 'post_code'])
+                msg = _('address successfully updated!')
+                return render(self.request, 'customer/address_detail.html',
+                              {'form': form, 'address_id': address_id, 'msg': msg})
+            else:
+                return render(self.request, 'customer/customer_addresses.html',
+                              {'form': form, 'address_id': address_id}, form.errors)
+        elif delete == 'Delete':
             address = Address.objects.get(id=address_id)
-            address.title = form.cleaned_data['title']
-            address.latitude = form.cleaned_data['latitude']
-            address.longitude = form.cleaned_data['longitude']
-            address.country = form.cleaned_data['country']
-            address.city = form.cleaned_data['city']
-            address.state = form.cleaned_data['state']
-            address.village = form.cleaned_data['village']
-            address.rest_of_address = form.cleaned_data['rest_of_address']
-            address.post_code = form.cleaned_data['post_code']
-            address.save(update_fields=['title', 'latitude', 'longitude', 'country', 'city', 'state',
-                                        'village', 'rest_of_address', 'post_code'])
-
-            return render(self.request, 'customer/address_detail.html', {'form': form, 'address_id': address_id})
-
-        else:
+            address.deleted = True
+            address.save()
+            msg = _('address successfully deleted!')
+            addresses = Address.objects.filter(owner=customer)
             return render(self.request, 'customer/customer_addresses.html',
-                          {'form': form, 'address_id': address_id}, form.errors)
+                          {'customer': customer, 'cus_addresses': addresses, 'msg': msg})
+        else:
+            return HttpResponse('ERROR!!!')
 
 
 class AddressListCustomerView(View):
@@ -181,7 +202,7 @@ class AddressListCustomerView(View):
     """
 
     def get(self, request, *args, **kwargs):
-        customer = self.request.user
+        customer = Customer.objects.get(id=self.request.user.id)
         addresses = Address.objects.filter(owner=customer)
 
         return render(request, 'customer/customer_addresses.html', {'customer': customer, 'cus_addresses': addresses})
@@ -194,12 +215,12 @@ class AddressCreateFormView(generic.FormView):
     template_name = 'customer/create_address.html'
     form_class = AddressForm
 
-    success_url = reverse_lazy('customer:address_list')
+    success_url = reverse_lazy('customer:customer_address_list')
 
     def form_valid(self, form):
-
+        customer = Customer.objects.get(id=self.request.user.id)
         new_address = form.save()
-        new_address.owner = Customer.objects.get(id=self.request.POST['owner'])
+        new_address.owner = customer
         new_address.save()
         return super().form_valid(form)
 

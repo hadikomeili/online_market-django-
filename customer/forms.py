@@ -25,7 +25,7 @@ class CustomerForm(forms.ModelForm):
                                     help_text=_('enter/change national code'),
                                     validators=[customer_national_code_validator, customer_input_string_validator,
                                                 customer_national_code_length_validator])
-    email = forms.EmailField(label=_('email'), help_text=_('enter/change your email'))
+    # email = forms.EmailField(label=_('email'), help_text=_('enter/change your email'))
 
 
 class AddressForm(forms.ModelForm):

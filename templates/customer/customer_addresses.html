@@ -5,18 +5,25 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid pt-3" style="min-height: 75vh">
+    <div class="container-fluid pt-3" style="min-height: 85vh">
         <div class="row m-auto w-50">
             <div class="col-12 text-center">
                 {% include 'customer/customer_panel.html' with customer_panel=customer %}
             </div>
         </div>
 
-        <div class="row w-75 m-auto p-3 ">
-            <div class="container-fluid p-3">
-                <h5 class="text-center">
-                    {{ customer.first_name }} {{ customer.last_name }}
-                {% translate 'Address List' %}</h5>
+        <div class="container-fluid p-3 w-50 m-auto">
+            <div class="row">
+                <h6 class="col-12 text-center">
+
+                    {% translate 'Addresses List' %}</h6>
+                <div class="container-fluid form-group text-center">
+                    {% if msg %}
+                        <div class="alert alert-success">
+                            {{ msg|escape }}
+                        </div>
+                    {% endif %}
+                </div>
 
                 {% for address in cus_addresses %}
                     {% include 'customer/address_card.html' with address_card=address %}
@@ -29,12 +36,7 @@
         </div>
     </div>
     <script>
-        function showAddressList() {
 
-            $('#info').html('')
-            {#$('#addresses').append('{% include 'customer/customer_addresses.html' with customer=customer %}')#}
-
-        }
     </script>
 {% endblock %}
 
