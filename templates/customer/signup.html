@@ -14,9 +14,9 @@
             {% csrf_token %}
 
             {% for field in form %}
-                <div class="form-group">
+                <div class="container-fluid form-group">
                     <strong>{{ field.label_tag }}</strong>
-                    {{ field }}<br>
+                    <span type="input" class="input-group">{{ field }}</span>
                     <span style="color: dimgrey">{{ field.help_text }}</span>
                     <span style="color: red">{{ field.errors }}</span>
                 </div>

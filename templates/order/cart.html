@@ -5,7 +5,7 @@
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid p-3 w-75 m-auto text-center  h-75">
+    <div class="container-fluid p-3 w-75 m-auto text-center" style="min-height: 85vh">
 
 
         <div class="row ">
@@ -17,15 +17,49 @@
                         </div>
                     {% endif %}
                 </div>
-                <div class="container-fluid form-group text-center">
-                    {% for orderitem in orderitems %}
-                        {% include 'order/orderitem_card_for_cart.html' with order_item_detail=orderitem %}
-                    {% endfor %}
+                <div class="container-fluid m-auto" >
+
+                    <form class="form-group bg-light p-3" method="post" enctype="multipart/form-data">
+                        <table class="table table-responsive-md m-auto text-center">
+                        {% csrf_token %}
+                            <h6 class="text-center">{% translate 'Order Items:' %}</h6>
+                            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                                <th>
+                                    {% translate 'Product:' %}
+                                </th>
+                                <th>
+                                    {% translate 'Numbers:' %}
+                                </th>
+                                <th>
+                                    {% translate 'Price (Unit):' %}
+                                </th>
+                                <th>
+                                    {% translate 'Discount:' %}
+                                </th>
+                                <th>
+                                    {% translate 'Final Price:' %}
+                                </th>
+                                <th>
+                                    {% translate 'Update:' %}
+                                </th>
+                                <th>
+                                    {% translate 'Delete:' %}
+                                </th>
+                            </tr>
+
+                            {% for orderitem in orderitems %}
+                                {% include 'order/orderitem_card_for_cart.html' with order_item_detail=orderitem %}
+                            {% endfor %}
+                        </table>
+
+
+                    </form>
                 </div>
-                <form class="form-group order_item_card_view text-left m-auto p-2"
-                      style="background-color: white" method="post">
-                    {% csrf_token %}
-                    <h5 style="text-align: center">{% translate 'Order Info' %}</h5>
+            <div class="container-fluid m-auto" >
+                <div class="form-group order_item_card_view text-left m-auto p-3"
+                      style="background-color: #c2cbd1" >
+{#                    {% csrf_token %}#}
+                    <h5 style="text-align: center">{% translate 'Order Info:' %}</h5>
                     <table class="table table-responsive-md m-auto shadow ">
 
                         <tr style="background-color: #c2cbd1; text-align: center" class="thead-dark">
@@ -45,7 +79,7 @@
 
 
                         </tr>
-                        <tr style="background-color: white; text-align: center" class="bg-light">
+                        <tr style="background-color: white; font-size: large; text-align: center" class="thead-light">
 
                             <td style="color: #353232; ">{{ customer_cart.order_date }}</td>
                             <td style="color: #353232; ">{{ customer_cart.order_status }}</td>
@@ -67,7 +101,7 @@
                     </table>
 
 
-                    <div class="row p-2">
+                    <div class="row pt-3 m-auto">
 
                         <div class="col-6">
                             <input type="submit" name="cancel" id="cancel"
@@ -83,7 +117,8 @@
                         </div>
                     </div>
 
-                </form>
+                </div>
+            </div>
 
             </div>
         </div>
@@ -91,7 +126,12 @@
 
 
 
-    {#    <div class="container-fluid">#}
+
+
+{% endblock %}
+
+
+   {#    <div class="container-fluid">#}
     {##}
     {#        <div class="row w-75 m-auto">#}
     {##}
@@ -146,5 +186,3 @@
     {#        </div>#}
     {#    </div>#}
     {#    </div>#}
-
-{% endblock %}

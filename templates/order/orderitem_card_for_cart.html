@@ -1,136 +1,28 @@
-{% load i18n %}
-<div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<tr style="background-color: white; text-align: center">
 
-    <form class="form-group">
-        <table class="table table-responsive-md m-auto">
+    <td style="color: #353232; ">{{ order_item_detail.product }}</td>
+    <td style="color: #353232; ">
+        <input class="input-group text-center" id="number" name="number" min="1"
+               max="{{ order_item_detail.product.inventory }}" type="number"
+               value="{{ order_item_detail.product_number }}">
+    </td>
+    <td style="color: #353232; ">{{ order_item_detail.product.price }}</td>
+    <td style="color: #353232; ">{{ order_item_detail.product.discount }}</td>
+    <td style="color: #353232; ">{{ order_item_detail.calculate_order_item_price }}</td>
+    <td style="color: #353232; padding: 4px">
+        <input type="submit" name="update" id="update" value="update" class="btn btn-success">
+    </td>
+    <td style="color: #353232; padding: 4px">
+        <input type="submit" name="delete" id="delete" value="delete" class="btn btn-danger">
+    </td>
 
-            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
-                <th>
-                    {% translate 'Product:' %}
-                </th>
-                <th>
-                    {% translate 'Numbers:' %}
-                </th>
-                <th>
-                    {% translate 'Price(product):' %}
-                </th>
-                <th>
-                    {% translate 'Discount:' %}
-                </th>
-                <th>
-                    {% translate 'Final Price(after discount):' %}
-                </th>
-            </tr>
-            <tr style="background-color: white; text-align: center">
-                <td style="color: #353232; ">{{ order_item_detail.product }}</td>
-                <td style="color: #353232; ">
-                    <input id="number" name="number" type="number" value="{{ order_item_detail.product_number }}">
-                </td>
-                <td style="color: #353232; ">{{ order_item_detail.product.price }}</td>
-                <td style="color: #353232; ">{{ order_item_detail.product.discount }}</td>
-                <td style="color: #353232; ">{{ order_item_detail.calculate_order_item_price }}</td>
-{#                <td style="color: #353232; ">#}
-{#                    <a href="/customer/dashboard/addresses/{{ address_card.id }}">#}
-{#                        <button class="btn btn-outline-dark btn-sm">#}
-{#                            {% translate 'Show' %}#}
-{#                        </button>#}
-{#                    </a>#}
-{#                </td>#}
-            </tr>
-
-        </table>
-
-
-    </form>
-</div>
-
-
-
-{#{% extends "base.html" %}#}
-{#{% load i18n %}#}
-{#{% load static %}#}
-{##}
-{#{% block extrastyle %}{% endblock %}#}
-{#{% block extrahead %}{% endblock %}#}
-{#{% block content %}#}
-{#    <div id="content-main" class="container-fluid text-center p-3">#}
-{#    <h3>{% translate 'Order Item Details' %}</h3>#}
-{#        <div id="order_item-overview" class="row p-3">#}
-{#            <div class="card order_item_card_view text-left m-auto shadow" style="width: 75%;#}
-{#                padding: 10px; background-color: white; max-height: 200px">#}
-{#                <div class="row">#}
-{#                    <div class="col-6">#}
-{#                        <br>#}
-{#                        <h5>{% translate 'Product Name:' %} {{ order_item_detail.product.name }}</h5>#}
-{#                        <h6>{% translate 'Category:' %} {{ order_item_detail.product.category.name }}</h6>#}
-{#                        <h6>{% translate 'Customer:' %} {{ order_item_detail.cart.customer }}</h6>#}
-{#                    </div>#}
-{#                    <div class="col-3">#}
-{#                        <br><br>#}
-{#                        <h6>{% translate 'Order Numbers:' %} {{ order_item_detail.product_number }}</h6>#}
-{#                        <h6>{% translate 'Final Price:' %} {{ order_item_detail.calculate_order_item_price }}</h6>#}
-{##}
-{#                    </div>#}
-{#                    <div class="col-3">#}
-{#                        <a href="/product/{{ order_item_detail.product.id }}"><img#}
-{#                                src="/static/{{ order_item_detail.product.image }}"#}
-{#                                alt="product image" height="170px"#}
-{#                                style="border-radius: 15px; "></a>#}
-{##}
-{#                    </div>#}
-{##}
-{##}
-{##}
-{#                </div>#}
-{#            </div>#}
-{##}
-{##}
-{#        </div>#}
-{#        <table id="order_item-detail" class="table text-left w-75 m-auto">#}
-{#            <tr>#}
-{#                <th>#}
-{#                    {% translate 'Product Name:' %}#}
-{#                </th>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <td style="padding-left: 30px; color: #231e1e; background: white">{{ order_item_detail.product.name }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>#}
-{#                    {% translate 'Category:' %}#}
-{#                </th>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <td style="padding-left: 30px; color: #231e1e; background: white">{{ order_item_detail.product.category.name }}</td>#}
-{#            </tr>#}
-{##}
-{#            <tr>#}
-{#                <th>#}
-{#                    {% translate 'Company Brand:' %}#}
-{#                </th>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <td style="padding-left: 30px; color: #231e1e; background: white">{{ order_item_detail.product.company_brand }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>#}
-{#                    {% translate 'Order Numbers:' %}#}
-{#                </th>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <td style="padding-left: 30px; color: #231e1e; background: white">{{ order_item_detail.product_number }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>#}
-{#                    {% translate 'Price Without discount:' %}#}
-{#                </th>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <td style="padding-left: 30px; color: #231e1e; background: white">{{ order_item_detail.product.price }}</td>#}
-{#            </tr>#}
-{#        </table>#}
-{#        <br>#}
-{##}
-{#    </div>#}
-{#{% endblock %}#}
-
+</tr>
+<input name="orderitem_id" value="{{ order_item_detail.id }}" style="display: none">
+</form>
+{#<script>#}
+{#    function addValue() {#}
+{#        $('#up')#}
+{#    }#}
+{#</script>#}

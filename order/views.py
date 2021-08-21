@@ -89,7 +89,7 @@ class CartView(LoginRequiredMixin, View):
             return redirect(reverse('customer:add_address'),
                             {'msg': _('please add an address for sending your orders!')})
         new_orderitems = set(request.COOKIES.get("cart", "").split(","))
-        # print(new_orderitems)
+
         customer_carts = Cart.objects.filter(customer=customer)
         customer_cart = customer_carts.filter(status='WA')
         if customer_cart.count() == 1:
@@ -151,20 +151,22 @@ class CartView(LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        # pprint(request.POST)
-        address_id = request.POST['address']
+        pprint(request.POST)
+
         customer = Customer.objects.get(id=self.request.user.id)
         customer_carts = Cart.objects.filter(customer=customer)
         customer_cart = customer_carts.filter(status='WA')
-        cart = customer_cart[0]
+        cart = customer_cart[0]               # it can change and line bala!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
         # orderitems = OrderItem.objects.get(cart=cart)
-        cart.order_address = Address.objects.get(id=address_id)
-        cart.save()
+
         # addresses = cart.order_address
         if 'confirm' in request.POST:
             confirm = request.POST['confirm']
             if confirm == 'Confirm and Pay':
                 if not cart.final_price == 0:
+                    address_id = request.POST['address']
+                    cart.order_address = Address.objects.get(id=address_id)
+                    cart.save()
                     cart.status = 'PD'
                     cart.order_status = 'SN'
                     cart.save()
@@ -197,6 +199,45 @@ class CartView(LoginRequiredMixin, View):
                     msg = _('Your cart is empty!!!')
                     return HttpResponse(msg)
 
+        elif 'update' in request.POST:
+            update = request.POST['update']
+            if update == 'update':
+                new_number = request.POST['number']
+                print(new_number)
+                orderitem_id = request.POST['orderitem_id']
+                new_orderitem = OrderItem.objects.get(id=orderitem_id)
+                product = new_orderitem.product
+                product_number = new_orderitem.product_number
+                product.inventory -= (int(new_number) - int(product_number))
+                product.save()
+                new_orderitem.product_number = int(new_number)
+                new_orderitem.save()
+                print(new_orderitem)
+                cart.save()
+                cart_orderitems = OrderItem.objects.filter(cart=cart)
+                addresses = Address.objects.filter(owner=customer)
+
+                return render(request, 'order/cart.html',
+                          {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
+                           'orderitems': cart_orderitems})
+        elif 'delete' in request.POST:
+            delete = request.POST['delete']
+            if delete == 'delete':
+                number = request.POST['number']
+                orderitem_id = request.POST['orderitem_id']
+                new_orderitem = OrderItem.objects.get(id=orderitem_id)
+                product = new_orderitem.product
+                product.inventory += int(number)
+                product.save()
+                new_orderitem.deleted = True
+                new_orderitem.save()
+                cart.save()
+                cart_orderitems = OrderItem.objects.filter(cart=cart)
+                addresses = Address.objects.filter(owner=customer)
+
+                return render(request, 'order/cart.html',
+                          {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
+                           'orderitems': cart_orderitems})
 
 class CartArchiveCardView(generic.DetailView):
     template_name = 'order/cart_card.html'
