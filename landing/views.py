@@ -3,6 +3,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
+from product.models import Product, Category
 from .forms import MessageForm
 from .models import *
 # Create your views here.
@@ -47,7 +48,18 @@ def contact_us(request):
 
 
 class HomeView(generic.TemplateView):
-
-    ...
+    """
+    View class for display home page
+    """
+    products = Product.objects.all().filter(inventory__gte=1)
+    off_products = []
+    for product in products:
+        if product.discount.specify_discount_status() == 'Active':
+            off_products.append(product)
+    template_name = 'landing/home.html'
+    extra_context = {
+        'products': off_products,
+        'category': Category.objects.all().filter(ref_category=None),
+    }
 
 

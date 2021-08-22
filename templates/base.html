@@ -73,9 +73,9 @@
                 min-height: 1rem;
             }
 
-        </style>
+
     {% endblock %}
-    {% block extrastyle %}{% endblock %}
+    {% block extrastyle %}{% endblock %}</style>
     {#{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "" %}{% endblock %}">{% endif %}#}
     {% block extrahead %}{% endblock %}
     {#{% block responsive %}#}
@@ -87,7 +87,7 @@
 
 </head>
 {% load i18n %}
-<body>
+<body id="body">
 <div id="header" class="container-fluid p-0 m-0 pt-2" style="background-color: #1b1e21">
     <div id="topnav" class="container-fluid header pl-3 pr-3 pt-1 m-auto">
         <div id="siteheader" class="row" style="height: 45px">
@@ -96,17 +96,22 @@
                     <button class="btn btn-outline-light">
                         <strong><i class="fa fa-list"></i></strong> {% translate 'All Products' %}</button>
                 </a>
+                <a href="{% url 'landing:home' %}">
+                    <button class="btn btn-outline-light">
+                        {% translate 'Home' %}</button>
+                </a>
                 <a href="{% url 'landing:contact_us' %}">
                     <button class="btn btn-outline-light">
                         {% translate 'Contact Us' %}</button>
                 </a>
+
                 {#                <a href="{% url 'product:product_index' %}"><button class="btn btn-outline-light">#}
                 {#                    {% translate 'Categories' %}</button></a>#}
 
             </div>
             <div id="branding" class="col-4 text-center">
                 {% block branding %}
-                    <a href="/product/" style="text-decoration: none"><h3 class="text-white">{% translate 'MARKET' %}</h3></a>
+                    <a href="/home/" style="text-decoration: none"><h3 class="text-white">{% translate 'MARKET' %}</h3></a>
                 {% endblock %}
             </div>
             {#            <div class="search-container">#}

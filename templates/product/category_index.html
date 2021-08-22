@@ -2,11 +2,28 @@
 {% load i18n %}
 {% load static %}
 
-{% block extrastyle %}{% endblock %}
+{% block extrastyle %}
+    /* scrollable div */
+
+    div.scrollmenu {
+    background-color: #93afca;
+    overflow: auto;
+    white-space: nowrap;
+    }
+
+    div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 0;
+    text-decoration: none;
+    }
+{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid shadow">
-        <div class="row" >
+    <div class="scrollmenu p-1 m-3">
+
+        <div class="row" style="font-size: 13px">
             {% for cat in category %}
                 {% include 'product/category_panel.html' with category=cat %}
             {% endfor %}

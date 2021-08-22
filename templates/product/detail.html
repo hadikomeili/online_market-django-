@@ -11,13 +11,14 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <h3 style="color: darkred">{{ product_details.inventory_status }}</h3>
-                    <p>{% translate 'Product Name:' %}</p>
+
+{#                    <p>{% translate 'Product Name:' %}</p>#}
                     <h2>{{ product_details.name }}</h2>
                     <p>{% translate 'Price:' %}</p>
-                    <h3>{{ product_details.price }}</h3>
-                    <p>{% translate 'Price After Discount:' %}</p>
-                    <h2 class="text-success">{{ product_details.calculate_final_price }}</h2>
+                    <h2>{{ product_details.price }}</h2>
+                    <p>{% translate 'Discount:' %}</p>
+                    <h3 class="text-danger">{{ product_details.discount }}</h3>
+                    <h5 class="text-info">{{ product_details.inventory_status }}</h5>
                     <div>
                         <input id="product" type="text" value="{{ product_details.id }}" name="product" class="form-control"
                                style="display: none">
@@ -41,8 +42,8 @@
             </div>
             <div id="product-image" class="col-6">
 
-                <img src="/static/{{ product_details.image }}" alt="product image" width="400px"
-                     style="border: 2px solid black; border-radius: 15px">
+                <img src="/static/{{ product_details.image }}" alt="product image" width="300px"
+                     style="border: 2px solid black; border-radius: 3px; height: 280px">
 
             </div>
 
