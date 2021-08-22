@@ -19,9 +19,9 @@
                 </div>
                 <div class="container-fluid m-auto" >
 
-                    <form class="form-group bg-light p-3" method="post" enctype="multipart/form-data">
+                    <div class="form-group bg-light p-3">
                         <table class="table table-responsive-md m-auto text-center">
-                        {% csrf_token %}
+{#                        {% csrf_token %}#}
                             <h6 class="text-center">{% translate 'Order Items:' %}</h6>
                             <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
                                 <th>
@@ -53,12 +53,12 @@
                         </table>
 
 
-                    </form>
+                    </div>
                 </div>
             <div class="container-fluid m-auto" >
-                <div class="form-group order_item_card_view text-left m-auto p-3"
-                      style="background-color: #c2cbd1" >
-{#                    {% csrf_token %}#}
+                <form class="form-group order_item_card_view text-left m-auto p-3"
+                      style="background-color: #c2cbd1" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <h5 style="text-align: center">{% translate 'Order Info:' %}</h5>
                     <table class="table table-responsive-md m-auto shadow ">
 
@@ -117,7 +117,7 @@
                         </div>
                     </div>
 
-                </div>
+                </form>
             </div>
 
             </div>

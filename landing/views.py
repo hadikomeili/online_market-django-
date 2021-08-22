@@ -46,3 +46,8 @@ def contact_us(request):
         return render(request, 'landing/contact_us.html')
 
 
+class HomeView(generic.TemplateView):
+
+    ...
+
+

@@ -187,8 +187,8 @@ class CartView(LoginRequiredMixin, View):
                         product = orderitem.product
                         product.inventory += orderitem.product_number
                         product.save()
-                        orderitem.deleted = True
-                        orderitem.save()
+                        # orderitem.deleted = True
+                        # orderitem.save()
                     cart.status = 'CA'
                     cart.order_status = 'CA'
                     cart.deleted = True
