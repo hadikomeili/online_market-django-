@@ -88,7 +88,7 @@ class CustomerTopPanelView(generic.DetailView):
     context_object_name = 'customer_panel'
 
 
-class CustomerDetailView(LoginRequiredMixin, generic.FormView):
+class CustomerDashbordView(LoginRequiredMixin, generic.FormView):
     """
     View class for customer dashboard
     """
@@ -97,10 +97,8 @@ class CustomerDetailView(LoginRequiredMixin, generic.FormView):
 
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(id=request.user.id)
-        # addresses = Address.objects.filter(owner=customer)
-        # carts = Cart.objects.filter(customer=customer)
         form = CustomerForm(instance=customer)
-        msg = _('wellcome to customer dashboard')
+        msg = _('Wellcome! Please complete this information, and add a address for easy shopping.')
 
         return render(request, 'customer/customer_dashboard.html',
                       {'customer': customer, 'form': form, 'msg': msg})
@@ -245,12 +243,12 @@ class AddressCreateFormView(generic.FormView):
     template_name = 'customer/create_address.html'
     form_class = AddressForm
 
-
     def get(self, request, *args, **kwargs):
         form = AddressForm()
         customer = Customer.objects.get(id=self.request.user.id)
+        msg = _('add address for sending your orders!')
         return render(request, 'customer/create_address.html',
-                      {'form': form, 'customer': customer})
+                      {'form': form, 'customer': customer, 'msg': msg})
 
     def form_valid(self, form):
         customer = Customer.objects.get(id=self.request.user.id)
@@ -370,7 +368,9 @@ def sign_up(request):
             password = form.cleaned_data.get('password1')
             user = authenticate(request, phone=phone, password=password)
             login(request, user)
+
             return redirect('customer:customer_dashboard')
+            # return redirect('customer:customer_dashboard')
     else:
         form = MyUserCreationForm()
     return render(request, 'customer/signup.html', {'form': form})

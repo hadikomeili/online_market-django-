@@ -10,6 +10,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from django.utils.translation import gettext as _
 
+from customer.forms import AddressForm
 from .serializers import *
 
 from .models import *
@@ -85,9 +86,7 @@ class CartView(LoginRequiredMixin, View):
         except Customer.DoesNotExist:
             return redirect(reverse('customer:login'))
         addresses = Address.objects.filter(owner=customer)
-        if addresses.count() == 0:
-            return redirect(reverse('customer:add_address'),
-                            {'msg': _('please add an address for sending your orders!')})
+
         new_orderitems = set(request.COOKIES.get("cart", "").split(","))
 
         customer_carts = Cart.objects.filter(customer=customer)
@@ -158,24 +157,30 @@ class CartView(LoginRequiredMixin, View):
         customer_cart = customer_carts.filter(status='WA')
         cart = customer_cart[0]               # it can change and line bala!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
         # orderitems = OrderItem.objects.get(cart=cart)
+        cart_orderitems = OrderItem.objects.filter(cart=cart)
+        addresses = Address.objects.filter(owner=customer)
 
-        # addresses = cart.order_address
         if 'confirm' in request.POST:
             confirm = request.POST['confirm']
             if confirm == 'Confirm and Pay':
                 if not cart.final_price == 0:
+                    if addresses.count() == 0:
+
+                        return redirect('customer:add_address')
                     address_id = request.POST['address']
                     cart.order_address = Address.objects.get(id=address_id)
                     cart.save()
                     cart.status = 'PD'
                     cart.order_status = 'SN'
                     cart.save()
-                    msg = _('Thanks for your trust. Your order successfully registered.'
-                            ' Our staff will call you for sending your order.')
-                    return HttpResponse(msg)
+                    # msg = _('Thanks for your trust. Your order successfully registered.'
+                    #         ' Our staff will call you for sending your order.')
+                    return redirect('order:cart_confirm')
                 else:
                     msg = _('Your cart is empty!!!')
-                    return HttpResponse(msg)
+                    return render(request, 'order/cart.html',
+                          {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
+                           'orderitems': cart_orderitems, 'msg': msg})
 
         elif 'cancel' in request.POST:
             cancel = request.POST['cancel']
@@ -193,11 +198,13 @@ class CartView(LoginRequiredMixin, View):
                     cart.order_status = 'CA'
                     cart.deleted = True
                     cart.save()
-                    msg = _('This order canceled successfully!')
-                    return HttpResponse(msg)
+
+                    return redirect('order:cart_cancel')
                 else:
                     msg = _('Your cart is empty!!!')
-                    return HttpResponse(msg)
+                    return render(request, 'order/cart.html',
+                                  {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
+                                   'orderitems': cart_orderitems, 'msg': msg})
 
         elif 'update' in request.POST:
             update = request.POST['update']
@@ -216,10 +223,10 @@ class CartView(LoginRequiredMixin, View):
                 cart.save()
                 cart_orderitems = OrderItem.objects.filter(cart=cart)
                 addresses = Address.objects.filter(owner=customer)
-
+                msg = _('the numbers of product successfully updated.')
                 return render(request, 'order/cart.html',
                           {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
-                           'orderitems': cart_orderitems})
+                           'orderitems': cart_orderitems, 'msg': msg})
         elif 'delete' in request.POST:
             delete = request.POST['delete']
             if delete == 'delete':
@@ -234,10 +241,10 @@ class CartView(LoginRequiredMixin, View):
                 cart.save()
                 cart_orderitems = OrderItem.objects.filter(cart=cart)
                 addresses = Address.objects.filter(owner=customer)
-
+                msg = _('the product successfully deleted from your cart.')
                 return render(request, 'order/cart.html',
                           {'customer': customer, 'customer_cart': cart, 'addresses': addresses,
-                           'orderitems': cart_orderitems})
+                           'orderitems': cart_orderitems, 'msg': msg})
 
 class CartArchiveCardView(generic.DetailView):
     template_name = 'order/cart_card.html'
@@ -245,7 +252,19 @@ class CartArchiveCardView(generic.DetailView):
     context_object_name = 'cart_card'
 
 
+class CartConfirmedMessageView(View):
 
+    def get(self, request):
+        msg = _('Thanks for your trust. Your order successfully registered.'
+                ' Our staff will call you for sending your order.')
+        return render(request, 'order/cart_msg.html', {'msg': msg})
+
+
+class CartCanceledMessageView(View):
+
+    def get(self, request):
+        msg = _('This order canceled successfully!')
+        return render(request, 'order/cart_msg.html', {'msg': msg})
 
 
 # --------------- API Views ------------------ #

@@ -16,16 +16,16 @@ class CustomerForm(forms.ModelForm):
     #                         customer_phone_start_validator, customer_input_string_validator],
     #                         label=_('phone'), help_text=_('enter  phone number'),
     #                         disabled=True, required=False)
-    first_name = forms.CharField(max_length=25, label=_('first name'), help_text=_('enter/change your first name'),
+    first_name = forms.CharField(max_length=25, label=_('first name *'), help_text=_('enter/change your first name'),
                                  validators=[customer_input_string_validator])
-    last_name = forms.CharField(max_length=25, label=_('last name'), help_text=_('enter/change your last name'),
+    last_name = forms.CharField(max_length=25, label=_('last name *'), help_text=_('enter/change your last name'),
                                 validators=[customer_input_string_validator])
 
-    national_code = forms.CharField(max_length=10, min_length=10, label=_('national code'),
+    national_code = forms.CharField(max_length=10, min_length=10, label=_('national code *'),
                                     help_text=_('enter/change national code'),
                                     validators=[customer_national_code_validator, customer_input_string_validator,
                                                 customer_national_code_length_validator])
-    # email = forms.EmailField(label=_('email'), help_text=_('enter/change your email'))
+    email = forms.EmailField(label=_('email *'), help_text=_('enter/change your email'))
 
 
 class AddressForm(forms.ModelForm):

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid pt-3" style="min-height: 85vh">
+{#        <div class="row m-auto w-50">#}
+{#            <div class="col-12 text-center">#}
+{#                {% include 'customer/customer_panel.html' with customer_panel=customer %}#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="container-fluid w-75 form-group text-center p-3">
+            {% if msg %}
+                <div class="alert alert-success">
+                    {{ msg|escape }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
