@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-<title>{% block title %}Customer Dashboard{% endblock %}</title>
+<title>{% block title %}{% translate 'Addresse:' %}{{ customer }}{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
@@ -59,8 +59,6 @@
 
         </div>
     </div>
-    <script>
 
-    </script>
 {% endblock %}
 

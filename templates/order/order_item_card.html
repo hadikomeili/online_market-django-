@@ -1,43 +1,15 @@
 {% load i18n %}
-<div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
-    <div class="row form-group">
-        <table class="table table-responsive-md m-auto">
+<tr style="background-color: white; text-align: center">
+    <td style="color: #353232; ">{{ order_item_card.id }}</td>
+    <td style="color: #353232; ">{{ order_item_card.cart.customer }}</td>
+    <td style="color: #353232; ">{{ order_item_card.cart.id }}</td>
+    <td style="color: #353232; ">{{ order_item_card.cart.create_timestamp }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product_number }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product.price }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product.discount }}</td>
+    <td style="color: #353232; ">{{ order_item_card.calculate_order_item_price }}</td>
 
-            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
-                <th>
-                    {% translate 'Product:' %}
-                </th>
-                <th>
-                    {% translate 'Numbers:' %}
-                </th>
-                <th>
-                    {% translate 'Price(product):' %}
-                </th>
-                <th>
-                    {% translate 'Discount:' %}
-                </th>
-                <th>
-                    {% translate 'Final Price(after discount):' %}
-                </th>
-            </tr>
-            <tr style="background-color: white; text-align: center">
-                <td style="color: #353232; ">{{ order_item_card.product }}</td>
-                <td style="color: #353232; ">{{ order_item_card.product_number }}</td>
-                <td style="color: #353232; ">{{ order_item_card.product.price }}</td>
-                <td style="color: #353232; ">{{ order_item_card.product.discount }}</td>
-                <td style="color: #353232; ">{{ order_item_card.calculate_order_item_price }}</td>
-{#                <td style="color: #353232; ">#}
-{#                    <a href="/customer/dashboard/addresses/{{ address_card.id }}">#}
-{#                        <button class="btn btn-outline-dark btn-sm">#}
-{#                            {% translate 'Show' %}#}
-{#                        </button>#}
-{#                    </a>#}
-{#                </td>#}
-            </tr>
+</tr>
 
-        </table>
-
-
-    </div>
-</div>

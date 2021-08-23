@@ -178,6 +178,15 @@ class AddressCardView(generic.DetailView):
     context_object_name = 'address_card'
 
 
+class AddressCardForAdminView(generic.DetailView):
+    """
+    View class for create card view for a address
+    """
+    template_name = 'customer/address_card_for_admin.html'
+    model = Address
+    context_object_name = 'address_card'
+
+
 class AddressDetailView(LoginRequiredMixin, generic.FormView):
     """
     View class for display address details
@@ -249,6 +258,19 @@ class AddressListCustomerView(View):
         addresses = Address.objects.filter(owner=customer)
 
         return render(request, 'customer/customer_addresses.html', {'customer': customer, 'cus_addresses': addresses})
+
+
+class AddressListView(View):
+    """
+    View class for display all addresses for superuser
+    """
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            addresses = Address.objects.all()
+            return render(request, 'customer/all_addreses.html', {'all_addresses': addresses})
+        else:
+            return redirect('landing:access_denied')
 
 
 # ------------------------ Form View --------------------------- #

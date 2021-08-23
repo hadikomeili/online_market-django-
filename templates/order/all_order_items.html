@@ -1,22 +1,51 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-
+<title>{% block title %}{% translate 'All Orderitems' %}{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid shadow">
-        <div class="row" >
-            {% for order_item in order_items %}
-                {% include 'order/order_item_card.html' with order_item_card=order_item %}
-            {% endfor %}
+    <div class="container-fluid address_card_view text-left m-auto p-2" style="">
+
+        <div class="row form-group p-2 m-auto">
+            <table class="table table-responsive-md m-auto">
+
+                <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                    <th>
+                        {% translate 'ID:' %}
+                    </th>
+                    <th>
+                        {% translate 'Customer:' %}
+                    </th>
+                    <th>
+                        {% translate 'Cart ID:' %}
+                    </th>
+                    <th>
+                        {% translate 'Create Timestamp:' %}
+                    </th>
+                    <th>
+                        {% translate 'Product:' %}
+                    </th>
+                    <th>
+                        {% translate 'Numbers:' %}
+                    </th>
+                    <th>
+                        {% translate 'Price(product):' %}
+                    </th>
+                    <th>
+                        {% translate 'Discount:' %}
+                    </th>
+                    <th>
+                        {% translate 'Final Price:' %}
+                    </th>
+                </tr>
+                {% for order_item in order_items %}
+                    {% include 'order/order_item_card.html' with order_item_card=order_item %}
+                {% endfor %}
+            </table>
+
+
         </div>
     </div>
-    <div class="container-fluid">
-{#        <div class="row">#}
-{#            {% for product in products %}#}
-{#                {% include 'product/card.html' with product_card=product %}#}
-{#            {% endfor %}#}
-{#        </div>#}
-    </div>
+
 {% endblock %}

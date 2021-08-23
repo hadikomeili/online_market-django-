@@ -24,24 +24,24 @@ from customer.permissions import *
 # -------------------- FormViews --------------------- #
 
 
-class OrderItemFormView(generic.FormView):
-    template_name = 'order/order_item_form.html'
-    form_class = OrderItemForm
-
-    success_url = reverse_lazy('order:add_order_item_form')
-
-    def form_valid(self, form):
-
-        form.save()
-        return super().form_valid(form)
-
-    def post(self, request, *arg, **kwargs):
-        resp = JsonResponse({"msg": "product added to your cart!"})
-        product = request.POST.get("product")
-        product_number = request.POST.get("product_number")
-        cart = request.COOKIES.get("cart", "")
-        resp.set_cookie("cart", cart + product + ":" + product_number + ",")
-        return resp
+# class OrderItemFormView(generic.FormView):
+#     template_name = 'order/order_item_form.html'
+#     form_class = OrderItemForm
+#
+#     success_url = reverse_lazy('order:add_order_item_form')
+#
+#     def form_valid(self, form):
+#
+#         form.save()
+#         return super().form_valid(form)
+#
+#     def post(self, request, *arg, **kwargs):
+#         resp = JsonResponse({"msg": "product added to your cart!"})
+#         product = request.POST.get("product")
+#         product_number = request.POST.get("product_number")
+#         cart = request.COOKIES.get("cart", "")
+#         resp.set_cookie("cart", cart + product + ":" + product_number + ",")
+#         return resp
 
 
 # ------------------- Views ----------------------- #
@@ -56,14 +56,17 @@ class OrderItemCardView(generic.DetailView):
     context_object_name = 'order_item_card'
 
 
-class OrderItemIndexView(generic.TemplateView):
+class OrderItemIndexView(View):
     """
-    View class for display all order items
+    View class for display all order items for superuser
     """
-    template_name = 'order/all_order_items.html'
-    extra_context = {
-        'order_items': OrderItem.objects.all()
-    }
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            order_items = OrderItem.objects.all()
+            return render(request, 'order/all_order_items.html', {'order_items': order_items})
+        else:
+            return redirect('landing:access_denied')
 
 
 class OrderItemDetailView(generic.DetailView):

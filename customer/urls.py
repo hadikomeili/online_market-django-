@@ -12,6 +12,7 @@ urlpatterns = [
     path('api/customer-addresses-list/', AddressListAPIView.as_view(), name='customer_addresses_list_api'),
     path('api/customer-address/<int:pk>', AddressDetailAPIView.as_view(), name='customer_address_detail_api'),
     path('', CustomerIndexView.as_view(), name='all_customers_for_admin'),
+    path('addresses/', AddressListView.as_view(), name='all_addresses_for_admin'),
     path('<int:pk>', CustomerDetailView.as_view(), name='customer_details_for_admin'),
     # path('card/<int:pk>', CustomerCardView.as_view(), name='customer_card'),
     path('dashboard/', CustomerDashbordView.as_view(), name='customer_dashboard'),

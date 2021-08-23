@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+<title>{% block title %}{% translate 'All Addresses' %}{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid p-2 m-auto" style="min-height: 85vh">
+
+
+        <div class="container-fluid address_card_view text-left m-auto " style="">
+
+            <div class="row form-group">
+                <table class="table table-responsive-md m-auto p-3">
+
+                    <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                        <th>
+                            {% translate 'ID:' %}
+                        </th>
+                        <th>
+                            {% translate 'Owner:' %}
+                        </th>
+                        <th>
+                            {% translate 'Title:' %}
+                        </th>
+                        <th>
+                            {% translate 'Country:' %}
+                        </th>
+                        <th>
+                            {% translate 'State:' %}
+                        </th>
+                        <th>
+                            {% translate 'City:' %}
+                        </th>
+                        <th>
+                            {% translate 'Latitude:' %}
+                        </th>
+                        <th>
+                            {% translate 'Longitude:' %}
+                        </th>
+                        <th>
+                            {% translate 'Post Code:' %}
+                        </th>
+                    </tr>
+
+                    {% for address in all_addresses %}
+                        {% include 'customer/address_card_for_admin.html' with address_card=address %}
+                    {% endfor %}
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
