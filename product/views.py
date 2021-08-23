@@ -38,6 +38,7 @@ class ProductIndexView(generic.TemplateView):
         'products': Product.objects.all(),
         'category': Category.objects.all().filter(ref_category=None),
     }
+    paginate_by = 3
 
 
 class ProductDetailsView(generic.DetailView):

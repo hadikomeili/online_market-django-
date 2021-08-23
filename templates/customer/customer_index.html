@@ -1,16 +1,46 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-
+<title>{% block title %}{% translate 'Customers' %}{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="container-fluid shadow">
-        <div class="row" >
-            {% for customer in customers %}
-                {% include 'customer/customer_card.html' with customer_card=customer %}
-            {% endfor %}
-        </div>
+    <div class="container-fluid form-group w-75 p-3">
+        <table class="table table-responsive-md m-auto">
+
+            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                <th>
+                    {% translate 'ID:' %}
+                </th>
+                <th>
+                    {% translate 'Name:' %}
+                </th>
+                <th>
+                    {% translate 'Phone:' %}
+                </th>
+                <th>
+                    {% translate 'National Code:' %}
+                </th>
+                <th>
+                    {% translate 'Email:' %}
+                </th>
+                <th>
+                    {% translate 'Last Login:' %}
+                </th>
+                <th>
+                    {% translate 'Details:' %}
+                </th>
+            </tr>
+
+            <div class="row">
+                {% for customer in customers %}
+                    {% include 'customer/customer_card.html' with customer_card=customer %}
+                {% endfor %}
+            </div>
+        </table>
+
+
+    </div>
     </div>
 
 {% endblock %}

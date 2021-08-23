@@ -144,9 +144,9 @@ AUTH_USER_MODEL = 'core.User'
 
 LOGIN_URL = 'customer:login'
 
-LOGIN_REDIRECT_URL = 'product:product_index'
+LOGIN_REDIRECT_URL = 'landing:home'
 
-LOGOUT_REDIRECT_URL = 'product:product_index'
+LOGOUT_REDIRECT_URL = 'landing:home'
 
 
 REST_FRAMEWORK = {

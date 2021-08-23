@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-<title>{% block title %}Login Customer{% endblock %}</title>
+<title>{% block title %}{% translate 'Signup Customer' %}{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
     <div class="container-fluid m-auto p-3 text-center w-50">
-        <div class="card form-group text-left p-3">
-            <h5 class="text-center">{% translate 'Signup' %}</h5><br>
+        <div class="card form-group text-left p-3 bg-secondary text-light">
+            <h5 class="text-center">{% translate 'Signup' %}</h5>
 
             <form class="form-group p-2" method="post" enctype="multipart/form-data"
-              style="border-radius: 3px;">
+              style="border-radius: 3px;" autocomplete="off">
             {% csrf_token %}
 
             {% for field in form %}
-                <div class="container-fluid form-group">
+                <div class="form-group-lg">
                     <strong>{{ field.label_tag }}</strong>
                     <span type="input" class="input-group">{{ field }}</span>
-                    <span style="color: dimgrey">{{ field.help_text }}</span>
-                    <span style="color: red">{{ field.errors }}</span>
+                    <span style="color: lightgrey; font-size: small">{{ field.help_text }}</span>
+                    <span style="color: orangered">{{ field.errors }}</span>
                 </div>
 
             {% endfor %}
 
-            <input class="btn btn-block btn-success" type="submit" value="Register">
+            <input class="btn btn-block btn-success m-auto" type="submit" value="Register">
 
 
         </form>

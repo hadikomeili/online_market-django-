@@ -2,27 +2,15 @@
 
 <div class="container-fluid m-auto p-2" style="background-color: #c2cbd1">
     <div class="row text-center p-2">
+        <div class="col-12">
+            <h6>{% translate 'Customer:' %} {{ customer.customer_name }}
+            </h6>
+        </div>
         <div class="col-6 text-dark">
-            <h6>{% translate 'Customer:' %}
-            {{ customer.customer_name }}</h6>
+
             <a href="/customer/dashboard/" style="text-decoration: none">
                 <button class="btn m-1 btn-block btn-secondary">
-                {% translate 'Customer Information' %}
-                </button>
-            </a>
-            <a href="/customer/dashboard/orders/" style="text-decoration: none">
-                <button class="btn m-1 btn-block btn-secondary">
-                    {% translate 'Orders History' %}
-                </button>
-            </a>
-
-        </div>
-        <div class="col-6">
-            <h6>{% translate 'Phone:' %}
-            {{ customer.phone }}</h6>
-            <a href="/customer/dashboard/add_address/" style="text-decoration: none">
-                <button class="btn m-1 btn-block btn-secondary">
-                    {% translate 'Add Address' %}
+                {% translate 'Account Information' %}
                 </button>
             </a>
             <a href="/customer/dashboard/addresses/" style="text-decoration: none">
@@ -32,6 +20,29 @@
             </a>
 
 
+        </div>
+        <div class="col-6">
+
+            <a href="/customer/dashboard/change_password/" style="text-decoration: none">
+                <button class="btn m-1 btn-block btn-secondary">
+                    {% translate 'Change Password' %}
+                </button>
+            </a>
+            <a href="/customer/dashboard/add_address/" style="text-decoration: none">
+                <button class="btn m-1 btn-block btn-secondary">
+                    {% translate 'Add Address' %}
+                </button>
+            </a>
+
+
+
+        </div>
+        <div class="col">
+            <a href="/customer/dashboard/orders/" style="text-decoration: none">
+                <button class="btn m-1 btn-block btn-secondary">
+                    {% translate 'Orders History' %}
+                </button>
+            </a>
         </div>
 
     </div>

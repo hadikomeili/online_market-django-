@@ -1,52 +1,68 @@
+{% extends "base.html" %}
 {% load i18n %}
-<div class="container-fluid">
-<form enctype="multipart/form-data" class="form-control bg-secondary" method="post">
-    <table id="customer-detail" class="table text-left w-75 m-auto">
-        {% for field in form %}
-            <div class="form-group">
-                <tr>
-                    <th>
-                        {{ field.label_tag }}
-                    </th>
-                </tr>
-                <tr>
-                    <td style="padding-left: 30px; color: #231e1e; background: white">{{ field }}</td>
-                    <td><span style="color: whitesmoke">{{ field.help_text }}</span></td>
-                </tr>
-                <span style="color: red">{{ field.errors }}</span>
+{% load static %}
+<title>{% block title %}{% translate 'Customer Details' %}{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+    <div class="container-fluid form-group w-100 p-3">
+        <table class="table table-responsive-md m-auto">
 
-            </div>
-        {% endfor %}
+            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                <th>
+                    {% translate 'ID:' %}
+                </th>
+                <th>
+                    {% translate 'Name:' %}
+                </th>
+                <th>
+                    {% translate 'Phone:' %}
+                </th>
+                <th>
+                    {% translate 'Is Staff:' %}
+                </th>
+                <th>
+                    {% translate 'Is Superuser:' %}
+                </th>
+                <th>
+                    {% translate 'Birthday:' %}
+                </th>
+                <th>
+                    {% translate 'National Code:' %}
+                </th>
+                <th>
+                    {% translate 'Email:' %}
+                </th>
+                <th>
+                    {% translate 'Last Login:' %}
+                </th>
+                <th>
+                    {% translate 'Gender:' %}
+                </th>
+                <th>
+                    {% translate 'Registred Timestamp:' %}
+                </th>
+            </tr>
+
+            <tr style="background-color: white; text-align: center">
+                <td style="color: #353232; ">{{ customer_detail.id }}</td>
+                <td style="color: #353232; ">{{ customer_detail.customer_name }}</td>
+                <td style="color: #353232; ">{{ customer_detail.phone }}</td>
+                <td style="color: #353232; ">{{ customer_detail.is_staff }}</td>
+                <td style="color: #353232; ">{{ customer_detail.is_superuser }}</td>
+                <td style="color: #353232; ">{{ customer_detail.birthday }}</td>
+                <td style="color: #353232; ">{{ customer_detail.national_code }}</td>
+                <td style="color: #353232; ">{{ customer_detail.email }}</td>
+                <td style="color: #353232; ">{{ customer_detail.last_login }}</td>
+                <td style="color: #353232; ">{{ customer_detail.gender }}</td>
+                <td style="color: #353232; ">{{ customer_detail.create_timestamp }}</td>
+
+            </tr>
+        </table>
 
 
-    </table>
-</form>
-</div>
+    </div>
+    </div>
 
+{% endblock %}
 
-
-{#        <tr>#}
-{#            <th>#}
-{#                {% translate 'Phone:' %}#}
-{#            </th>#}
-{#            <th>#}
-{#                {% translate 'National Code:' %}#}
-{#            </th>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.phone }}</td>#}
-{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.national_code }}</td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <th>#}
-{#                {% translate 'Gender:' %}#}
-{#            </th>#}
-{#            <th>#}
-{#                {% translate 'Birthday:' %}#}
-{#            </th>#}
-{##}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.gender }}</td>#}
-{#            <td style="padding-left: 30px; color: #231e1e; background: white">{{ customer_detail.birthday }}</td>#}
-{#        </tr>#}

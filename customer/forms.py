@@ -52,12 +52,15 @@ class AddressForm(forms.ModelForm):
 class MyUserCreationForm(forms.ModelForm):
     phone = forms.CharField(max_length=11, validators=[customer_phone_validator, customer_phone_length_validator,
                                                        customer_phone_start_validator, customer_input_string_validator],
-                            label=_('Phone'), help_text=_('enter  phone number'), min_length=11)
+                            label=_('Phone'), help_text=_('enter  phone number'), min_length=11,
+                            widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    email = forms.EmailField(label=_('email'), help_text=_('enter email address'),
+                             widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     password1 = forms.CharField(
         label=_("Password"),
         strip=False,
         widget=forms.PasswordInput,
-        help_text=_('Enter password'),
+        help_text=_('Enter password')
     )
     password2 = forms.CharField(
         label=_("Password confirmation"),

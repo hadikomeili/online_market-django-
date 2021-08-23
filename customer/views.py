@@ -42,7 +42,7 @@ class CustomerIndexView(LoginRequiredMixin, generic.TemplateView):
         if request.user.is_superuser:
             return super().get(request, *args, **kwargs)
         else:
-            return HttpResponse('You have not access to this page!!!')
+            return redirect('landing:access_denied')
 
 
 class CustomerCardView(generic.DetailView):
@@ -57,7 +57,22 @@ class CustomerCardView(generic.DetailView):
         if request.user.is_superuser:
             return super().get(request, *args, **kwargs)
         else:
-            return HttpResponse('You have not access to this page!!!')
+            return redirect('landing:access_denied')
+
+
+class CustomerDetailView(generic.DetailView):
+    """
+    View class for create card view for a customer(for superuser use)
+    """
+    template_name = 'customer/customer_details.html'
+    model = Customer
+    context_object_name = 'customer_detail'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect('landing:access_denied')
 
 
 # class CustomerDetailCardView(generic.FormView):
@@ -92,7 +107,7 @@ class CustomerDashbordView(LoginRequiredMixin, generic.FormView):
     """
     View class for customer dashboard
     """
-    template_name = 'customer/customer_details.html'
+    # template_name = 'customer/customer_details.html'
     form_class = CustomerForm
 
     def get(self, request, *args, **kwargs):
@@ -373,7 +388,38 @@ def sign_up(request):
             # return redirect('customer:customer_dashboard')
     else:
         form = MyUserCreationForm()
-    return render(request, 'customer/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form})
 
-# def home(request):
-#     return render(request, 'home.html')
+
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+# from django.shortcuts import render, redirect
+
+
+def change_password(request):
+
+    if request.method == 'POST':
+        customer = Customer.objects.get(id=request.user.id)
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            # messages.success(request, 'Your password was successfully updated!', {'customer': customer})
+            msg = _('Your password was successfully updated!')
+            return render(request, 'registration/change_password.html',
+                          {'form': form, 'customer': customer, 'msg': msg})
+        else:
+            msg = _('Please correct the error below.')
+            return render(request, 'registration/change_password.html',
+                          {'form': form, 'customer': customer, 'msg': msg})
+            # messages.error(request, 'Please correct the error below.')
+    else:
+        customer = Customer.objects.get(id=request.user.id)
+        form = PasswordChangeForm(customer)
+    return render(request, 'registration/change_password.html', {
+        'form': form, 'customer': customer
+    })
+
+
+

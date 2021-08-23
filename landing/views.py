@@ -1,11 +1,13 @@
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse, reverse_lazy
-from django.views import generic
-
+from django.views import generic, View
+from django.utils.translation import gettext as _
 from product.models import Product, Category
 from .forms import MessageForm
 from .models import *
+
+
 # Create your views here.
 
 
@@ -21,9 +23,8 @@ from .models import *
 #         form.save()
 #         return super().form_valid(form)
 
-def contact_us(request):
-    # if request.method == 'POST':
 
+def contact_us(request):
     if request.POST.get('action') == 'create-message':
         subject = request.POST.get('subject')
         customer_name = request.POST.get('customer_name')
@@ -64,3 +65,8 @@ class HomeView(generic.TemplateView):
     }
 
 
+class AccessDenied(View):
+
+    def get(self, request):
+        msg = _('You have not access to this page!!!')
+        return render(request, 'landing/access_denied.html', {'msg': msg})

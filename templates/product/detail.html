@@ -6,7 +6,7 @@
 {% block extrahead %}{% endblock %}
 {% block content %}
     <div id="content-main" class="container-fluid text-center">
-        <div id="product-overview" class="row p-3">
+        <div id="product-overview" class="row p-3 bg-white w-75 m-auto">
             <div id="product-info" class="col-6">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -49,7 +49,7 @@
 
         </div>
         <table id="product-detail" class="table text-left w-75 m-auto">
-            <tr>
+            <tr style="background-color: #c2cbd1" class="thead-light">
                 <th>
                     {% translate 'Category:' %}
                 </th>
@@ -57,7 +57,7 @@
             <tr>
                 <td style="padding-left: 30px; color: #231e1e; background: white">{{ product_details.category.name }}</td>
             </tr>
-            <tr>
+            <tr style="background-color: #c2cbd1" class="thead-light">
                 <th>
                     {% translate 'Product Name:' %}
                 </th>
@@ -65,7 +65,7 @@
             <tr>
                 <td style="padding-left: 30px; color: #231e1e; background: white">{{ product_details.name }}</td>
             </tr>
-            <tr>
+            <tr style="background-color: #c2cbd1" class="thead-light">
                 <th>
                     {% translate 'Company Brand:' %}
                 </th>
@@ -73,7 +73,7 @@
             <tr>
                 <td style="padding-left: 30px; color: #231e1e; background: white">{{ product_details.company_brand }}</td>
             </tr>
-            <tr>
+            <tr style="background-color: #c2cbd1" class="thead-light">
                 <th>
                     {% translate 'Product Specifications:' %}
                 </th>

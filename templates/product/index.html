@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
+<title>{% block title %}{% translate 'Products' %}{% endblock %}</title>
 
 {% block extrastyle %}
     /* scrollable div */
@@ -29,11 +30,14 @@
             {% endfor %}
         </div>
     </div>
-    <div class="container-fluid m-auto text-center">
+    <div class="container-fluid text-left">
         <div class="row">
             {% for product in products %}
                 {% include 'product/card.html' with product_card=product %}
             {% endfor %}
         </div>
+
     </div>
+
+
 {% endblock %}

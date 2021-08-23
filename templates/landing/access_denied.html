@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+<title>{% block title %}Customer Dashboard{% endblock %}</title>
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block content %}
+
+    <div class="container-fluid form-group text-center p-lg-5">
+                    {% if msg %}
+                        <div class="alert alert-danger" style="font-size: x-large">
+                            {{ msg|escape }}
+                        </div>
+                    {% endif %}
+                </div>
+{% endblock %}
