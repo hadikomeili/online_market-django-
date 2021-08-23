@@ -23,7 +23,7 @@ class OrderItemForCustomerSerializer(serializers.ModelSerializer):
     """
     for customer
     """
-    product = ProductSerializer(read_only=True)
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
     cart = serializers.PrimaryKeyRelatedField(read_only=True, source='cart.customer.__str__')
 
     class Meta:

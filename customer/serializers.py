@@ -7,16 +7,19 @@ class CustomerBriefListSerializer(serializers.ModelSerializer):
     """
     for superuser use
     """
+
     class Meta:
         model = Customer
         fields = ['id', 'phone', 'first_name', 'last_name']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'phone']
 
 
 class CustomerDetailAdminSerializer(serializers.ModelSerializer):
     """
     for superuser use
     """
+    id = serializers.HyperlinkedRelatedField(view_name='customer:customer_detail_api_for_admin', read_only=True)
+
     class Meta:
         model = Customer
         exclude = ['password']
@@ -37,7 +40,7 @@ class AddressBriefListSerializer(serializers.ModelSerializer):
     """
     for superuser use
     """
-    owner = serializers.ReadOnlyField(source='owner.customer_name')
+    owner = CustomerDetailAdminSerializer(read_only=True)
 
     class Meta:
         model = Address
@@ -49,11 +52,11 @@ class AddressDetailSerializer(serializers.ModelSerializer):
     """
     for customer use
     """
-    owner = serializers.ReadOnlyField(source='owner.customer_name')
+    id = serializers.HyperlinkedRelatedField(view_name='customer:customer_address_detail_api', read_only=True)
 
     class Meta:
         model = Address
-        exclude = ['deleted', 'create_timestamp', 'modify_timestamp', 'delete_timestamp']
-        read_only_fields = ['owner']
+        exclude = ['deleted', 'create_timestamp', 'modify_timestamp', 'delete_timestamp', 'owner']
+        read_only_fields = ['id', ]
 
 

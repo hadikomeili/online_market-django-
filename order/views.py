@@ -295,7 +295,7 @@ class CartAPIView(generics.ListAPIView):
     ]
 
 
-class CartOrderItemsAPIView(generics.ListCreateAPIView):
+class CartOrderItemsAPIView(LoginRequiredMixin, generics.ListCreateAPIView):
     """
     API view for customer to see all order items in his/her cart
     """
@@ -353,7 +353,7 @@ class CartOrderItemsAPIView(generics.ListCreateAPIView):
     #             new_order_item.save()
 
 
-class CartOrderItemCreateAPIView(generics.CreateAPIView):
+class CartOrderItemCreateAPIView(LoginRequiredMixin, generics.CreateAPIView):
     """
     API view for customer to see all order items in his/her cart
     """
@@ -386,7 +386,7 @@ class CartOrderItemCreateAPIView(generics.CreateAPIView):
                 return Response(new_order_item.data)
 
 
-class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
+class CartCustomerAPIView(LoginRequiredMixin, generics.RetrieveUpdateAPIView):
     """
     API view for customer to see his/her cart
     """
@@ -409,7 +409,7 @@ class CartCustomerAPIView(generics.RetrieveUpdateAPIView):
             return obj
 
 
-class OrderItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+class OrderItemDetailAPIView(LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
     """
     API view for customer to edit order items in cart
     """
