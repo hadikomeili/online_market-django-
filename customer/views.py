@@ -75,23 +75,23 @@ class CustomerDetailView(generic.DetailView):
             return redirect('landing:access_denied')
 
 
-# class CustomerDetailCardView(generic.FormView):
-#     """
-#     View class for create card view for a customer(for customer use)
-#     """
-#     template_name = 'customer/customer_details.html'
-#     form_class = CustomerForm
-#     # context_object_name = 'customer_detail'
-#
-#     def get(self, request, *args, **kwargs):
-#         customer = Customer.objects.get(id=request.user.id)
-#         form = CustomerForm(instance=customer)
-#         return render(request, 'customer/customer_details.html',
-#                       {'form': form})
-#
-#     def form_valid(self, form):
-#         form.save()
-#         return super.form_valid(form)
+class CustomerDetailCardView(generic.FormView):
+    """
+    View class for create card view for a customer(for customer use)
+    """
+    template_name = 'customer/customer_details.html'
+    form_class = CustomerForm
+    # context_object_name = 'customer_detail'
+
+    def get(self, request, *args, **kwargs):
+        customer = Customer.objects.get(id=request.user.id)
+        form = CustomerForm(instance=customer)
+        return render(request, 'customer/customer_details.html',
+                      {'form': form})
+
+    def form_valid(self, form):
+        form.save()
+        return super.form_valid(form)
 
 
 class CustomerTopPanelView(generic.DetailView):
@@ -113,7 +113,7 @@ class CustomerDashbordView(LoginRequiredMixin, generic.FormView):
     def get(self, request, *args, **kwargs):
         customer = Customer.objects.get(id=request.user.id)
         form = CustomerForm(instance=customer)
-        msg = _('Wellcome! Please complete this information, and add a address for easy shopping.')
+        msg = _('Well Come! Complete this information, and add an address for easy shopping.')
 
         return render(request, 'customer/customer_dashboard.html',
                       {'customer': customer, 'form': form, 'msg': msg})

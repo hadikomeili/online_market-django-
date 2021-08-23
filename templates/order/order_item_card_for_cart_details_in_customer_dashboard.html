@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<tr style="background-color: white; text-align: center">
+
+    <td style="color: #353232; ">{{ order_item_card.product }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product_number }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product.price }}</td>
+    <td style="color: #353232; ">{{ order_item_card.product.discount }}</td>
+    <td style="color: #353232; ">{{ order_item_card.calculate_order_item_price }}</td>
+
+</tr>
+

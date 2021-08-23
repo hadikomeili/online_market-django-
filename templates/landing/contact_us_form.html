@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-<title>{% block title %}{% translate 'Signup' %}{% endblock %}</title>
+<title>{% block title %}{% translate 'Contact Us' %}{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
     <div id="content-main" class="container-fluid text-center p-3">
         <div class="card p-5 m-auto w-50 pt-3 pb-3 text-left" style="background-color: #c2cbd1">
-            <h5 class="text-center">{% translate 'Signup' %}</h5>
+            <h5 class="text-center">{% translate 'Contact Us' %}</h5>
 
             <form class="form-group p-2" method="post" enctype="multipart/form-data"
               style="border-radius: 3px;" autocomplete="off">
@@ -23,11 +23,12 @@
 
             {% endfor %}
 
-            <input class="btn btn-block btn-success m-auto" type="submit" value="Register">
+            <input class="btn btn-block btn-outline-dark m-auto" type="submit" value="Send Message">
 
 
         </form>
 
         </div>
     </div>
+
 {% endblock %}

@@ -70,3 +70,14 @@ class AccessDenied(View):
     def get(self, request):
         msg = _('You have not access to this page!!!')
         return render(request, 'landing/access_denied.html', {'msg': msg})
+
+
+class ContactUsView(generic.FormView):
+
+    template_name = 'landing/contact_us_form.html'
+    form_class = MessageForm
+
+    def form_valid(self, form):
+        form.save()
+        msg = _('your message successfully sent.')
+        return render(self.request, 'landing/contact_us_form.html', {'msg': msg})

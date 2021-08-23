@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
-<title>{% block title %}{% translate 'Cntact Us' %}{% endblock %}</title>
+<title>{% block title %}{% translate 'Contact Us(ajax)' %}{% endblock %}</title>
 {% block extrastyle %}{% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
     <div id="content-main" class="container-fluid text-center p-3">
         <div class="card p-5 m-auto w-50 pt-3 pb-3 text-left" style="background-color: #c2cbd1">
-            <h3 class="text-center">{% translate 'Cuntact Us' %}</h3>
+            <h6 class="text-center">{% translate 'Contact Us' %}</h6>
             <form id="my-form">
                 <div class="form-group">
                     <label for="subject">{% translate 'subject:' %}</label>
