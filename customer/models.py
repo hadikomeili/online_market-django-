@@ -19,7 +19,8 @@ class Customer(User):
                               choices=[('M', 'Male'), ('F', 'Female')], blank=True, null=True)
     birthday = models.DateField(verbose_name=_('birthday'), help_text=_('specify birthday date'), null=True, blank=True)
     image = models.FileField(verbose_name=_('customer image'), help_text=_('upload your image'), null=True,
-                             blank=True, upload_to='customer/images/')
+                             blank=True, upload_to='customer/images/',
+                             default='customer/images/customer.jpeg')
 
     class Meta:
         verbose_name = 'customer'

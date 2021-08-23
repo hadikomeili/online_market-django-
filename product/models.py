@@ -93,7 +93,7 @@ class Product(BaseModel):
                                     null=False, blank=False)
     image = models.FileField(verbose_name=_('product image'), help_text=_('upload image of product'), null=True,
                              blank=True, upload_to='product/images/',
-                             default='product/images/default.jpeg')
+                             default='product/images/product.jpeg')
     specifications = models.CharField(verbose_name=_('english product specifications'), null=True, blank=True,
                                       help_text=_('enter product specifications in english'), max_length=100)
     specifications_fa = models.CharField(verbose_name=_('farsi product specifications'), null=True, blank=True,
