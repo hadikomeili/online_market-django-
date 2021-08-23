@@ -19,7 +19,8 @@ class Category(BaseModel):
     ref_category = models.ForeignKey('self', verbose_name=_('parent category'), help_text=_('specify parent category'),
                                      null=True, blank=True, on_delete=models.SET_NULL)
     image = models.FileField(verbose_name=_('category image'), help_text=_('upload image of category'), null=True,
-                             blank=True, upload_to='product/category/images/')
+                             blank=True, upload_to='product/category/images/',
+                             default='product/category/images/category.jpeg')
     level = models.IntegerField(verbose_name=_('category level'), help_text=_('specify level of self relation'),
                                 null=True, blank=True, default=0, editable=False)
 
@@ -91,7 +92,8 @@ class Product(BaseModel):
     inventory = models.IntegerField(verbose_name=_('inventory'), help_text=_('specify product inventory'),
                                     null=False, blank=False)
     image = models.FileField(verbose_name=_('product image'), help_text=_('upload image of product'), null=True,
-                             blank=True, upload_to='product/images/')
+                             blank=True, upload_to='product/images/',
+                             default='product/images/default.jpeg')
     specifications = models.CharField(verbose_name=_('english product specifications'), null=True, blank=True,
                                       help_text=_('enter product specifications in english'), max_length=100)
     specifications_fa = models.CharField(verbose_name=_('farsi product specifications'), null=True, blank=True,
