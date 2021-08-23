@@ -6,27 +6,34 @@
 {% block extrahead %}{% endblock %}
 {% block content %}
     <div id="content-main" class="container-fluid text-center p-3">
+        <div class="container-fluid form-group text-center w-50 m-auto">
+            {% if msg %}
+                <div class="alert alert-success">
+                    {{ msg|escape }}
+                </div>
+            {% endif %}
+        </div>
         <div class="card p-5 m-auto w-50 pt-3 pb-3 text-left" style="background-color: #c2cbd1">
             <h5 class="text-center">{% translate 'Contact Us' %}</h5>
 
             <form class="form-group p-2" method="post" enctype="multipart/form-data"
-              style="border-radius: 3px;" autocomplete="off">
-            {% csrf_token %}
+                  style="border-radius: 3px;" autocomplete="off">
+                {% csrf_token %}
 
-            {% for field in form %}
-                <div class="form-group-lg">
-                    <strong>{{ field.label_tag }}</strong>
-                    <span type="input" class="input-group">{{ field }}</span>
-                    <span style="color: dimgrey; font-size: small">{{ field.help_text }}</span>
-                    <span style="color: orangered">{{ field.errors }}</span>
-                </div>
+                {% for field in form %}
+                    <div class="form-group-lg">
+                        <strong>{{ field.label_tag }}</strong>
+                        <span type="input" class="input-group">{{ field }}</span>
+                        <span style="color: dimgrey; font-size: small">{{ field.help_text }}</span>
+                        <span style="color: orangered">{{ field.errors }}</span>
+                    </div>
 
-            {% endfor %}
+                {% endfor %}
 
-            <input class="btn btn-block btn-outline-dark m-auto" type="submit" value="Send Message">
+                <input class="btn btn-block btn-outline-dark m-auto" type="submit" value="Send Message">
 
 
-        </form>
+            </form>
 
         </div>
     </div>

@@ -80,4 +80,5 @@ class ContactUsView(generic.FormView):
     def form_valid(self, form):
         form.save()
         msg = _('your message successfully sent.')
-        return render(self.request, 'landing/contact_us_form.html', {'msg': msg})
+        form = MessageForm()
+        return render(self.request, 'landing/contact_us_form.html', {'msg': msg, 'form': form})
