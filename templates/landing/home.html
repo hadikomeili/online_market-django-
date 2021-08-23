@@ -77,8 +77,10 @@
     /* scrollable div */
 
     div.scrollmenu {
+
     background-color: #93afca;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
     white-space: nowrap;
     }
 
@@ -90,9 +92,9 @@
     text-decoration: none;
     }
 
-{#    div.scrollmenu a:hover {#}
-{#    background-color: #46ACF0FF;#}
-{#    }#}
+    div.scrollmenu a:hover {
+
+    }
 
 {% endblock %}
 {% block extrahead %}{% endblock %}
@@ -220,7 +222,7 @@
         </script>
 
 
-        <div class="scrollmenu p-1 m-2">
+        <div class="scrollmenu p-1 m-3">
             <h6 class="text-center text-light pt-2" style="font-size: x-large">
                 {% translate 'Discounted Products:' %}</h6>
             <div class="row">

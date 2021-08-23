@@ -24,12 +24,43 @@
                         </div>
                     {% endif %}
                 </div>
+            <div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
+    <div class="row form-group">
+        <table class="table table-responsive-md m-auto">
+
+            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                <th>
+                    {% translate 'Number:' %}
+                </th>
+                <th>
+                    {% translate 'Date:' %}
+                </th>
+                <th>
+                    {% translate 'Status:' %}
+                </th>
+                <th>
+                    {% translate 'Price:' %}
+                </th>
+                <th>
+                    {% translate 'Address:' %}
+                </th>
+                <th>
+                    {% translate 'Details:' %}
+                </th>
+            </tr>
 
                 {% for cart in carts %}
                     {% include 'order/cart_card.html' with cart_card=cart %}
                 {% endfor %}
+
+        </table>
+
+
+    </div>
+</div>
             </div>
+
 
         </div>
     </div>

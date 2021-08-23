@@ -24,10 +24,34 @@
                         </div>
                     {% endif %}
                 </div>
+                <div class="container-fluid address_card_view text-left m-2 mt-2 p-2" style="">
 
-                {% for address in cus_addresses %}
-                    {% include 'customer/address_card.html' with address_card=address %}
-                {% endfor %}
+                    <div class="row form-group">
+                        <table class="table table-responsive-md m-auto">
+
+                            <tr style="background-color: #c2cbd1; text-align: center" class="thead-light">
+                                <th>
+                                    {% translate 'Title:' %}
+                                </th>
+                                <th>
+                                    {% translate 'State:' %}
+                                </th>
+                                <th>
+                                    {% translate 'City:' %}
+                                </th>
+                                <th>
+                                    {% translate 'Details:' %}
+                                </th>
+                            </tr>
+
+                            {% for address in cus_addresses %}
+                                {% include 'customer/address_card.html' with address_card=address %}
+                            {% endfor %}
+                        </table>
+
+
+                    </div>
+                </div>
 
             </div>
         </div>

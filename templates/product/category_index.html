@@ -21,7 +21,7 @@
 {% endblock %}
 {% block extrahead %}{% endblock %}
 {% block content %}
-    <div class="scrollmenu p-1 m-3">
+    <div class="container-fluid bg-light shadow m-auto">
 
         <div class="row" style="font-size: 13px">
             {% for cat in category %}
@@ -29,7 +29,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid m-auto">
         <div class="row">
             {% for product in products %}
                 {% include 'product/card.html' with product_card=product %}

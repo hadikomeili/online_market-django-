@@ -54,8 +54,9 @@ class HomeView(generic.TemplateView):
     products = Product.objects.all().filter(inventory__gte=1)
     off_products = []
     for product in products:
-        if product.discount.specify_discount_status() == 'Active':
+        if product.discount.specify_discount_status() == 'Active' and product.discount.value > 0:
             off_products.append(product)
+    print(off_products)
     template_name = 'landing/home.html'
     extra_context = {
         'products': off_products,

@@ -2,15 +2,15 @@
 
 <div class="container-fluid m-auto p-2" style="background-color: #c2cbd1">
     <div class="row text-center p-2">
-        <div class="col-6">
-            <h6>{% translate 'Name:' %}
+        <div class="col-6 text-dark">
+            <h6>{% translate 'Customer:' %}
             {{ customer.customer_name }}</h6>
-            <a href="/customer/dashboard/">
+            <a href="/customer/dashboard/" style="text-decoration: none">
                 <button class="btn m-1 btn-block btn-secondary">
                 {% translate 'Customer Information' %}
                 </button>
             </a>
-            <a href="/customer/dashboard/orders/">
+            <a href="/customer/dashboard/orders/" style="text-decoration: none">
                 <button class="btn m-1 btn-block btn-secondary">
                     {% translate 'Orders History' %}
                 </button>
@@ -20,16 +20,17 @@
         <div class="col-6">
             <h6>{% translate 'Phone:' %}
             {{ customer.phone }}</h6>
-            <a href="/customer/dashboard/addresses/">
-                <button class="btn m-1 btn-block btn-secondary">
-                    {% translate 'Addresses List' %}
-                </button>
-            </a>
-            <a href="/customer/dashboard/add_address/">
+            <a href="/customer/dashboard/add_address/" style="text-decoration: none">
                 <button class="btn m-1 btn-block btn-secondary">
                     {% translate 'Add Address' %}
                 </button>
             </a>
+            <a href="/customer/dashboard/addresses/" style="text-decoration: none">
+                <button class="btn m-1 btn-block btn-secondary">
+                    {% translate 'Addresses List' %}
+                </button>
+            </a>
+
 
         </div>
 
